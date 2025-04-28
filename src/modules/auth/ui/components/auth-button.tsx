@@ -34,7 +34,7 @@ export const AuthButton = () => {
 			{/* <SignedOut> */}
 			{/* <SignInButton mode="modal"> */}
 			<Button
-				variant={'outline'}
+				variant="outline"
 				className="px-4 py-2 rounded-full text-sm font-medium text-blue-600 hover:text-blue-500 border-blue-500/20 shadow-none"
 			>
 				<UserCircleIcon className="size-5" />

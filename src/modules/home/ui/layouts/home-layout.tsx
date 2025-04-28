@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 
 import { SidebarProvider } from '@/components/ui'
 import { HomeNavbar } from '@/modules/home/ui/components/home-navbar'
-// import { HomeSidebar } from '../components/home-sidebar'
+import { HomeSidebar } from '@/modules/home/ui/components/home-sidebar'
 
 export const HomeLayout = ({ children }: PropsWithChildren) => {
 	return (
@@ -11,7 +11,7 @@ export const HomeLayout = ({ children }: PropsWithChildren) => {
 				<HomeNavbar />
 
 				<div className="flex min-h-screen pt-16">
-					{/* <HomeSidebar /> */}
+					<HomeSidebar />
 
 					<main className="flex-1 overflow-y-auto">{children}</main>
 				</div>

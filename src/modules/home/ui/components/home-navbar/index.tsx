@@ -10,11 +10,11 @@ export const HomeNavbar = () => {
 		<nav className="z-50 fixed top-0 left-0 right-0 flex items-center h-16 px-2 pr-5 bg-white">
 			<div className="flex items-center gap-4 w-full">
 				{/* Menu and Logo */}
-				<div className="flex items-center shrink-0">
-					<SidebarTrigger />
+				<div className="flex shrink-0 items-center gap-4">
+					<SidebarTrigger className="cursor-pointer" />
 
 					<Link href={'/'}>
-						<div className="flex items-center gap-1 p-4">
+						<div className="flex items-center gap-1">
 							<Image src={'/svg/logo.svg'} alt="Logo" width={32} height={32} />
 
 							<p className="text-xl font-semibold tracking-tight">NewTube</p>
@@ -23,14 +23,14 @@ export const HomeNavbar = () => {
 				</div>
 
 				{/* Search bar */}
-				<div className="flex-1 flex justify-center max-w-180 mx-auto">
+				<div className="flex flex-1 justify-center max-w-180 mx-auto">
 					<SearchInput />
 				</div>
 
-				<div className="shrink-0 flex items-center gap-4">
-					<div className="flex items-center justify-center w-26">
-						<AuthButton />
-					</div>
+				<div className="flex flex-shrink-0 items-center gap-4">
+					{/* <div className="flex items-center justify-center w-26"> */}
+					<AuthButton />
+					{/* </div> */}
 				</div>
 			</div>
 		</nav>

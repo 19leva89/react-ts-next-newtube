@@ -3,6 +3,7 @@ This project contains the following technologies
 
 
 To run the client and server via concurrently:
+terminal powershell -> npm install -g bun (the last `npm` command you'll ever need)
 terminal powershell -> bun i
 terminal powershell -> bun run dev
 terminal powershell -> bun run lint (loading ESLint checker)

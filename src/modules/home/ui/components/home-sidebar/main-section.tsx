@@ -42,8 +42,8 @@ export const MainSection = () => {
 					{items.map((item) => (
 						<SidebarMenuItem key={item.title}>
 							<SidebarMenuButton
-								tooltip={item.title}
 								asChild
+								tooltip={item.title}
 								isActive={false} // TODO: Change to look at current pathname
 								// onClick={(e) => {
 								// 	if (!isSignedIn && item.auth) {
@@ -52,7 +52,7 @@ export const MainSection = () => {
 								// 	}
 								// }}
 							>
-								<Link href={item.url} className="flex items-center gap-4" prefetch>
+								<Link href={item.url} className="flex items-center gap-4">
 									<item.icon />
 
 									<span className="text-sm">{item.title}</span>

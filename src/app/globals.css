@@ -43,6 +43,20 @@
 	--radius-xl: calc(var(--radius) + 4px);
 }
 
+*,
+::after,
+::before,
+::backdrop,
+html,
+body {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+button {
+	cursor: pointer;
+}
+
 :root {
 	--radius: 0.625rem;
 	--background: oklch(1 0 0);

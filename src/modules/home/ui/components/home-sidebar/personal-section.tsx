@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-// import { useAuth, useClerk } from "@clerk/nextjs";
+// import { useAuth, useClerk } from "@clerk/nextjs"
 import { HistoryIcon, ListVideoIcon, ThumbsUpIcon } from 'lucide-react'
 
 import {
@@ -47,8 +47,8 @@ export const PersonalSection = () => {
 					{items.map((item) => (
 						<SidebarMenuItem key={item.title}>
 							<SidebarMenuButton
-								tooltip={item.title}
 								asChild
+								tooltip={item.title}
 								isActive={false} // TODO: Change to look at current pathname
 								// onClick={(e) => {
 								// 	if (!isSignedIn && item.auth) {
