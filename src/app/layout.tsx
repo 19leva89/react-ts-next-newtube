@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { PropsWithChildren } from 'react'
-// import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Toaster } from '@/components/ui'
@@ -26,17 +26,17 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
-		// <ClerkProvider afterSignOutUrl={'/'}>
-		<html lang="en" suppressHydrationWarning>
-			<body className={`${inter.className} antialiased`}>
-				<Toaster />
+		<ClerkProvider afterSignOutUrl={'/'}>
+			<html lang="en" suppressHydrationWarning>
+				<body className={`${inter.className} antialiased`}>
+					<Toaster />
 
-				{/* <TRPCProviderClient> */}
-				{children}
-				{/* </TRPCProviderClient> */}
-			</body>
-		</html>
-		// </ClerkProvider>
+					{/* <TRPCProviderClient> */}
+					{children}
+					{/* </TRPCProviderClient> */}
+				</body>
+			</html>
+		</ClerkProvider>
 	)
 }
 

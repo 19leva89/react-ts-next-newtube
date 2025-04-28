@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-// import { useAuth, useClerk } from '@clerk/nextjs'
+import { useAuth, useClerk } from '@clerk/nextjs'
 import { FlameIcon, HomeIcon, PlaySquareIcon } from 'lucide-react'
 
 import {
@@ -32,8 +32,9 @@ const items = [
 ]
 
 export const MainSection = () => {
-	// const clerk = useClerk()
-	// const { isSignedIn } = useAuth()
+	const clerk = useClerk()
+
+	const { isSignedIn } = useAuth()
 
 	return (
 		<SidebarGroup>
@@ -45,12 +46,13 @@ export const MainSection = () => {
 								asChild
 								tooltip={item.title}
 								isActive={false} // TODO: Change to look at current pathname
-								// onClick={(e) => {
-								// 	if (!isSignedIn && item.auth) {
-								// 		e.preventDefault()
-								// 		return clerk.openSignIn({ redirectUrl: item.url })
-								// 	}
-								// }}
+								onClick={(e) => {
+									if (!isSignedIn && item.auth) {
+										e.preventDefault()
+
+										return clerk.openSignIn({ redirectUrl: item.url })
+									}
+								}}
 							>
 								<Link href={item.url} className="flex items-center gap-4">
 									<item.icon />
