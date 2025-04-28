@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 // import { ClerkProvider } from '@clerk/nextjs'
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 
-// import { Toaster } from '@/components/ui'
+import { Toaster } from '@/components/ui'
 // import { TRPCProviderClient } from '@/providers'
 
 import './globals.css'
@@ -24,12 +24,12 @@ export const metadata: Metadata = {
 	},
 }
 
-export default function RootLayout({ children }: PropsWithChildren) {
+const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
 		// <ClerkProvider afterSignOutUrl={'/'}>
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${inter.className} antialiased`}>
-				{/* <Toaster /> */}
+				<Toaster />
 
 				{/* <TRPCProviderClient> */}
 				{children}
@@ -39,3 +39,5 @@ export default function RootLayout({ children }: PropsWithChildren) {
 		// </ClerkProvider>
 	)
 }
+
+export default RootLayout
