@@ -3,17 +3,15 @@ This project contains the following technologies
 
 
 To run the client and server via concurrently:
-terminal powershell -> `npm install -g bun` (the last `npm` command you'll ever need)
-terminal powershell -> `bun i`
-terminal powershell -> `bun add` (install dependencies)
-terminal powershell -> `bun run all` OR `bun all`
-terminal powershell -> `bun run lint` OR `bun lint`(loading ESLint checker)
-terminal powershell -> `bun run knip` OR `bun knip`
+terminal powershell -> `npm i` (install dependencies)
+terminal powershell -> `npm run all`
+terminal powershell -> `npm run lint` (loading ESLint checker)
+terminal powershell -> `npm run knip`
 
-terminal powershell -> `bunx drizzle-kit generate`
-terminal powershell -> `bunx drizzle-kit push`
-terminal powershell -> `bunx drizzle-kit migrate`
-terminal powershell -> `bunx drizzle-kit migrate reset`
+terminal powershell -> `npx drizzle-kit generate`
+terminal powershell -> `npx drizzle-kit push`
+terminal powershell -> `npx drizzle-kit migrate`
+terminal powershell -> `npx drizzle-kit migrate reset`
 
 terminal CommandPrompt -> `ngrok config add-authtoken 2lKZpXotH2Iex2uCLicGRw5Y4Wv_219kEsPPGgs2yXeyE6iEx`
 terminal CommandPrompt -> `ngrok http --url=notably-just-cheetah.ngrok-free.app 3000`

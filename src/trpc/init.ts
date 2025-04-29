@@ -12,9 +12,7 @@ export const createTRPCContext = cache(async () => {
 	// TODO: Generate a problem for building the app
 	const { userId } = await auth()
 
-	return {
-		clerkUserId: userId,
-	}
+	return { clerkUserId: userId }
 })
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>
@@ -33,14 +31,9 @@ export const createTRPCRouter = t.router
 export const createCallerFactory = t.createCallerFactory
 export const baseProcedure = t.procedure
 
-// Create a Redis instance
-
-// Create a Ratelimit instance
-
 // Check if the user is authenticated and if not, throw an exception
 export const protectedProcedure = t.procedure.use(async function isAuthed(opts) {
 	const { ctx } = opts
-
 	if (!ctx.clerkUserId) {
 		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource' })
 	}
@@ -50,6 +43,7 @@ export const protectedProcedure = t.procedure.use(async function isAuthed(opts) 
 	if (!user) {
 		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not user found in database' })
 	}
+
 	// Check if the user has exceeded the request limit
 	const { success } = await ratelimit.limit(user.id)
 	if (!success) {
