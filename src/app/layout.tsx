@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Toaster } from '@/components/ui'
-// import { TRPCProviderClient } from '@/providers'
+import { TRPCProviderClient } from '@/providers/trpc-provider-client'
 
 import './globals.css'
 
@@ -31,9 +31,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 				<body className={`${inter.className} antialiased`}>
 					<Toaster />
 
-					{/* <TRPCProviderClient> */}
-					{children}
-					{/* </TRPCProviderClient> */}
+					<TRPCProviderClient>{children}</TRPCProviderClient>
 				</body>
 			</html>
 		</ClerkProvider>
