@@ -15,5 +15,8 @@ terminal powershell -> `bunx drizzle-kit push`
 terminal powershell -> `bunx drizzle-kit migrate`
 terminal powershell -> `bunx drizzle-kit migrate reset`
 
+terminal CommandPrompt -> `ngrok config add-authtoken 2lKZpXotH2Iex2uCLicGRw5Y4Wv_219kEsPPGgs2yXeyE6iEx`
+terminal CommandPrompt -> `ngrok http --url=notably-just-cheetah.ngrok-free.app 3000`
+
 terminal CommandPrompt -> `stripe login`
 terminal CommandPrompt -> `stripe listen --forward-to localhost:3000/api/webhook`
