@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import { config } from 'dotenv'
 import ngrok from '@ngrok/ngrok'
 

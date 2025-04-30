@@ -10,9 +10,18 @@ export {
 	AlertDialogCancel,
 } from './alert-dialog'
 export { Avatar, AvatarFallback, AvatarImage } from './avatar'
+export { Badge, badgeVariants } from './badge'
 export { Button, buttonVariants } from './button'
 export { Calendar } from './calendar'
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
+export {
+	Carousel,
+	type CarouselApi,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from './carousel'
 export { ChartContainer, ChartTooltip, ChartTooltipContent } from './chart'
 export type { ChartConfig } from './chart'
 export { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './command'

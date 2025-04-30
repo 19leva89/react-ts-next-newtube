@@ -12,6 +12,7 @@ terminal powershell -> `npx drizzle-kit generate`
 terminal powershell -> `npx drizzle-kit push`
 terminal powershell -> `npx drizzle-kit migrate`
 terminal powershell -> `npx drizzle-kit migrate reset`
+terminal powershell -> `npx tsx scripts/seed-categories.ts` (seed Categories)
 
 terminal CommandPrompt -> `ngrok config add-authtoken 2lKZpXotH2Iex2uCLicGRw5Y4Wv_219kEsPPGgs2yXeyE6iEx`
 terminal CommandPrompt -> `ngrok http --url=notably-just-cheetah.ngrok-free.app 3000`
