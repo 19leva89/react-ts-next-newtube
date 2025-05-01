@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -14,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 export const VideosSection = () => {
 	return (
 		<Suspense fallback={<div>Loading...</div>}>
-			<ErrorBoundary fallback={<p>Error...</p>}>
+			<ErrorBoundary fallback={<p>Error</p>}>
 				<VideosSectionSuspense />
 			</ErrorBoundary>
 		</Suspense>

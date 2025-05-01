@@ -34,6 +34,7 @@ export {
 	DialogTitle,
 	DialogTrigger,
 } from './dialog'
+export { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from './drawer'
 export {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
