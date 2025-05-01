@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { Suspense } from 'react'
+import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
 import { useTRPC } from '@/trpc/client'
-import { DEFAULT_LIMIT } from '@/constants'
 import { InfiniteScroll } from '@/components/shared'
+import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
 
 export const VideosSection = () => {
@@ -22,6 +23,7 @@ export const VideosSection = () => {
 
 export const VideosSectionSuspense = () => {
 	const trpc = useTRPC()
+	const router = useRouter()
 
 	const {
 		data: videos,
@@ -59,17 +61,19 @@ export const VideosSectionSuspense = () => {
 						{videos.pages
 							.flatMap((page) => page.items)
 							.map((video) => (
-								<Link href={`/studio/videos/${video.id}`} key={video.id} prefetch>
-									<TableRow className="cursor-pointer">
-										<TableCell>{video.title}</TableCell>
-										<TableCell>Visibility</TableCell>
-										<TableCell>Status</TableCell>
-										<TableCell>Date</TableCell>
-										<TableCell>Views</TableCell>
-										<TableCell>Comments</TableCell>
-										<TableCell>Likes</TableCell>
-									</TableRow>
-								</Link>
+								<TableRow
+									key={video.id}
+									onClick={() => router.push(`/studio/videos/${video.id}`)}
+									className="cursor-pointer hover:bg-muted transition"
+								>
+									<TableCell>{video.title}</TableCell>
+									<TableCell>Visibility</TableCell>
+									<TableCell>Status</TableCell>
+									<TableCell>Date</TableCell>
+									<TableCell>Views</TableCell>
+									<TableCell>Comments</TableCell>
+									<TableCell>Likes</TableCell>
+								</TableRow>
 							))}
 					</TableBody>
 				</Table>

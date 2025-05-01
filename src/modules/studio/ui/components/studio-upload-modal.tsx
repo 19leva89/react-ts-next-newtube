@@ -17,8 +17,8 @@ export const StudioUploadModal = () => {
 				toast.success('Video created successfully')
 				queryClient.invalidateQueries({ refetchType: 'active' })
 			},
-			onError: () => {
-				toast.error('Error creating video')
+			onError: (error) => {
+				toast.error(error ? error.message : 'Error creating video')
 			},
 		}),
 	)

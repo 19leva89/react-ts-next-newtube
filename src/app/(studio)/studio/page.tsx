@@ -1,6 +1,6 @@
 import { HydrateClient, prefetch, trpc } from '@/trpc/server'
 
-import { DEFAULT_LIMIT } from '@/constants'
+import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { StudioView } from '@/modules/studio/view/studio-view'
 
 export const dynamic = 'force-dynamic' // Force dynamic rendering

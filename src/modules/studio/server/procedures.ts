@@ -11,7 +11,7 @@ export const studioRouter = createTRPCRouter({
 			z.object({
 				cursor: z
 					.object({
-						id: z.string().uuid(),
+						id: z.string().cuid2(),
 						updatedAt: z.date(),
 					})
 					.nullish(),
@@ -21,6 +21,7 @@ export const studioRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const { cursor, limit } = input
 			const { id: userId } = ctx.user
+
 			const data = await db
 				.select()
 				.from(videos)
@@ -36,12 +37,15 @@ export const studioRouter = createTRPCRouter({
 					),
 				)
 				.orderBy(desc(videos.updatedAt), desc(videos.id))
+				// Add 1 to the limit to check if there is more data
 				.limit(limit + 1)
 
 			const hasMore = data.length > limit
+
+			// Remove the last item if there is more data
 			const items = hasMore ? data.slice(0, -1) : data
 
-			// Set the next cursor
+			// Set the next cursor to the last item if there is more data
 			const lastItem = items[items.length - 1]
 			const nextCursor = hasMore ? { id: lastItem.id, updatedAt: lastItem.updatedAt } : null
 

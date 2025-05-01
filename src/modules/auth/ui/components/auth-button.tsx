@@ -12,12 +12,18 @@ export const AuthButton = () => {
 		<>
 			<ClerkLoading>
 				<div className="flex items-center justify-center w-full">
-					<LoaderIcon className="size-5 text-gray-500/80 animate-spin" />
+					<LoaderIcon className="size-6 text-gray-500/80 animate-spin" />
 				</div>
 			</ClerkLoading>
 
 			<SignedIn>
-				<UserButton>
+				<UserButton
+					appearance={{
+						elements: {
+							userButtonAvatarBox: '!size-8',
+						},
+					}}
+				>
 					<UserButton.MenuItems>
 						{/* // TODO: Add user profile menu button */}
 

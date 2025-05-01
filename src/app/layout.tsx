@@ -29,7 +29,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 		<ClerkProvider afterSignOutUrl="/">
 			<html lang="en" suppressHydrationWarning>
 				<body className={`${inter.className} antialiased`}>
-					<Toaster />
+					<Toaster position="bottom-right" expand={false} richColors />
 
 					<TRPCProviderClient>{children}</TRPCProviderClient>
 				</body>

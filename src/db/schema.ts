@@ -41,10 +41,10 @@ export const videos = pgTable('videos', {
 	id: cuid('id').primaryKey(),
 	title: varchar({ length: 255 }).notNull(),
 	description: text('description'),
-	userId: cuid('user_id')
+	userId: text('user_id')
 		.references(() => users.id, { onDelete: 'cascade' })
 		.notNull(),
-	categoryId: cuid('category_id').references(() => categories.id, {
+	categoryId: text('category_id').references(() => categories.id, {
 		onDelete: 'set null',
 	}),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
