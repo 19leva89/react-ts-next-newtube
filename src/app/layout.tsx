@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<ClerkProvider afterSignOutUrl={'/'}>
+		<ClerkProvider afterSignOutUrl="/">
 			<html lang="en" suppressHydrationWarning>
 				<body className={`${inter.className} antialiased`}>
 					<Toaster />

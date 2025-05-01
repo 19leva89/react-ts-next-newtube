@@ -13,9 +13,9 @@ export const HomeNavbar = () => {
 				<div className="flex shrink-0 items-center gap-4">
 					<SidebarTrigger className="cursor-pointer" />
 
-					<Link href={'/'}>
+					<Link href="/">
 						<div className="flex items-center gap-1">
-							<Image src={'/svg/logo.svg'} alt="Logo" width={32} height={32} />
+							<Image src="/svg/logo.svg" alt="Logo" width={32} height={32} />
 
 							<p className="text-xl font-semibold tracking-tight">NewTube</p>
 						</div>

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui'
 
 export const AuthButton = () => {
 	// TODO: Add different auth states
+
 	return (
 		<>
 			<ClerkLoading>
@@ -19,6 +20,7 @@ export const AuthButton = () => {
 				<UserButton>
 					<UserButton.MenuItems>
 						{/* // TODO: Add user profile menu button */}
+
 						<UserButton.Link
 							href="/studio"
 							label="Studio"
@@ -28,6 +30,7 @@ export const AuthButton = () => {
 						<UserButton.Action label="manageAccount" />
 					</UserButton.MenuItems>
 				</UserButton>
+
 				{/* // TODO Add menu items here for studio and User profile */}
 			</SignedIn>
 

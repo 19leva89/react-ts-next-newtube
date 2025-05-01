@@ -14,8 +14,8 @@ export const StudioSidebarHeader = () => {
 				<Skeleton className="size-28 rounded-full" />
 
 				<div className="flex flex-col items-center gap-y-1 mt-3">
-					<Skeleton className="h-4 w-20" />
-					<Skeleton className="h-4 w-26" />
+					<Skeleton className="w-20 h-4" />
+					<Skeleton className="w-26 h-4" />
 				</div>
 			</SidebarHeader>
 		)
@@ -23,9 +23,9 @@ export const StudioSidebarHeader = () => {
 	if (state === 'collapsed') {
 		return (
 			<SidebarMenuItem>
-				<SidebarMenuButton tooltip={'Your profile'} asChild>
-					<Link href={'/users/current'} prefetch>
-						<UserAvatar imageUrl={user?.imageUrl} name={user?.fullName ?? 'User'} size={'xs'} />
+				<SidebarMenuButton tooltip="Your profile" asChild>
+					<Link href="/users/current" prefetch>
+						<UserAvatar size="xs" name={user?.fullName ?? 'User'} imageUrl={user?.imageUrl} />
 
 						<span className="text-sm">Your profile</span>
 					</Link>
@@ -36,17 +36,18 @@ export const StudioSidebarHeader = () => {
 
 	return (
 		<SidebarHeader className="flex items-center justify-center pb-4">
-			<Link href={'/users/current'} prefetch>
+			<Link href="/users/current" prefetch>
 				<UserAvatar
 					size="xl"
-					imageUrl={user?.imageUrl}
 					name={user?.fullName ?? 'User'}
+					imageUrl={user?.imageUrl}
 					className="size-28 hover:opacity-80 transition-opacity"
 				/>
 			</Link>
 
 			<div className="flex flex-col items-center mt-2 gap-y-1">
 				<p className="text-sm  font-medium">Your profile</p>
+
 				<p className="text-xs text-muted-foreground">{user.fullName}</p>
 			</div>
 		</SidebarHeader>

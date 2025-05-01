@@ -25,7 +25,7 @@ export const StudioUploadModal = () => {
 
 	return (
 		<Button
-			variant={'secondary'}
+			variant="secondary"
 			disabled={create.isPending}
 			onClick={() => create.mutate()}
 			className="cursor-pointer"

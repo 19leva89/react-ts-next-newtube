@@ -6,11 +6,11 @@ import { Avatar, AvatarImage } from '@/components/ui'
 const avatarVariants = cva('', {
 	variants: {
 		size: {
-			default: 'h-9 w-9',
-			xs: 'h-4 w-4',
-			sm: 'h-6 w-6',
-			lg: 'h-10 w-10',
-			xl: 'h-[160px] w-[160px]',
+			default: 'size-9',
+			xs: 'size-4',
+			sm: 'size-6',
+			lg: 'size-10',
+			xl: 'size-40',
 		},
 	},
 	defaultVariants: {
@@ -18,14 +18,14 @@ const avatarVariants = cva('', {
 	},
 })
 
-interface UserAvatarProps extends VariantProps<typeof avatarVariants> {
-	imageUrl: string
+interface Props extends VariantProps<typeof avatarVariants> {
 	name: string
+	imageUrl: string
 	className?: string
 	onClick?: () => void
 }
 
-export const UserAvatar = ({ imageUrl, name, className, size, onClick }: UserAvatarProps) => {
+export const UserAvatar = ({ size, name, imageUrl, className, onClick }: Props) => {
 	return (
 		<Avatar className={cn(avatarVariants({ size, className }))} onClick={onClick}>
 			<AvatarImage src={imageUrl} alt={name} />
