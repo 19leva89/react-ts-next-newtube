@@ -9,7 +9,11 @@ const nextConfig: NextConfig = {
 			},
 			{
 				protocol: 'https',
-				hostname: 'res.cloudinary.com',
+				hostname: 'image.mux.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'utfs.io',
 			},
 		],
 		unoptimized: true,

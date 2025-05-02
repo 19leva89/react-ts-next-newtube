@@ -79,10 +79,11 @@ export const POST = async (req: NextRequest) => {
 
 			const tempPreviewUrl = `https://image.mux.com/${playbackId}/animated.gif`
 			const tempThumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.png`
+
 			const duration = data.duration ? Math.round(data.duration * 1000) : 0
 
-			const utapi = new UTApi()
-			const [uploadThumbnailUrl, uploadPreviewUrl] = await utapi.uploadFilesFromUrl([
+			const utApi = new UTApi()
+			const [uploadThumbnailUrl, uploadPreviewUrl] = await utApi.uploadFilesFromUrl([
 				tempThumbnailUrl,
 				tempPreviewUrl,
 			])
@@ -146,8 +147,8 @@ export const POST = async (req: NextRequest) => {
 				asset_id: string
 			}
 
-			const assetId = data.asset_id
 			const trackId = data.id
+			const assetId = data.asset_id
 			const status = data.status
 
 			if (!assetId) {
