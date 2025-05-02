@@ -1,16 +1,16 @@
 'use client'
 
 import superjson from 'superjson'
+import { httpBatchLink } from '@trpc/client'
+import { createTRPCReact } from '@trpc/react-query'
 import { PropsWithChildren, useState } from 'react'
 import type { QueryClient } from '@tanstack/react-query'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { createTRPCClient, httpBatchLink } from '@trpc/client'
-import { createTRPCContext } from '@trpc/tanstack-react-query'
 
 import type { AppRouter } from '@/trpc/routers/_app'
 import { makeQueryClient } from '@/trpc/query-client'
 
-export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>()
+export const trpc = createTRPCReact<AppRouter>()
 
 let browserQueryClient: QueryClient
 
@@ -41,7 +41,7 @@ function getUrl() {
 	return `${base}/api/trpc`
 }
 
-export function TRPCReactProvider(props: PropsWithChildren) {
+export function TRPCProvider(props: PropsWithChildren) {
 	// NOTE: Avoid useState when initializing the query client if you don't
 	//       have a suspense boundary between this and the code that may
 	//       suspend because React will throw away the client on the initial
@@ -49,7 +49,7 @@ export function TRPCReactProvider(props: PropsWithChildren) {
 	const queryClient = getQueryClient()
 
 	const [trpcClient] = useState(() =>
-		createTRPCClient<AppRouter>({
+		trpc.createClient({
 			links: [
 				httpBatchLink({
 					transformer: superjson,
@@ -57,7 +57,6 @@ export function TRPCReactProvider(props: PropsWithChildren) {
 					async headers() {
 						const headers = new Headers()
 						headers.set('x-trpc-source', 'nextjs-react')
-
 						return headers
 					},
 				}),
@@ -66,10 +65,8 @@ export function TRPCReactProvider(props: PropsWithChildren) {
 	)
 
 	return (
-		<QueryClientProvider client={queryClient}>
-			<TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-				{props.children}
-			</TRPCProvider>
-		</QueryClientProvider>
+		<trpc.Provider client={trpcClient} queryClient={queryClient}>
+			<QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
+		</trpc.Provider>
 	)
 }

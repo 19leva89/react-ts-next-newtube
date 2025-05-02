@@ -1,4 +1,4 @@
-import { HydrateClient, prefetch, trpc } from '@/trpc/server'
+import { HydrateClient, trpc } from '@/trpc/server'
 
 import { HomeView } from '@/modules/home/ui/views/home-view'
 
@@ -13,7 +13,11 @@ interface Props {
 const HomePage = async ({ searchParams }: Props) => {
 	const { categoryId } = await searchParams
 
-	prefetch(trpc.categories.getMany.queryOptions())
+	void trpc.categories.getMany.prefetch()
+	// void trpc.videos.getMany.prefetchInfinite({
+	// 	categoryId: categoryId,
+	// 	limit: DEFAULT_LIMIT,
+	// })
 
 	return (
 		<HydrateClient>

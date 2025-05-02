@@ -3,9 +3,8 @@
 import { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { useTRPC } from '@/trpc/client'
+import { trpc } from '@/trpc/client'
 import { FilterCarousel } from '@/components/shared'
 
 interface Props {
@@ -27,14 +26,13 @@ export const CategoriesSection = ({ categoryId }: Props) => {
 }
 
 export const CategoriesSectionSuspense = ({ categoryId }: Props) => {
-	const trpc = useTRPC()
 	const router = useRouter()
 
-	const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions())
+	const [categories] = trpc.categories.getMany.useSuspenseQuery()
 
-	const categories = data.map(({ id, name }) => ({
-		value: id,
-		label: name,
+	const data = categories.map((category) => ({
+		value: category.id,
+		label: category.name,
 	}))
 
 	const onSelect = (value: string | null) => {
@@ -49,5 +47,5 @@ export const CategoriesSectionSuspense = ({ categoryId }: Props) => {
 		router.push(url.toString())
 	}
 
-	return <FilterCarousel data={categories} value={categoryId} onSelectAction={onSelect} />
+	return <FilterCarousel data={data} value={categoryId} onSelectAction={onSelect} />
 }

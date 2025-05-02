@@ -5,9 +5,8 @@ import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { Globe2Icon, LockIcon } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 
-import { useTRPC } from '@/trpc/client'
+import { trpc } from '@/trpc/client'
 import { snakeCaseToTitle } from '@/lib/utils'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
@@ -16,7 +15,7 @@ import { Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 
 export const VideosSection = () => {
 	return (
-		<Suspense fallback={<div>Loading...</div>}>
+		<Suspense fallback={<VideosSectionSkeleton />}>
 			<ErrorBoundary fallback={<p>Error</p>}>
 				<VideosSectionSuspense />
 			</ErrorBoundary>
@@ -26,84 +25,71 @@ export const VideosSection = () => {
 
 const VideosSectionSkeleton = () => {
 	return (
-		<>
-			<div className="border-y">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead className="w-130 pl-6">Video</TableHead>
-							<TableHead>Visibility</TableHead>
-							<TableHead>Status</TableHead>
-							<TableHead>Date</TableHead>
-							<TableHead className="text-right">Views</TableHead>
-							<TableHead className="text-right">Comments</TableHead>
-							<TableHead className="text-right pr-6">Likes</TableHead>
-						</TableRow>
-					</TableHeader>
+		<div className="border-y">
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead className="w-130 pl-6">Video</TableHead>
+						<TableHead>Visibility</TableHead>
+						<TableHead>Status</TableHead>
+						<TableHead>Date</TableHead>
+						<TableHead>Views</TableHead>
+						<TableHead>Comments</TableHead>
+						<TableHead>Likes</TableHead>
+					</TableRow>
+				</TableHeader>
 
-					<TableBody>
-						{Array.from({ length: DEFAULT_LIMIT }).map((_, i) => (
-							<TableRow key={i}>
-								<TableCell className="pl-6">
-									<div className="flex items-center gap-4">
-										<Skeleton className="w-36 h-20" />
-										<div className="flex flex-col gap-2">
-											<Skeleton className="w-25 h-4" />
-											<Skeleton className="w-45 h-3" />
-										</div>
+				<TableBody>
+					{Array.from({ length: DEFAULT_LIMIT }).map((_, index) => (
+						<TableRow key={index}>
+							<TableCell className="pl-6">
+								<div className="flex items-center gap-4">
+									<Skeleton className="w-36 h-20" />
+
+									<div className="flex flex-col gap-2">
+										<Skeleton className="w-25 h-4" />
+										<Skeleton className="w-45 h-3" />
 									</div>
-								</TableCell>
+								</div>
+							</TableCell>
 
-								<TableCell>
-									<Skeleton className="w-20 h-4" />
-								</TableCell>
+							<TableCell>
+								<Skeleton className="w-20 h-4" />
+							</TableCell>
 
-								<TableCell>
-									<Skeleton className="w-20 h-4" />
-								</TableCell>
+							<TableCell>
+								<Skeleton className="w-20 h-4" />
+							</TableCell>
 
-								<TableCell className="text-xs truncate">
-									<Skeleton className="w-24 h-4" />
-								</TableCell>
+							<TableCell>
+								<Skeleton className="w-24 h-4" />
+							</TableCell>
 
-								<TableCell className="text-right">
-									<Skeleton className="w-16 h-4" />
-								</TableCell>
+							<TableCell>
+								<Skeleton className="w-16 h-4" />
+							</TableCell>
 
-								<TableCell className="text-right">
-									<Skeleton className="w-20 h-4" />
-								</TableCell>
+							<TableCell>
+								<Skeleton className="w-20 h-4" />
+							</TableCell>
 
-								<TableCell className="text-right pr-6">
-									<Skeleton className="w-16 h-4" />
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</div>
-		</>
+							<TableCell>
+								<Skeleton className="w-16 h-4" />
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</div>
 	)
 }
 
 export const VideosSectionSuspense = () => {
-	const trpc = useTRPC()
 	const router = useRouter()
 
-	const {
-		data: videos,
-		hasNextPage,
-		isFetchingNextPage,
-		fetchNextPage,
-	} = useSuspenseInfiniteQuery(
-		trpc.studio.getMany.infiniteQueryOptions(
-			{ limit: DEFAULT_LIMIT },
-			{
-				getNextPageParam(lastPage) {
-					return lastPage.nextCursor
-				},
-			},
-		),
+	const [videos, query] = trpc.studio.getMany.useSuspenseInfiniteQuery(
+		{ limit: DEFAULT_LIMIT },
+		{ getNextPageParam: (lastPage) => lastPage.nextCursor },
 	)
 
 	return (
@@ -182,10 +168,9 @@ export const VideosSectionSuspense = () => {
 			</div>
 
 			<InfiniteScroll
-				isManual
-				hasNextPage={hasNextPage}
-				isFetchingNextPage={isFetchingNextPage}
-				fetchNextPage={fetchNextPage}
+				hasNextPage={query.hasNextPage}
+				fetchNextPage={query.fetchNextPage}
+				isFetchingNextPage={query.isFetchingNextPage}
 			/>
 		</div>
 	)
