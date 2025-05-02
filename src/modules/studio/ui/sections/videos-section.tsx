@@ -3,8 +3,8 @@
 import { Suspense } from 'react'
 import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
-import { Globe2Icon, LockIcon } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { LockOpenIcon, LockIcon } from 'lucide-react'
 
 import { trpc } from '@/trpc/client'
 import { snakeCaseToTitle } from '@/lib/utils'
@@ -143,7 +143,7 @@ export const VideosSectionSuspense = () => {
 											{video.visibility === 'private' ? (
 												<LockIcon className="size-4 mr-2" />
 											) : (
-												<Globe2Icon className="size-4 mr-2" />
+												<LockOpenIcon className="size-4 mr-2" />
 											)}
 
 											{snakeCaseToTitle(video.visibility)}

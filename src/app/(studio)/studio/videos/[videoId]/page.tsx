@@ -1,4 +1,4 @@
-import { HydrateClient, trpc } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 import { VideoView } from '@/modules/studio/ui/views/video-view'
 
 export const dynamic = 'force-dynamic'
@@ -13,11 +13,7 @@ const VideoIdPage = async ({ params }: Props) => {
 	void trpc.studio.getOne.prefetch({ id: videoId })
 	void trpc.categories.getMany.prefetch()
 
-	return (
-		<HydrateClient>
-			<VideoView videoId={videoId} />
-		</HydrateClient>
-	)
+	return <VideoView videoId={videoId} />
 }
 
 export default VideoIdPage

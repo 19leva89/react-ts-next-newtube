@@ -1,14 +1,16 @@
 import { z } from 'zod'
 import { and, eq } from 'drizzle-orm'
 import { TRPCError } from '@trpc/server'
+import { UTApi } from 'uploadthing/server'
 
 import { db } from '@/db'
 import { mux } from '@/lib/mux'
-import { videos } from '@/db/schema'
+import { workflow } from '@/lib/workflow'
+import { videos, videosUpdateSchema } from '@/db/schema'
 import { createTRPCRouter, protectedProcedure } from '@/trpc/init'
 
 export const videosRouter = createTRPCRouter({
-	// getOne: baseProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ input, ctx }) => {
+	// getOne: baseProcedure.input(z.object({ id: z.string().cuid2() })).query(async ({ input, ctx }) => {
 	// 	const { id: videoId } = input
 	// 	const { userId } = ctx
 
@@ -67,10 +69,10 @@ export const videosRouter = createTRPCRouter({
 	// 	.input(
 	// 		z.object({
 	// 			userId: z.string().nullish(),
-	// 			categoryId: z.string().uuid().nullish(),
+	// 			categoryId: z.string().cuid2().nullish(),
 	// 			cursor: z
 	// 				.object({
-	// 					id: z.string().uuid(),
+	// 					id: z.string().cuid2(),
 	// 					updatedAt: z.date(),
 	// 				})
 	// 				.nullish(),
@@ -133,7 +135,7 @@ export const videosRouter = createTRPCRouter({
 	// 		z.object({
 	// 			cursor: z
 	// 				.object({
-	// 					id: z.string().uuid(),
+	// 					id: z.string().cuid2(),
 	// 					viewCount: z.number(),
 	// 				})
 	// 				.nullish(),
@@ -196,7 +198,7 @@ export const videosRouter = createTRPCRouter({
 	// 		z.object({
 	// 			cursor: z
 	// 				.object({
-	// 					id: z.string().uuid(),
+	// 					id: z.string().cuid2(),
 	// 					updatedAt: z.date(),
 	// 				})
 	// 				.nullish(),
@@ -264,154 +266,138 @@ export const videosRouter = createTRPCRouter({
 	// 		return { items, nextCursor }
 	// 	}),
 
-	// generateTitle: protectedProcedure
-	// 	.input(z.object({ id: z.string().uuid() }))
-	// 	.mutation(async ({ ctx, input }) => {
-	// 		const { id: userId } = ctx.user
+	generateTitle: protectedProcedure
+		.input(z.object({ id: z.string().cuid2() }))
+		.mutation(async ({ ctx, input }) => {
+			const { id: userId } = ctx.user
 
-	// 		const { workflowRunId } = await workflow.trigger({
-	// 			url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
-	// 			body: { userId, videoId: input.id },
-	// 			retries: 3,
-	// 		})
+			const { workflowRunId } = await workflow.trigger({
+				url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
+				body: { userId, videoId: input.id },
+				retries: 3,
+			})
 
-	// 		return { workflowRunId }
-	// 	}),
+			return { workflowRunId }
+		}),
 
-	// generateDescription: protectedProcedure
-	// 	.input(z.object({ id: z.string().uuid() }))
-	// 	.mutation(async ({ ctx, input }) => {
-	// 		const { id: userId } = ctx.user
+	generateDescription: protectedProcedure
+		.input(z.object({ id: z.string().cuid2() }))
+		.mutation(async ({ ctx, input }) => {
+			const { id: userId } = ctx.user
 
-	// 		const { workflowRunId } = await workflow.trigger({
-	// 			url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/description`,
-	// 			body: { userId, videoId: input.id },
-	// 			retries: 3,
-	// 		})
+			const { workflowRunId } = await workflow.trigger({
+				url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/description`,
+				body: { userId, videoId: input.id },
+				retries: 3,
+			})
 
-	// 		return { workflowRunId }
-	// 	}),
+			return { workflowRunId }
+		}),
 
-	// revalidate: protectedProcedure
-	// 	.input(z.object({ id: z.string().uuid() }))
-	// 	.mutation(async ({ ctx, input }) => {
-	// 		const { id: userId } = ctx.user
+	revalidate: protectedProcedure
+		.input(z.object({ id: z.string().cuid2() }))
+		.mutation(async ({ ctx, input }) => {
+			const { id: userId } = ctx.user
 
-	// 		const [existingVideo] = await db
-	// 			.select()
-	// 			.from(videos)
-	// 			.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))
+			const [existingVideo] = await db
+				.select()
+				.from(videos)
+				.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))
 
-	// 		if (!existingVideo) {
-	// 			throw new TRPCError({ code: 'NOT_FOUND' })
-	// 		}
+			if (!existingVideo) {
+				throw new TRPCError({ code: 'NOT_FOUND' })
+			}
 
-	// 		if (!existingVideo.muxUploadId) {
-	// 			throw new TRPCError({ code: 'BAD_REQUEST' })
-	// 		}
+			if (!existingVideo.muxUploadId) {
+				throw new TRPCError({ code: 'BAD_REQUEST' })
+			}
 
-	// 		const directUpload = await mux.video.uploads.retrieve(existingVideo.muxUploadId)
+			const directUpload = await mux.video.uploads.retrieve(existingVideo.muxUploadId)
 
-	// 		if (!directUpload || !directUpload.asset_id) {
-	// 			throw new TRPCError({ code: 'BAD_REQUEST' })
-	// 		}
+			if (!directUpload || !directUpload.asset_id) {
+				throw new TRPCError({ code: 'BAD_REQUEST' })
+			}
 
-	// 		const asset = await mux.video.assets.retrieve(directUpload.asset_id)
+			const asset = await mux.video.assets.retrieve(directUpload.asset_id)
 
-	// 		if (!asset) {
-	// 			throw new TRPCError({ code: 'BAD_REQUEST' })
-	// 		}
+			if (!asset) {
+				throw new TRPCError({ code: 'BAD_REQUEST' })
+			}
 
-	// 		const [updatedVideo] = await db
-	// 			.update(videos)
-	// 			.set({
-	// 				muxStatus: asset.status,
-	// 				muxPlaybackId: asset.playback_ids?.[0].id,
-	// 				muxAssetId: asset.id,
-	// 				duration: asset.duration ? Math.round(asset.duration * 1000) : 0,
-	// 			})
-	// 			.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))
-	// 			.returning()
+			const [updatedVideo] = await db
+				.update(videos)
+				.set({
+					muxStatus: asset.status,
+					muxPlaybackId: asset.playback_ids?.[0].id,
+					muxAssetId: asset.id,
+					duration: asset.duration ? Math.round(asset.duration * 1000) : 0,
+				})
+				.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))
+				.returning()
 
-	// 		return updatedVideo
-	// 	}),
+			return updatedVideo
+		}),
 
-	// generateThumbnail: protectedProcedure
-	// 	.input(z.object({ id: z.string().uuid() }))
-	// 	.mutation(async ({ ctx, input }) => {
-	// 		const { id: userId } = ctx.user
+	generateThumbnail: protectedProcedure
+		.input(z.object({ id: z.string().cuid2() }))
+		.mutation(async ({ ctx, input }) => {
+			const { id: userId } = ctx.user
 
-	// 		const { workflowRunId } = await workflow.trigger({
-	// 			url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
-	// 			body: { userId, videoId: input.id },
-	// 			retries: 3,
-	// 		})
+			const { workflowRunId } = await workflow.trigger({
+				url: `${process.env.UPSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
+				body: { userId, videoId: input.id },
+				retries: 3,
+			})
 
-	// 		return { workflowRunId }
-	// 	}),
+			return { workflowRunId }
+		}),
 
-	// restoreThumbnail: protectedProcedure
-	// 	.input(z.object({ id: z.string().uuid() }))
-	// 	.mutation(async ({ ctx, input }) => {
-	// 		const { id } = input
-	// 		const { id: userId } = ctx.user
+	restoreThumbnail: protectedProcedure
+		.input(z.object({ id: z.string().cuid2() }))
+		.mutation(async ({ ctx, input }) => {
+			const { id } = input
+			const { id: userId } = ctx.user
 
-	// 		const [existingVideo] = await db
-	// 			.select()
-	// 			.from(videos)
-	// 			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+			const [existingVideo] = await db
+				.select()
+				.from(videos)
+				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
 
-	// 		if (!existingVideo) {
-	// 			throw new TRPCError({ code: 'NOT_FOUND' })
-	// 		}
+			if (!existingVideo) {
+				throw new TRPCError({ code: 'NOT_FOUND' })
+			}
 
-	// 		if (existingVideo.thumbnailKey) {
-	// 			const utapi = new UTApi()
+			if (existingVideo.thumbnailKey) {
+				const utApi = new UTApi()
 
-	// 			await utapi.deleteFiles(existingVideo.thumbnailKey)
+				await utApi.deleteFiles(existingVideo.thumbnailKey)
 
-	// 			await db
-	// 				.update(videos)
-	// 				.set({ thumbnailKey: null, thumbnailUrl: null })
-	// 				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
-	// 		}
+				await db
+					.update(videos)
+					.set({ thumbnailKey: null, thumbnailUrl: null })
+					.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+			}
 
-	// 		if (!existingVideo.muxPlaybackId) {
-	// 			throw new TRPCError({ code: 'BAD_REQUEST' })
-	// 		}
+			if (!existingVideo.muxPlaybackId) {
+				throw new TRPCError({ code: 'BAD_REQUEST' })
+			}
 
-	// 		const tempThumbnailUrl = `https://image.mux.com/${existingVideo.muxPlaybackId}/thumbnail.jpg`
-	// 		const utapi = new UTApi()
-	// 		const uploadThumbnail = await utapi.uploadFilesFromUrl(tempThumbnailUrl)
+			const tempThumbnailUrl = `https://image.mux.com/${existingVideo.muxPlaybackId}/thumbnail.jpg`
+			const utApi = new UTApi()
+			const uploadThumbnail = await utApi.uploadFilesFromUrl(tempThumbnailUrl)
 
-	// 		if (!uploadThumbnail.data) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
+			if (!uploadThumbnail.data) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
 
-	// 		const { key: thumbnailKey, ufsUrl: thumbnailUrl } = uploadThumbnail.data
+			const { key: thumbnailKey, ufsUrl: thumbnailUrl } = uploadThumbnail.data
 
-	// 		const [updatedVideo] = await db
-	// 			.update(videos)
-	// 			.set({ thumbnailUrl, thumbnailKey })
-	// 			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
-	// 			.returning()
+			const [updatedVideo] = await db
+				.update(videos)
+				.set({ thumbnailUrl, thumbnailKey })
+				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+				.returning()
 
-	// 		return updatedVideo
-	// 	}),
-
-	remove: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
-		const { id } = input
-		const { id: userId } = ctx.user
-
-		const [removedVideo] = await db
-			.delete(videos)
-			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
-			.returning()
-
-		if (!removedVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
-		}
-
-		return removedVideo
-	}),
+			return updatedVideo
+		}),
 
 	create: protectedProcedure.mutation(async ({ ctx }) => {
 		const { id: userId } = ctx.user
@@ -420,16 +406,16 @@ export const videosRouter = createTRPCRouter({
 			new_asset_settings: {
 				passthrough: userId,
 				playback_policy: ['public'],
-				input: [
-					{
-						generated_subtitles: [
-							{
-								language_code: 'en',
-								name: 'English',
-							},
-						],
-					},
-				],
+				// input: [
+				// 	{
+				// 		generated_subtitles: [
+				// 			{
+				// 				language_code: 'en',
+				// 				name: 'English',
+				// 			},
+				// 		],
+				// 	},
+				// ],
 			},
 			cors_origin: '*', // TODO: In production set to your domain
 		})
@@ -437,7 +423,7 @@ export const videosRouter = createTRPCRouter({
 		const [video] = await db
 			.insert(videos)
 			.values({
-				title: 'title',
+				title: 'Untitled',
 				userId,
 				muxStatus: 'waiting',
 				muxUploadId: upload.id,
@@ -470,5 +456,21 @@ export const videosRouter = createTRPCRouter({
 		}
 
 		return updatedVideo
+	}),
+
+	remove: protectedProcedure.input(z.object({ id: z.string().cuid2() })).mutation(async ({ ctx, input }) => {
+		const { id } = input
+		const { id: userId } = ctx.user
+
+		const [removedVideo] = await db
+			.delete(videos)
+			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+			.returning()
+
+		if (!removedVideo) {
+			throw new TRPCError({ code: 'NOT_FOUND' })
+		}
+
+		return removedVideo
 	}),
 })

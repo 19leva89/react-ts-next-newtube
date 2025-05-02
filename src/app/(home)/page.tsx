@@ -1,4 +1,4 @@
-import { HydrateClient, trpc } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 
 import { HomeView } from '@/modules/home/ui/views/home-view'
 
@@ -19,11 +19,7 @@ const HomePage = async ({ searchParams }: Props) => {
 	// 	limit: DEFAULT_LIMIT,
 	// })
 
-	return (
-		<HydrateClient>
-			<HomeView categoryId={categoryId} />
-		</HydrateClient>
-	)
+	return <HomeView categoryId={categoryId} />
 }
 
 export default HomePage

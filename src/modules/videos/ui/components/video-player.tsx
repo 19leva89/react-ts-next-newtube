@@ -10,11 +10,9 @@ interface Props {
 	onPlay?: () => void
 }
 export const VideoPlayer = ({ playbackId, thumbnailUrl, autoPlay, onPlay }: Props) => {
-	if (!playbackId) return null
-
 	return (
 		<MuxPlayer
-			playbackId={playbackId}
+			playbackId={playbackId || ''}
 			poster={thumbnailUrl || THUMBNAIL_FALLBACK}
 			autoPlay={autoPlay}
 			playerInitTime={0}

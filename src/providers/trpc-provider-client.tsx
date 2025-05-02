@@ -1,12 +1,12 @@
 import { PropsWithChildren } from 'react'
 
+import { TRPCProvider } from '@/trpc/client'
 import { HydrateClient } from '@/trpc/server'
-import { TRPCReactProvider } from '@/trpc/client'
 
 export const TRPCProviderClient = ({ children }: PropsWithChildren) => {
 	return (
-		<TRPCReactProvider>
+		<TRPCProvider>
 			<HydrateClient>{children}</HydrateClient>
-		</TRPCReactProvider>
+		</TRPCProvider>
 	)
 }

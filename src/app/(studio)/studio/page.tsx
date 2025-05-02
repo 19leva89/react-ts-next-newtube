@@ -1,4 +1,4 @@
-import { HydrateClient, trpc } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { StudioView } from '@/modules/studio/ui/views/studio-view'
@@ -10,11 +10,7 @@ const StudioPage = () => {
 		limit: DEFAULT_LIMIT,
 	})
 
-	return (
-		<HydrateClient>
-			<StudioView />
-		</HydrateClient>
-	)
+	return <StudioView />
 }
 
 export default StudioPage

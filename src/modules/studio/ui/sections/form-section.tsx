@@ -5,6 +5,8 @@ import {
 	CopyIcon,
 	ImagePlusIcon,
 	Loader2Icon,
+	LockIcon,
+	LockOpenIcon,
 	MoreVerticalIcon,
 	RotateCcwIcon,
 	SparklesIcon,
@@ -53,7 +55,7 @@ interface Props {
 
 export const FormSection = ({ videoId }: Props) => {
 	return (
-		<Suspense fallback={<p>Loading...</p>}>
+		<Suspense fallback={<FormSectionSkeleton />}>
 			<ErrorBoundary fallback={<p>Something went wrong</p>}>
 				<FormSectionSuspense videoId={videoId} />
 			</ErrorBoundary>
@@ -61,23 +63,27 @@ export const FormSection = ({ videoId }: Props) => {
 	)
 }
 
+const FormSectionSkeleton = () => {
+	return <p>Loading...</p>
+}
+
 const FormSectionSuspense = ({ videoId }: Props) => {
 	const router = useRouter()
 	const utils = trpc.useUtils()
-	const fullUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/videos/${videoId}`
+	const fullUrl = `${process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || 'http://localhost:3000'}/videos/${videoId}`
 
-	const [categories] = trpc.categories.getMany.useSuspenseQuery()
 	const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId })
+	const [categories] = trpc.categories.getMany.useSuspenseQuery()
 
 	const [isCopied, setIsCopied] = useState<boolean>(false)
 	const [thumbnailModalOpen, setThumbnailModalOpen] = useState<boolean>(false)
 
 	const update = trpc.videos.update.useMutation({
 		onSuccess: () => {
-			toast.success('Video updated')
-
 			utils.studio.getMany.invalidate()
 			utils.studio.getOne.invalidate({ id: videoId })
+
+			toast.success('Video updated')
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -86,9 +92,9 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const remove = trpc.videos.remove.useMutation({
 		onSuccess: () => {
-			toast.success('Video removed')
-
 			utils.studio.getMany.invalidate()
+
+			toast.success('Video removed')
 
 			router.push('/studio')
 		},
@@ -99,10 +105,10 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const revalidate = trpc.videos.revalidate.useMutation({
 		onSuccess: () => {
-			toast.success('Video revalidated')
-
 			utils.studio.getMany.invalidate()
 			utils.studio.getOne.invalidate({ id: videoId })
+
+			toast.success('Video revalidated')
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -111,10 +117,10 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const restoreThumbnail = trpc.videos.restoreThumbnail.useMutation({
 		onSuccess: () => {
-			toast.success('Thumbnail restored')
-
 			utils.studio.getMany.invalidate()
 			utils.studio.getOne.invalidate({ id: videoId })
+
+			toast.success('Thumbnail restored')
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -123,12 +129,12 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
 		onSuccess: () => {
+			utils.studio.getMany.invalidate()
+			utils.studio.getOne.invalidate({ id: videoId })
+
 			toast.success('Background job started', {
 				description: 'This may take a few minutes',
 			})
-
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -137,12 +143,12 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const generateTitle = trpc.videos.generateTitle.useMutation({
 		onSuccess: () => {
+			utils.studio.getMany.invalidate()
+			utils.studio.getOne.invalidate({ id: videoId })
+
 			toast.success('Background job started', {
 				description: 'This may take a few minutes',
 			})
-
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -151,12 +157,12 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const generateDescription = trpc.videos.generateDescription.useMutation({
 		onSuccess: () => {
+			utils.studio.getMany.invalidate()
+			utils.studio.getOne.invalidate({ id: videoId })
+
 			toast.success('Background job started', {
 				description: 'This may take a few minutes',
 			})
-
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -164,8 +170,8 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 	})
 
 	const form = useForm<z.infer<typeof videosUpdateSchema>>({
-		resolver: zodResolver(videosUpdateSchema),
 		defaultValues: video,
+		resolver: zodResolver(videosUpdateSchema),
 	})
 
 	const onSubmit = (data: z.infer<typeof videosUpdateSchema>) => {
@@ -176,6 +182,8 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 		await navigator.clipboard.writeText(fullUrl)
 
 		setIsCopied(true)
+
+		toast.success('Copied to clipboard')
 
 		setTimeout(() => {
 			setIsCopied(false)
@@ -216,6 +224,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										onClick={() => {
 											revalidate.mutate({ id: videoId })
 										}}
+										className="cursor-pointer"
 									>
 										<RotateCcwIcon className="size-4 mr-2" />
 										Revalidate
@@ -225,6 +234,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										onClick={() => {
 											remove.mutate({ id: videoId })
 										}}
+										className="cursor-pointer"
 									>
 										<TrashIcon className="size-4 mr-2" />
 										Delete
@@ -235,6 +245,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 					</div>
 
 					<div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+						{/* Left side */}
 						<div className="space-y-6 lg:col-span-3">
 							<FormField
 								control={form.control}
@@ -337,17 +348,26 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 													</DropdownMenuTrigger>
 
 													<DropdownMenuContent align="start" side="right">
-														<DropdownMenuItem onClick={() => setThumbnailModalOpen(true)}>
+														<DropdownMenuItem
+															onClick={() => setThumbnailModalOpen(true)}
+															className="cursor-pointer"
+														>
 															<ImagePlusIcon className="size-4 mr-1" />
 															Change
 														</DropdownMenuItem>
 
-														<DropdownMenuItem onClick={() => generateThumbnail.mutate({ id: video.id })}>
+														<DropdownMenuItem
+															onClick={() => generateThumbnail.mutate({ id: video.id })}
+															className="cursor-pointer"
+														>
 															<SparklesIcon className="size-4 mr-1" />
 															AI-Generated
 														</DropdownMenuItem>
 
-														<DropdownMenuItem onClick={() => restoreThumbnail.mutate({ id: video.id })}>
+														<DropdownMenuItem
+															onClick={() => restoreThumbnail.mutate({ id: video.id })}
+															className="cursor-pointer"
+														>
 															<RotateCcwIcon className="size-4 mr-1" />
 															Restore
 														</DropdownMenuItem>
@@ -377,7 +397,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 											<SelectContent>
 												{categories.map((category) => (
-													<SelectItem key={category.id} value={category.id}>
+													<SelectItem key={category.id} value={category.id} className="cursor-pointer">
 														{category.name}
 													</SelectItem>
 												))}
@@ -390,6 +410,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 							/>
 						</div>
 
+						{/* Right side */}
 						<div className="flex flex-col gap-y-8 lg:col-span-2">
 							<div className="flex flex-col gap-4 rounded-xl bg-[#F9F9F9] overflow-hidden h-fit">
 								<div className="relative aspect-video overflow-hidden">
@@ -432,7 +453,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										<div className="flex flex-col gap-y-1">
 											<p className="text-muted-foreground text-xs">Subtitles status</p>
 
-											<p className="text-sm">{snakeCaseToTitle(video.muxTrackStatus || 'preparing')}</p>
+											<p className="text-sm">{snakeCaseToTitle(video.muxTrackStatus || 'no_subtitles')}</p>
 										</div>
 									</div>
 								</div>
@@ -446,16 +467,22 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										<FormLabel>Visibility</FormLabel>
 
 										<Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
-											<FormControl>
+											<FormControl className="w-full">
 												<SelectTrigger>
 													<SelectValue placeholder="Select visibility" />
 												</SelectTrigger>
 											</FormControl>
 
 											<SelectContent>
-												<SelectItem value="public">Public</SelectItem>
+												<SelectItem value="public" className="cursor-pointer">
+													<LockOpenIcon className="size-4 mr-2" />
+													Public
+												</SelectItem>
 
-												<SelectItem value="private">Private</SelectItem>
+												<SelectItem value="private" className="cursor-pointer">
+													<LockIcon className="size-4 mr-2" />
+													Private
+												</SelectItem>
 											</SelectContent>
 										</Select>
 
