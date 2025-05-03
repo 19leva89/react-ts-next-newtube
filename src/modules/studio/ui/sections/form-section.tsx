@@ -41,6 +41,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
+	Skeleton,
 	Textarea,
 } from '@/components/ui'
 import { snakeCaseToTitle } from '@/lib/utils'
@@ -48,6 +49,7 @@ import { videosUpdateSchema } from '@/db/schema'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 import { ThumbnailUploadModal } from '@/modules/studio/ui/components/thumbnail-upload-modal'
+import { ThumbnailGenerateModal } from '@/modules/studio/ui/components/thumbnail-generate-modal'
 
 interface Props {
 	videoId: string
@@ -64,7 +66,72 @@ export const FormSection = ({ videoId }: Props) => {
 }
 
 const FormSectionSkeleton = () => {
-	return <p>Loading...</p>
+	return (
+		<div>
+			<div className="flex items-center justify-between mb-6">
+				<div className="space-y-2">
+					<Skeleton className="w-32 h-7" />
+					<Skeleton className="w-40 h-4" />
+				</div>
+
+				<Skeleton className="w-24 h-9" />
+			</div>
+
+			<div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+				{/* Left side */}
+				<div className="space-y-8 lg:col-span-3">
+					<div className="space-y-2">
+						<Skeleton className="w-16 h-5" />
+						<Skeleton className="w-full h-10" />
+					</div>
+
+					<div className="space-y-2">
+						<Skeleton className="w-24 h-5" />
+						<Skeleton className="w-full h-55" />
+					</div>
+
+					<div className="space-y-2">
+						<Skeleton className="w-20 h-5" />
+						<Skeleton className="w-38 h-21" />
+					</div>
+
+					<div className="space-y-2">
+						<Skeleton className="w-20 h-5" />
+						<Skeleton className="w-full h-10" />
+					</div>
+				</div>
+
+				{/* Right side */}
+				<div className="flex flex-col gap-y-8 lg:col-span-2">
+					<div className="flex flex-col gap-4 h-fit rounded-xl bg-[#F9F9F9] overflow-hidden">
+						<Skeleton className="aspect-video" />
+
+						<div className="p-4 space-y-6">
+							<div className="space-y-2">
+								<Skeleton className="w-20 h-4" />
+								<Skeleton className="w-full h-5" />
+							</div>
+
+							<div className="space-y-2">
+								<Skeleton className="w-24 h-4" />
+								<Skeleton className="w-32 h-5" />
+							</div>
+
+							<div className="space-y-2">
+								<Skeleton className="w-24 h-4" />
+								<Skeleton className="w-32 h-5" />
+							</div>
+						</div>
+					</div>
+
+					<div className="space-y-2">
+						<Skeleton className="w-20 h-5" />
+						<Skeleton className="w-full h-10" />
+					</div>
+				</div>
+			</div>
+		</div>
+	)
 }
 
 const FormSectionSuspense = ({ videoId }: Props) => {
@@ -77,6 +144,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 	const [isCopied, setIsCopied] = useState<boolean>(false)
 	const [thumbnailModalOpen, setThumbnailModalOpen] = useState<boolean>(false)
+	const [thumbnailGenerateModalOpen, setThumbnailGenerateModalOpen] = useState<boolean>(false)
 
 	const update = trpc.videos.update.useMutation({
 		onSuccess: () => {
@@ -121,20 +189,6 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 			utils.studio.getOne.invalidate({ id: videoId })
 
 			toast.success('Thumbnail restored')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
-
-	const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
-
-			toast.success('Background job started', {
-				description: 'This may take a few minutes',
-			})
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -198,6 +252,12 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				onOpenChange={setThumbnailModalOpen}
 			/>
 
+			<ThumbnailGenerateModal
+				videoId={videoId}
+				open={thumbnailGenerateModalOpen}
+				onOpenChange={setThumbnailGenerateModalOpen}
+			/>
+
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<div className="flex items-center justify-between mb-6">
@@ -208,7 +268,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 						</div>
 
 						<div className="flex items-center gap-x-2">
-							<Button type="submit" disabled={update.isPending}>
+							<Button type="submit" disabled={update.isPending || !form.formState.isDirty}>
 								Save
 							</Button>
 
@@ -311,8 +371,8 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 												{...field}
 												rows={10}
 												value={field.value || ''}
-												placeholder="Video description"
-												className="resize-none"
+												placeholder="Add a description to your video"
+												className="min-h-55 resize-none"
 											/>
 										</FormControl>
 										<FormMessage />
@@ -357,7 +417,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 														</DropdownMenuItem>
 
 														<DropdownMenuItem
-															onClick={() => generateThumbnail.mutate({ id: video.id })}
+															onClick={() => setThumbnailGenerateModalOpen(true)}
 															className="cursor-pointer"
 														>
 															<SparklesIcon className="size-4 mr-1" />
@@ -412,7 +472,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 						{/* Right side */}
 						<div className="flex flex-col gap-y-8 lg:col-span-2">
-							<div className="flex flex-col gap-4 rounded-xl bg-[#F9F9F9] overflow-hidden h-fit">
+							<div className="flex flex-col gap-4 h-fit rounded-xl bg-[#F9F9F9] overflow-hidden">
 								<div className="relative aspect-video overflow-hidden">
 									<VideoPlayer playbackId={video.muxPlaybackId} thumbnailUrl={video.thumbnailUrl} />
 								</div>
