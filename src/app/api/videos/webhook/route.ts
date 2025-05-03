@@ -7,12 +7,12 @@ import {
 	VideoAssetReadyWebhookEvent,
 	VideoAssetTrackReadyWebhookEvent,
 } from '@mux/mux-node/resources/webhooks'
-import { UTApi } from 'uploadthing/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { db } from '@/db'
 import { mux } from '@/lib/mux'
 import { videos } from '@/db/schema'
+import { UTApi } from 'uploadthing/server'
 
 const SIGNING_SECRET = process.env.MUX_WEBHOOK_SECRET!
 
@@ -121,6 +121,32 @@ export const POST = async (req: NextRequest) => {
 				return new NextResponse('Missing upload ID', { status: 400 })
 			}
 
+			// Find video in DB by muxUploadId
+			const [existingVideo] = await db.select().from(videos).where(eq(videos.muxUploadId, data.upload_id))
+
+			if (!existingVideo) {
+				console.warn(`Video with muxUploadId=${data.upload_id} does not exist`)
+
+				return new NextResponse('Video not found', { status: 200 })
+			}
+
+			// Delete thumbnail from UploadThing
+			if (existingVideo.thumbnailKey) {
+				try {
+					const utApi = new UTApi()
+					await utApi.deleteFiles(existingVideo.thumbnailKey)
+
+					await db
+						.update(videos)
+						.set({ thumbnailKey: null, thumbnailUrl: null })
+						.where(eq(videos.id, existingVideo.id))
+				} catch (err) {
+					console.error('Error deleting thumbnail from UploadThing:', err)
+					// Continue to delete video, if thumbnail deletion fails
+				}
+			}
+
+			// Delete video from MUX
 			await db.delete(videos).where(eq(videos.muxUploadId, data.upload_id))
 
 			break

@@ -400,16 +400,16 @@ export const videosRouter = createTRPCRouter({
 			new_asset_settings: {
 				passthrough: userId,
 				playback_policy: ['public'],
-				// input: [
-				// 	{
-				// 		generated_subtitles: [
-				// 			{
-				// 				language_code: 'en',
-				// 				name: 'English',
-				// 			},
-				// 		],
-				// 	},
-				// ],
+				input: [
+					{
+						generated_subtitles: [
+							{
+								language_code: 'en',
+								name: 'English',
+							},
+						],
+					},
+				],
 			},
 			cors_origin: '*', // TODO: In production set to your domain
 		})
@@ -465,17 +465,33 @@ export const videosRouter = createTRPCRouter({
 			throw new TRPCError({ code: 'NOT_FOUND' })
 		}
 
+		// Delete thumbnail from UploadThing
 		if (existingVideo.thumbnailKey) {
-			const utApi = new UTApi()
+			try {
+				const utApi = new UTApi()
+				await utApi.deleteFiles(existingVideo.thumbnailKey)
 
-			await utApi.deleteFiles(existingVideo.thumbnailKey)
-
-			await db
-				.update(videos)
-				.set({ thumbnailKey: null, thumbnailUrl: null })
-				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+				await db
+					.update(videos)
+					.set({ thumbnailKey: null, thumbnailUrl: null })
+					.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+			} catch (err) {
+				console.error('Error deleting thumbnail from UploadThing:', err)
+				// Continue to delete video, if thumbnail deletion fails
+			}
 		}
 
+		// Delete video from MUX
+		if (existingVideo.muxAssetId) {
+			try {
+				await mux.video.assets.delete(existingVideo.muxAssetId)
+			} catch (err) {
+				console.error('Error deleting MUX video:', err)
+				// Continue to delete video, if MUX deletion fails
+			}
+		}
+
+		// Delete video from DB
 		const [removedVideo] = await db
 			.delete(videos)
 			.where(and(eq(videos.id, id), eq(videos.userId, userId)))

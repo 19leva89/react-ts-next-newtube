@@ -25,7 +25,7 @@ export const StudioUploader = ({ endpoint, onSuccess }: Props) => {
 				className="hidden group/uploader"
 			/>
 
-			<MuxUploaderDrop muxUploader={UPLOADER_ID} className="group/drop">
+			<MuxUploaderDrop muxUploader={UPLOADER_ID} className="m-4 group/drop">
 				<div slot="heading" className="flex flex-col items-center gap-6">
 					<div className="flex items-center justify-center gap-2 size-32 rounded-full bg-muted">
 						<UploadIcon className="size-10 text-muted-foreground group-hover/drop:animate-bounce transition-all duration-300" />
