@@ -382,17 +382,11 @@ export const videosRouter = createTRPCRouter({
 				throw new TRPCError({ code: 'BAD_REQUEST' })
 			}
 
-			const tempThumbnailUrl = `https://image.mux.com/${existingVideo.muxPlaybackId}/thumbnail.jpg`
-			const utApi = new UTApi()
-			const uploadThumbnail = await utApi.uploadFilesFromUrl(tempThumbnailUrl)
-
-			if (!uploadThumbnail.data) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
-
-			const { key: thumbnailKey, ufsUrl: thumbnailUrl } = uploadThumbnail.data
+			const thumbnailUrl = `https://image.mux.com/${existingVideo.muxPlaybackId}/thumbnail.jpg`
 
 			const [updatedVideo] = await db
 				.update(videos)
-				.set({ thumbnailUrl, thumbnailKey })
+				.set({ thumbnailUrl })
 				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
 				.returning()
 
@@ -430,7 +424,7 @@ export const videosRouter = createTRPCRouter({
 			})
 			.returning()
 
-		return { video, url: upload.url }
+		return { video, ufsUrl: upload.url }
 	}),
 
 	update: protectedProcedure.input(videosUpdateSchema).mutation(async ({ ctx, input }) => {
@@ -461,6 +455,26 @@ export const videosRouter = createTRPCRouter({
 	remove: protectedProcedure.input(z.object({ id: z.string().cuid2() })).mutation(async ({ ctx, input }) => {
 		const { id } = input
 		const { id: userId } = ctx.user
+
+		const [existingVideo] = await db
+			.select()
+			.from(videos)
+			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+
+		if (!existingVideo) {
+			throw new TRPCError({ code: 'NOT_FOUND' })
+		}
+
+		if (existingVideo.thumbnailKey) {
+			const utApi = new UTApi()
+
+			await utApi.deleteFiles(existingVideo.thumbnailKey)
+
+			await db
+				.update(videos)
+				.set({ thumbnailKey: null, thumbnailUrl: null })
+				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
+		}
 
 		const [removedVideo] = await db
 			.delete(videos)

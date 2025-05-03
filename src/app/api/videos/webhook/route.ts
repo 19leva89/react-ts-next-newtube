@@ -77,24 +77,10 @@ export const POST = async (req: NextRequest) => {
 				return new NextResponse('Missing playback ID', { status: 400 })
 			}
 
-			const tempPreviewUrl = `https://image.mux.com/${playbackId}/animated.gif`
-			const tempThumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.png`
+			const previewUrl = `https://image.mux.com/${playbackId}/animated.gif`
+			const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`
 
 			const duration = data.duration ? Math.round(data.duration * 1000) : 0
-
-			const utApi = new UTApi()
-			const [uploadThumbnailUrl, uploadPreviewUrl] = await utApi.uploadFilesFromUrl([
-				tempThumbnailUrl,
-				tempPreviewUrl,
-			])
-
-			if (!uploadThumbnailUrl.data || !uploadPreviewUrl.data) {
-				return new NextResponse('Failed to upload files', { status: 500 })
-			}
-
-			const { key: thumbnailKey, ufsUrl: thumbnailUrl } = uploadThumbnailUrl.data
-
-			const { key: previewKey, ufsUrl: previewUrl } = uploadPreviewUrl.data
 
 			await db
 				.update(videos)
@@ -105,8 +91,6 @@ export const POST = async (req: NextRequest) => {
 					thumbnailUrl,
 					previewUrl,
 					duration,
-					thumbnailKey,
-					previewKey,
 				})
 				.where(eq(videos.muxUploadId, data.upload_id))
 

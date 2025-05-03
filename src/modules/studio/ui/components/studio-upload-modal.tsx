@@ -36,11 +36,11 @@ export const StudioUploadModal = () => {
 		<>
 			<ResponsiveModal
 				title="Upload a video"
-				open={!!create.data?.url}
+				open={!!create.data?.ufsUrl}
 				onOpenChangeAction={() => create.reset()}
 			>
-				{create.data?.url ? (
-					<StudioUploader endpoint={create.data.url} onSuccess={onSuccess} />
+				{create.data?.ufsUrl ? (
+					<StudioUploader endpoint={create.data.ufsUrl} onSuccess={onSuccess} />
 				) : (
 					<Loader2Icon className="size-4 animate-spin" />
 				)}

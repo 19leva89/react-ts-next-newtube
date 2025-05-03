@@ -12,8 +12,9 @@ export const ThumbnailUploadModal = ({ videoId, open, onOpenChange }: Props) => 
 	const utils = trpc.useUtils()
 
 	const onUploadComplete = () => {
-		utils.studio.getOne.invalidate({ id: videoId })
 		utils.studio.getMany.invalidate()
+		utils.studio.getOne.invalidate({ id: videoId })
+
 		onOpenChange(false)
 	}
 
