@@ -22,6 +22,20 @@
       "when": 1746200944383,
       "tag": "0002_sturdy_ravenous",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1746363154896,
+      "tag": "0003_opposite_vermin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746363776424,
+      "tag": "0004_cheerful_alex_wilder",
+      "breakpoints": true
     }
   ]
 }

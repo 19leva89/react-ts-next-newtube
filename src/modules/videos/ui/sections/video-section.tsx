@@ -1,11 +1,11 @@
 'use client'
 
 import { Suspense } from 'react'
+import { useAuth } from '@clerk/nextjs'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { cn } from '@/lib/utils'
 import { trpc } from '@/trpc/client'
-// import { useUser } from '@/hooks/use-user'
 import { Skeleton } from '@/components/ui'
 import { VideoBanner } from '@/modules/videos/ui/components/video-banner'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
@@ -49,24 +49,24 @@ const VideoSectionSkeleton = () => {
 }
 
 const VideoSectionSuspense = ({ videoId }: Props) => {
-	// const { userId } = useUser()
+	const { isSignedIn } = useAuth()
 
 	const utils = trpc.useUtils()
 	const [video] = trpc.videos.getOne.useSuspenseQuery({ id: videoId })
 
-	// const createView = trpc.videoViews.create.useMutation({
-	// 	onSuccess: () => {
-	// 		utils.videos.getOne.invalidate({ id: videoId })
-	// 	},
-	// })
+	const createView = trpc.videoViews.create.useMutation({
+		onSuccess: () => {
+			utils.videos.getOne.invalidate({ id: videoId })
+		},
+	})
 
-	// const handlePlay = () => {
-	// 	if (!userId) return
+	const handlePlay = () => {
+		if (!isSignedIn) return
 
-	// 	createView.mutate({
-	// 		videoId,
-	// 	})
-	// }
+		createView.mutate({
+			videoId,
+		})
+	}
 
 	return (
 		<>
@@ -80,7 +80,7 @@ const VideoSectionSuspense = ({ videoId }: Props) => {
 					autoPlay
 					playbackId={video.muxPlaybackId}
 					thumbnailUrl={video.thumbnailUrl}
-					// onPlay={handlePlay}
+					onPlay={handlePlay}
 				/>
 			</div>
 

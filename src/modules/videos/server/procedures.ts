@@ -6,7 +6,7 @@ import { and, eq, getTableColumns, inArray, isNotNull } from 'drizzle-orm'
 import { db } from '@/db'
 import { mux } from '@/lib/mux'
 import { workflow } from '@/lib/workflow'
-import { users, videos, videosUpdateSchema } from '@/db/schema'
+import { users, videos, videosUpdateSchema, videoViews } from '@/db/schema'
 import { baseProcedure, createTRPCRouter, protectedProcedure } from '@/trpc/init'
 
 export const videosRouter = createTRPCRouter({
@@ -37,7 +37,7 @@ export const videosRouter = createTRPCRouter({
 					// subscriberCount: db.$count(subscriptions, eq(subscriptions.creatorId, user.id)),
 					// viewerSubscribed: isNotNull(viewerSubscriptions.viewerId).mapWith(Boolean),
 				},
-				// viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
+				viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
 				// likeCount: db.$count(
 				// 	videoReactions,
 				// 	and(eq(videoReactions.videoId, videos.id), eq(videoReactions.type, 'like')),
