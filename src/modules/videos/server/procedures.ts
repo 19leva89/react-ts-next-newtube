@@ -47,8 +47,8 @@ export const videosRouter = createTRPCRouter({
 				...getTableColumns(videos),
 				user: {
 					...getTableColumns(users),
-					subscriberCount: db.$count(subscriptions, eq(subscriptions.creatorId, user.id)),
 					viewerSubscribed: isNotNull(viewerSubscriptions.viewerId).mapWith(Boolean),
+					subscriberCount: db.$count(subscriptions, eq(subscriptions.creatorId, users.id)),
 				},
 				viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
 				likeCount: db.$count(
@@ -64,9 +64,8 @@ export const videosRouter = createTRPCRouter({
 			.from(videos)
 			.innerJoin(users, eq(videos.userId, users.id))
 			.leftJoin(viewerReactions, eq(videos.id, viewerReactions.videoId))
-			.leftJoin(viewerSubscriptions, eq(viewerSubscriptions.creatorId, user.id))
+			.leftJoin(viewerSubscriptions, eq(viewerSubscriptions.creatorId, users.id))
 			.where(eq(videos.id, input.id))
-		// .groupBy(videos.id, users.id, viewerReactions.type)
 
 		if (!video) {
 			throw new TRPCError({ code: 'NOT_FOUND' })

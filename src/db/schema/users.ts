@@ -31,10 +31,10 @@ export const userRelations = relations(users, ({ many }) => ({
 	videoViews: many(videoViews),
 	videoReactions: many(videoReactions),
 	subscriptions: many(subscriptions, {
-		relationName: 'subscriptions_viewer_id_fkey',
+		relationName: 'subscriptions_viewer_id_fk',
 	}),
 	subscribers: many(subscriptions, {
-		relationName: 'subscriptions_creator_id_fkey',
+		relationName: 'subscriptions_creator_id_fk',
 	}),
 	comments: many(comments),
 	commentsReactions: many(commentsReactions),
