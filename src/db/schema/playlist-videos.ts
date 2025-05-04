@@ -6,13 +6,13 @@ import { playlists, videos } from '@/db/schema'
 export const playlistVideos = pgTable(
 	'playlist_videos',
 	{
-		playlistId: text('playlist_id')
-			.references(() => playlists.id, {
+		videoId: text('video_id')
+			.references(() => videos.id, {
 				onDelete: 'cascade',
 			})
 			.notNull(),
-		videoId: text('video_id')
-			.references(() => videos.id, {
+		playlistId: text('playlist_id')
+			.references(() => playlists.id, {
 				onDelete: 'cascade',
 			})
 			.notNull(),
@@ -28,12 +28,12 @@ export const playlistVideos = pgTable(
 )
 
 export const playlistVideosRelations = relations(playlistVideos, ({ one }) => ({
-	playlists: one(playlists, {
-		fields: [playlistVideos.playlistId],
-		references: [playlists.id],
-	}),
 	videos: one(videos, {
 		fields: [playlistVideos.videoId],
 		references: [videos.id],
+	}),
+	playlists: one(playlists, {
+		fields: [playlistVideos.playlistId],
+		references: [playlists.id],
 	}),
 }))

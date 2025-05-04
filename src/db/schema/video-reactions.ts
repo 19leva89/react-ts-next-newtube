@@ -8,13 +8,13 @@ import { reactionTypes } from '@/db/schema/enums'
 export const videoReactions = pgTable(
 	'video_reactions',
 	{
+		userId: text('user_id')
+			.references(() => users.id, { onDelete: 'cascade' })
+			.notNull(),
 		videoId: text('video_id')
 			.references(() => videos.id, {
 				onDelete: 'cascade',
 			})
-			.notNull(),
-		userId: text('user_id')
-			.references(() => users.id, { onDelete: 'cascade' })
 			.notNull(),
 		type: reactionTypes('type').notNull(),
 		createdAt: timestamp('created_at').defaultNow().notNull(),
@@ -29,13 +29,13 @@ export const videoReactions = pgTable(
 )
 
 export const videoReactionsRelations = relations(videoReactions, ({ one }) => ({
-	videos: one(videos, {
-		fields: [videoReactions.videoId],
-		references: [videos.id],
-	}),
 	users: one(users, {
 		fields: [videoReactions.userId],
 		references: [users.id],
+	}),
+	videos: one(videos, {
+		fields: [videoReactions.videoId],
+		references: [videos.id],
 	}),
 }))
 

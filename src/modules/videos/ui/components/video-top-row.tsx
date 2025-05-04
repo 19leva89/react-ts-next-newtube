@@ -42,9 +42,9 @@ export const VideoTopRow = ({ video }: Props) => {
 				<div className="flex gap-2 pb-2 -mb-2 sm:pb-0 sm:mb-0 overflow-x-auto sm:min-w-[calc(50%-6px)] sm:justify-end sm:overflow-visible">
 					<VideoReactions
 						videoId={video.id}
-						likeCount={1}
-						dislikeCount={34}
-						// viewerReaction={video.viewerReaction}
+						likeCount={video.likeCount}
+						dislikeCount={video.dislikeCount}
+						viewerReaction={video.viewerReaction}
 					/>
 
 					<VideoMenu variant="secondary" videoId={video.id} />
