@@ -37,6 +37,6 @@ export const videoViewsRelations = relations(videoViews, ({ one }) => ({
 	}),
 }))
 
-export const videoViewsInsertSchema = createInsertSchema(videoViews)
-export const videoViewsSelectSchema = createSelectSchema(videoViews)
-export const videoViewsUpdateSchema = createUpdateSchema(videoViews)
+export const videoViewInsertSchema = createInsertSchema(videoViews)
+export const videoViewSelectSchema = createSelectSchema(videoViews)
+export const videoViewUpdateSchema = createUpdateSchema(videoViews)

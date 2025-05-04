@@ -9,16 +9,15 @@ export const comments = pgTable(
 	'comments',
 	{
 		id: cuid('id').primaryKey(),
-		// https://orm.drizzle.team/docs/indexes-constraints#foreign-key
-		parentId: text('parent_id'),
+		userId: text('user_id')
+			.references(() => users.id, { onDelete: 'cascade' })
+			.notNull(),
 		videoId: text('video_id')
 			.references(() => videos.id, {
 				onDelete: 'cascade',
 			})
 			.notNull(),
-		userId: text('user_id')
-			.references(() => users.id, { onDelete: 'cascade' })
-			.notNull(),
+		parentId: text('parent_id'),
 		value: text('value').notNull(),
 		createdAt: timestamp('created_at').defaultNow().notNull(),
 		updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -52,6 +51,6 @@ export const commentRelations = relations(comments, ({ one, many }) => ({
 	}),
 }))
 
-export const commentsInsertSchema = createInsertSchema(comments)
-export const commentsSelectSchema = createSelectSchema(comments)
-export const commentsUpdateSchema = createUpdateSchema(comments)
+export const commentInsertSchema = createInsertSchema(comments)
+export const commentSelectSchema = createSelectSchema(comments)
+export const commentUpdateSchema = createUpdateSchema(comments)

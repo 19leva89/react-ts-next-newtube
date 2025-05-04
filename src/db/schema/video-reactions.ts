@@ -39,6 +39,6 @@ export const videoReactionsRelations = relations(videoReactions, ({ one }) => ({
 	}),
 }))
 
-export const videoReactionsInsertSchema = createInsertSchema(videoReactions)
-export const videoReactionsSelectSchema = createSelectSchema(videoReactions)
-export const videoReactionsUpdateSchema = createUpdateSchema(videoReactions)
+export const videoReactionInsertSchema = createInsertSchema(videoReactions)
+export const videoReactionSelectSchema = createSelectSchema(videoReactions)
+export const videoReactionUpdateSchema = createUpdateSchema(videoReactions)

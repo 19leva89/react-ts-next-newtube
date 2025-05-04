@@ -5,7 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import { trpc } from '@/trpc/client'
 import { Skeleton } from '@/components/ui'
-// import { DEFAULT_LIMIT } from '@/constants'
+import { DEFAULT_LIMIT } from '@/constants/default-limit'
 // import { VideoRowCard } from '../components/video-row-card'
 // import { VideoGridCard } from '../components/video-grid-card'
 // import { InfiniteScroll } from '@/components/infinite-scroll'

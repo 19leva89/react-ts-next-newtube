@@ -51,6 +51,6 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
 	playlistVideos: many(playlistVideos),
 }))
 
-export const videosInsertSchema = createInsertSchema(videos)
-export const videosSelectSchema = createSelectSchema(videos)
-export const videosUpdateSchema = createUpdateSchema(videos)
+export const videoInsertSchema = createInsertSchema(videos)
+export const videoSelectSchema = createSelectSchema(videos)
+export const videoUpdateSchema = createUpdateSchema(videos)

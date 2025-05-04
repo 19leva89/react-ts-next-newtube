@@ -45,7 +45,7 @@ import {
 	Textarea,
 } from '@/components/ui'
 import { snakeCaseToTitle } from '@/lib/utils'
-import { videosUpdateSchema } from '@/db/schema'
+import { videoUpdateSchema } from '@/db/schema'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 import { ThumbnailUploadModal } from '@/modules/studio/ui/components/thumbnail-upload-modal'
@@ -223,12 +223,12 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 		},
 	})
 
-	const form = useForm<z.infer<typeof videosUpdateSchema>>({
+	const form = useForm<z.infer<typeof videoUpdateSchema>>({
 		defaultValues: video,
-		resolver: zodResolver(videosUpdateSchema),
+		resolver: zodResolver(videoUpdateSchema),
 	})
 
-	const onSubmit = (data: z.infer<typeof videosUpdateSchema>) => {
+	const onSubmit = (data: z.infer<typeof videoUpdateSchema>) => {
 		update.mutateAsync(data)
 	}
 

@@ -24,6 +24,6 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
 	playlistVideos: many(playlistVideos),
 }))
 
-export const playlistsInsertSchema = createInsertSchema(playlists)
-export const playlistsSelectSchema = createSelectSchema(playlists)
-export const playlistsUpdateSchema = createUpdateSchema(playlists)
+export const playlistInsertSchema = createInsertSchema(playlists)
+export const playlistSelectSchema = createSelectSchema(playlists)
+export const playlistUpdateSchema = createUpdateSchema(playlists)

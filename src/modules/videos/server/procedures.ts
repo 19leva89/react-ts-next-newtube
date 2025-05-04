@@ -7,7 +7,7 @@ import { db } from '@/db'
 import { mux } from '@/lib/mux'
 import { workflow } from '@/lib/workflow'
 import { baseProcedure, createTRPCRouter, protectedProcedure } from '@/trpc/init'
-import { subscriptions, users, videoReactions, videos, videosUpdateSchema, videoViews } from '@/db/schema'
+import { subscriptions, users, videoReactions, videos, videoUpdateSchema, videoViews } from '@/db/schema'
 
 export const videosRouter = createTRPCRouter({
 	getOne: baseProcedure.input(z.object({ id: z.string().cuid2() })).query(async ({ ctx, input }) => {
@@ -436,7 +436,7 @@ export const videosRouter = createTRPCRouter({
 		return { video, ufsUrl: upload.url }
 	}),
 
-	update: protectedProcedure.input(videosUpdateSchema).mutation(async ({ ctx, input }) => {
+	update: protectedProcedure.input(videoUpdateSchema).mutation(async ({ ctx, input }) => {
 		const { id: userId } = ctx.user
 
 		if (!input.id) {
