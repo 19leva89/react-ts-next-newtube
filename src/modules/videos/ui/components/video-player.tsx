@@ -6,12 +6,12 @@ import '@/modules/videos/ui/styles/video-player.css'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 
 interface Props {
+	autoPlay?: boolean
 	playbackId?: string | null
 	thumbnailUrl?: string | null
-	autoPlay?: boolean
 	onPlay?: () => void
 }
-export const VideoPlayer = ({ playbackId, thumbnailUrl, autoPlay, onPlay }: Props) => {
+export const VideoPlayer = ({ autoPlay, playbackId, thumbnailUrl, onPlay }: Props) => {
 	return (
 		<MuxPlayer
 			playbackId={playbackId || ''}

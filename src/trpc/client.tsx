@@ -48,7 +48,7 @@ export function TRPCProvider(props: PropsWithChildren) {
 	//       render if it suspends and there is no boundary
 	const queryClient = getQueryClient()
 
-	const [trpcClient] = useState(() =>
+	const [trpcClient] = useState<ReturnType<typeof trpc.createClient>>(() =>
 		trpc.createClient({
 			links: [
 				httpBatchLink({

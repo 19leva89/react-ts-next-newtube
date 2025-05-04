@@ -64,8 +64,8 @@ function Carousel({
 		},
 		plugins,
 	)
-	const [canScrollPrev, setCanScrollPrev] = useState(false)
-	const [canScrollNext, setCanScrollNext] = useState(false)
+	const [canScrollPrev, setCanScrollPrev] = useState<boolean>(false)
+	const [canScrollNext, setCanScrollNext] = useState<boolean>(false)
 
 	const onSelect = useCallback((api: CarouselApi) => {
 		if (!api) return

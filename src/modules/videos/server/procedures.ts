@@ -1,69 +1,66 @@
 import { z } from 'zod'
-import { and, eq } from 'drizzle-orm'
 import { TRPCError } from '@trpc/server'
 import { UTApi } from 'uploadthing/server'
+import { and, eq, getTableColumns, inArray, isNotNull } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { mux } from '@/lib/mux'
 import { workflow } from '@/lib/workflow'
-import { videos, videosUpdateSchema } from '@/db/schema'
-import { createTRPCRouter, protectedProcedure } from '@/trpc/init'
+import { users, videos, videosUpdateSchema } from '@/db/schema'
+import { baseProcedure, createTRPCRouter, protectedProcedure } from '@/trpc/init'
 
 export const videosRouter = createTRPCRouter({
-	// getOne: baseProcedure.input(z.object({ id: z.string().cuid2() })).query(async ({ input, ctx }) => {
-	// 	const { id: videoId } = input
-	// 	const { userId } = ctx
+	getOne: baseProcedure.input(z.object({ id: z.string().cuid2() })).query(async ({ ctx, input }) => {
+		// const viewerReactions = db.$with('viewer_reactions').as(
+		// 	db
+		// 		.select({
+		// 			videoId: videoReactions.videoId,
+		// 			type: videoReactions.type,
+		// 		})
+		// 		.from(videoReactions)
+		// 		.where(inArray(videoReactions.userId, userId ? [userId] : [])),
+		// )
 
-	// 	const viewerReactions = db.$with('viewer_reactions').as(
-	// 		db
-	// 			.select({
-	// 				videoId: videoReactions.videoId,
-	// 				type: videoReactions.type,
-	// 			})
-	// 			.from(videoReactions)
-	// 			.where(inArray(videoReactions.userId, userId ? [userId] : [])),
-	// 	)
+		// const viewerSubscriptions = db.$with('viewer_subscriptions').as(
+		// 	db
+		// 		.select()
+		// 		.from(subscriptions)
+		// 		.where(inArray(subscriptions.viewerId, userId ? [userId] : [])),
+		// )
 
-	// 	const viewerSubscriptions = db.$with('viewer_subscriptions').as(
-	// 		db
-	// 			.select()
-	// 			.from(subscriptions)
-	// 			.where(inArray(subscriptions.viewerId, userId ? [userId] : [])),
-	// 	)
+		const [video] = await db
+			// .with(viewerReactions, viewerSubscriptions)
+			.select({
+				...getTableColumns(videos),
+				user: {
+					...getTableColumns(users),
+					// subscriberCount: db.$count(subscriptions, eq(subscriptions.creatorId, user.id)),
+					// viewerSubscribed: isNotNull(viewerSubscriptions.viewerId).mapWith(Boolean),
+				},
+				// viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
+				// likeCount: db.$count(
+				// 	videoReactions,
+				// 	and(eq(videoReactions.videoId, videos.id), eq(videoReactions.type, 'like')),
+				// ),
+				// dislikeCount: db.$count(
+				// 	videoReactions,
+				// 	and(eq(videoReactions.videoId, videos.id), eq(videoReactions.type, 'dislike')),
+				// ),
+				// viewerReaction: viewerReactions.type,
+			})
+			.from(videos)
+			.innerJoin(users, eq(videos.userId, users.id))
+			// .leftJoin(viewerReactions, eq(videos.id, viewerReactions.videoId))
+			// .leftJoin(viewerSubscriptions, eq(viewerSubscriptions.creatorId, user.id))
+			.where(eq(videos.id, input.id))
+		// .groupBy(videos.id, user.id, viewerReactions.type)
 
-	// 	const [video] = await db
-	// 		.with(viewerReactions, viewerSubscriptions)
-	// 		.select({
-	// 			...getTableColumns(videos),
-	// 			user: {
-	// 				...getTableColumns(user),
-	// 				subscriberCount: db.$count(subscriptions, eq(subscriptions.creatorId, user.id)),
-	// 				viewerSubscribed: isNotNull(viewerSubscriptions.viewerId).mapWith(Boolean),
-	// 			},
-	// 			viewCount: db.$count(videoViews, eq(videoViews.videoId, videos.id)),
-	// 			likeCount: db.$count(
-	// 				videoReactions,
-	// 				and(eq(videoReactions.videoId, videos.id), eq(videoReactions.type, 'like')),
-	// 			),
-	// 			dislikeCount: db.$count(
-	// 				videoReactions,
-	// 				and(eq(videoReactions.videoId, videos.id), eq(videoReactions.type, 'dislike')),
-	// 			),
-	// 			viewerReaction: viewerReactions.type,
-	// 		})
-	// 		.from(videos)
-	// 		.innerJoin(user, eq(videos.userId, user.id))
-	// 		.leftJoin(viewerReactions, eq(videos.id, viewerReactions.videoId))
-	// 		.leftJoin(viewerSubscriptions, eq(viewerSubscriptions.creatorId, user.id))
-	// 		.where(eq(videos.id, videoId))
-	// 	//.groupBy(videos.id, user.id, viewerReactions.type);
+		if (!video) {
+			throw new TRPCError({ code: 'NOT_FOUND' })
+		}
 
-	// 	if (!video) {
-	// 		throw new TRPCError({ code: 'NOT_FOUND' })
-	// 	}
-
-	// 	return video
-	// }),
+		return video
+	}),
 
 	// getMany: baseProcedure
 	// 	.input(
