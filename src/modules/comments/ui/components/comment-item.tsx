@@ -10,8 +10,8 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { useAuth, useClerk } from '@clerk/nextjs'
 import { formatDistanceToNow } from 'date-fns'
-import { useClerk, useUser } from '@clerk/nextjs'
 
 import {
 	Button,
@@ -35,7 +35,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 	const clerk = useClerk()
 	const utils = trpc.useUtils()
 
-	const { user } = useUser()
+	const { userId } = useAuth()
 
 	const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false)
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false)
@@ -48,8 +48,12 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 
 			toast.success('Comment deleted')
 		},
-		onError: () => {
-			toast.error('Failed to delete comment')
+		onError: (error) => {
+			toast.error('You need to be logged in to delete comment')
+
+			if (error.data?.code === 'UNAUTHORIZED') {
+				clerk.openSignIn()
+			}
 		},
 	})
 
@@ -99,28 +103,39 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 
 					<p className="text-sm">{comment.value}</p>
 
+					{/* Reactions */}
 					<div className="flex items-center gap-2 mt-1">
 						<div className="flex items-center">
 							<Button
-								variant="ghost"
+								variant="link"
 								size="icon"
 								// disabled={like.isPending || dislike.isPending}
 								// onClick={() => like.mutate({ commentId: comment.id })}
-								className="size-8 rounded-full"
+								className="size-8 rounded-full group/like"
 							>
-								<ThumbsUpIcon className={cn(comment.viewerReactions === 'like' && 'fill-black')} />
+								<ThumbsUpIcon
+									className={cn(
+										'transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+										comment.viewerReactions === 'like' && 'fill-black group-hover/like:fill-transparent',
+									)}
+								/>
 							</Button>
 
 							<span className="text-xs text-muted-foreground">{comment.likeCount}</span>
 
 							<Button
-								// disabled={dislike.isPending || like.isPending}
-								variant="ghost"
+								variant="link"
 								size="icon"
-								className="size-8 rounded-full"
+								// disabled={dislike.isPending || like.isPending}
 								// onClick={() => dislike.mutate({ commentId: comment.id })}
+								className="size-8 rounded-full group/like"
 							>
-								<ThumbsDownIcon className={cn(comment.viewerReactions === 'dislike' && 'fill-black')} />
+								<ThumbsDownIcon
+									className={cn(
+										'transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+										comment.viewerReactions === 'dislike' && 'fill-black group-hover/like:fill-transparent',
+									)}
+								/>
 							</Button>
 
 							<span className="text-xs text-muted-foreground">{comment.dislikeCount}</span>
@@ -143,14 +158,14 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 
 					<DropdownMenuContent align="end">
 						{variant === 'comment' && (
-							<DropdownMenuItem onClick={() => setIsReplyOpen(true)}>
+							<DropdownMenuItem onClick={() => setIsReplyOpen(true)} className="cursor-pointer">
 								<MessageSquareIcon className="size-4 mr-2" />
 								Reply
 							</DropdownMenuItem>
 						)}
 
-						{user?.id === comment.userId && (
-							<DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })}>
+						{comment.user.clerkId === userId && (
+							<DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })} className="cursor-pointer">
 								<TrashIcon className="size-4 mr-2" />
 								Delete
 							</DropdownMenuItem>

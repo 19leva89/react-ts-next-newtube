@@ -65,6 +65,7 @@ export const commentsRouter = createTRPCRouter({
 		)
 		.query(async ({ ctx, input }) => {
 			const { clerkUserId } = ctx
+			const { videoId, parentId, cursor, limit } = input
 
 			let userId
 
@@ -76,8 +77,6 @@ export const commentsRouter = createTRPCRouter({
 			if (user) {
 				userId = user.id
 			}
-
-			const { videoId, parentId, cursor, limit } = input
 
 			const [existingUser] = await db
 				.select()
@@ -105,13 +104,7 @@ export const commentsRouter = createTRPCRouter({
 					.groupBy(comments.parentId),
 			)
 
-			const [totalData, data] = await Promise.all([
-				db
-					.select({
-						total: count(),
-					})
-					.from(comments)
-					.where(eq(comments.videoId, videoId)),
+			const [data, totalData] = await Promise.all([
 				db
 					.with(viewerReactions, replies)
 					.select({
@@ -145,20 +138,24 @@ export const commentsRouter = createTRPCRouter({
 					.leftJoin(viewerReactions, eq(comments.id, viewerReactions.commentId))
 					.leftJoin(replies, eq(comments.id, replies.parentId))
 					.orderBy(desc(comments.updatedAt), desc(comments.id))
+					// Add 1 to the limit to check if there is more data
 					.limit(limit + 1),
+				db
+					.select({
+						total: count(),
+					})
+					.from(comments)
+					.where(eq(comments.videoId, videoId)),
 			])
 
 			const hasMore = data.length > limit
+
 			// Remove the last item if there is more data
 			const items = hasMore ? data.slice(0, -1) : data
+
 			// Set the next cursor to the last item if there is more data
 			const lastItem = items[items.length - 1]
-			const nextCursor = hasMore
-				? {
-						id: lastItem.id,
-						updatedAt: lastItem.updatedAt,
-					}
-				: null
+			const nextCursor = hasMore ? { id: lastItem.id, updatedAt: lastItem.updatedAt } : null
 
 			return { items, nextCursor, totalCount: totalData[0].total }
 		}),

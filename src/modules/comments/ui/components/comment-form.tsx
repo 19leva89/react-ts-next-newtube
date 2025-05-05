@@ -43,8 +43,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 		},
 	})
 
-	const form = useForm<z.infer<typeof commentInsertSchema>>({
-		resolver: zodResolver(commentInsertSchema),
+	const form = useForm<{ videoId: string; parentId?: string; value: string }>({
 		defaultValues: {
 			videoId,
 			parentId,
@@ -52,7 +51,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 		},
 	})
 
-	const handleSubmit = (values: z.infer<typeof commentInsertSchema>) => {
+	const onSubmit = (values: { videoId: string; parentId?: string; value: string }) => {
 		create.mutate(values)
 	}
 
@@ -63,7 +62,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 
 	return (
 		<Form {...form}>
-			<form className="flex gap-4 group" onSubmit={form.handleSubmit(handleSubmit)}>
+			<form className="flex gap-4 group" onSubmit={form.handleSubmit(onSubmit)}>
 				<UserAvatar
 					size="lg"
 					name={user?.username || 'User'}

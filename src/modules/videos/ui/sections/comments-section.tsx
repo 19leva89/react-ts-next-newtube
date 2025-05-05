@@ -26,8 +26,8 @@ export const CommentsSection = ({ videoId }: Props) => {
 
 const CommentsSectionSkeleton = () => {
 	return (
-		<div className="mt-6 flex justify-center items-center">
-			<Loader2 className="animate-spin size-7 text-muted-foreground" />
+		<div className="flex justify-center items-center mt-6">
+			<Loader2 className="size-7 animate-spin text-muted-foreground" />
 		</div>
 	)
 }
@@ -59,7 +59,6 @@ const CommentsSectionSuspense = ({ videoId }: Props) => {
 				</div>
 
 				<InfiniteScroll
-					isManual
 					hasNextPage={query.hasNextPage}
 					fetchNextPage={query.fetchNextPage}
 					isFetchingNextPage={query.isFetchingNextPage}

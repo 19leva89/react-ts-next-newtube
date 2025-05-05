@@ -52,9 +52,14 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 				onClick={() => like.mutate({ videoId })}
 				disabled={like.isPending || dislike.isPending}
 				variant="secondary"
-				className="gap-2 pr-4 rounded-l-full rounded-r-none"
+				className="gap-2 pr-4 rounded-l-full rounded-r-none group/like"
 			>
-				<ThumbsUpIcon className={cn('size-5', viewerReaction === 'like' && 'fill-black')} />
+				<ThumbsUpIcon
+					className={cn(
+						'size-5 transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+						viewerReaction === 'like' && 'fill-black group-hover/like:fill-transparent',
+					)}
+				/>
 
 				{likeCount}
 			</Button>
@@ -65,9 +70,14 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 				variant="secondary"
 				onClick={() => dislike.mutate({ videoId })}
 				disabled={like.isPending || dislike.isPending}
-				className="rounded-r-full rounded-l-none pl-3"
+				className="rounded-r-full rounded-l-none pl-3 group/like"
 			>
-				<ThumbsDownIcon className={cn('size-5', viewerReaction === 'dislike' && 'fill-black')} />
+				<ThumbsDownIcon
+					className={cn(
+						'size-5 transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+						viewerReaction === 'dislike' && 'fill-black group-hover/like:fill-transparent',
+					)}
+				/>
 				{dislikeCount}
 			</Button>
 		</div>
