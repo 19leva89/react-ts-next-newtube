@@ -3,7 +3,7 @@ import { pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core'
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from 'drizzle-zod'
 
 import { users, videos } from '@/db/schema'
-import { reactionTypes } from '@/db/schema/enums'
+import { reactionType } from '@/db/schema/enums'
 
 export const videoReactions = pgTable(
 	'video_reactions',
@@ -16,7 +16,7 @@ export const videoReactions = pgTable(
 				onDelete: 'cascade',
 			})
 			.notNull(),
-		type: reactionTypes('type').notNull(),
+		type: reactionType('type').notNull(),
 		createdAt: timestamp('created_at').defaultNow().notNull(),
 		updatedAt: timestamp('updated_at').defaultNow().notNull(),
 	},
@@ -29,11 +29,11 @@ export const videoReactions = pgTable(
 )
 
 export const videoReactionsRelations = relations(videoReactions, ({ one }) => ({
-	users: one(users, {
+	user: one(users, {
 		fields: [videoReactions.userId],
 		references: [users.id],
 	}),
-	videos: one(videos, {
+	video: one(videos, {
 		fields: [videoReactions.videoId],
 		references: [videos.id],
 	}),

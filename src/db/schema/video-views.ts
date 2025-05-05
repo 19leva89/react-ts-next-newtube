@@ -27,11 +27,11 @@ export const videoViews = pgTable(
 )
 
 export const videoViewsRelations = relations(videoViews, ({ one }) => ({
-	users: one(users, {
+	user: one(users, {
 		fields: [videoViews.userId],
 		references: [users.id],
 	}),
-	videos: one(videos, {
+	video: one(videos, {
 		fields: [videoViews.videoId],
 		references: [videos.id],
 	}),

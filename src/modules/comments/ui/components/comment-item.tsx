@@ -57,27 +57,39 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 		},
 	})
 
-	// const like = trpc.commentReactions.like.useMutation({
-	// 	onSuccess: () => {
-	// 		utils.comments.getMany.invalidate({
-	// 			videoId: comment.videoId,
-	// 		})
-	// 	},
-	// 	onError: () => {
-	// 		toast.error('Failed to like comment')
-	// 	},
-	// })
+	const like = trpc.commentReactions.like.useMutation({
+		onSuccess: () => {
+			utils.comments.getMany.invalidate({
+				videoId: comment.videoId,
+			})
 
-	// const dislike = trpc.commentReactions.dislike.useMutation({
-	// 	onSuccess: () => {
-	// 		utils.comments.getMany.invalidate({
-	// 			videoId: comment.videoId,
-	// 		})
-	// 	},
-	// 	onError: () => {
-	// 		toast.error('Failed to dislike comment')
-	// 	},
-	// })
+			toast.success('Comment liked')
+		},
+		onError: (error) => {
+			toast.error('You need to be logged in to like comment')
+
+			if (error.data?.code === 'UNAUTHORIZED') {
+				clerk.openSignIn()
+			}
+		},
+	})
+
+	const dislike = trpc.commentReactions.dislike.useMutation({
+		onSuccess: () => {
+			utils.comments.getMany.invalidate({
+				videoId: comment.videoId,
+			})
+
+			toast.success('Comment disliked')
+		},
+		onError: (error) => {
+			toast.error('You need to be logged in to dislike comment')
+
+			if (error.data?.code === 'UNAUTHORIZED') {
+				clerk.openSignIn()
+			}
+		},
+	})
 
 	return (
 		<div>
@@ -109,8 +121,8 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 							<Button
 								variant="link"
 								size="icon"
-								// disabled={like.isPending || dislike.isPending}
-								// onClick={() => like.mutate({ commentId: comment.id })}
+								disabled={like.isPending || dislike.isPending}
+								onClick={() => like.mutate({ commentId: comment.id })}
 								className="size-8 rounded-full group/like"
 							>
 								<ThumbsUpIcon
@@ -126,8 +138,8 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 							<Button
 								variant="link"
 								size="icon"
-								// disabled={dislike.isPending || like.isPending}
-								// onClick={() => dislike.mutate({ commentId: comment.id })}
+								disabled={dislike.isPending || like.isPending}
+								onClick={() => dislike.mutate({ commentId: comment.id })}
 								className="size-8 rounded-full group/like"
 							>
 								<ThumbsDownIcon

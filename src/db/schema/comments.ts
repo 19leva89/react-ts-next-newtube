@@ -32,11 +32,11 @@ export const comments = pgTable(
 )
 
 export const commentRelations = relations(comments, ({ one, many }) => ({
-	users: one(users, {
+	user: one(users, {
 		fields: [comments.userId],
 		references: [users.id],
 	}),
-	videos: one(videos, {
+	video: one(videos, {
 		fields: [comments.videoId],
 		references: [videos.id],
 	}),

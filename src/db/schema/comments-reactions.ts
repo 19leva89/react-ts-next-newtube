@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm'
 import { pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core'
 
 import { comments, users } from '@/db/schema'
-import { reactionTypes } from '@/db/schema/enums'
+import { reactionType } from '@/db/schema/enums'
 
 export const commentsReactions = pgTable(
 	'comments_reactions',
@@ -13,7 +13,7 @@ export const commentsReactions = pgTable(
 		commentId: text('comment_id')
 			.references(() => comments.id, { onDelete: 'cascade' })
 			.notNull(),
-		type: reactionTypes('type').notNull(),
+		type: reactionType('type').notNull(),
 		createdAt: timestamp('created_at').defaultNow().notNull(),
 		updatedAt: timestamp('updated_at').defaultNow().notNull(),
 	},
@@ -26,11 +26,11 @@ export const commentsReactions = pgTable(
 )
 
 export const commentsReactionsRelations = relations(commentsReactions, ({ one }) => ({
-	users: one(users, {
+	user: one(users, {
 		fields: [commentsReactions.userId],
 		references: [users.id],
 	}),
-	comments: one(comments, {
+	comment: one(comments, {
 		fields: [commentsReactions.commentId],
 		references: [comments.id],
 	}),

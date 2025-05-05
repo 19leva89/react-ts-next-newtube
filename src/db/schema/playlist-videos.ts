@@ -28,11 +28,11 @@ export const playlistVideos = pgTable(
 )
 
 export const playlistVideosRelations = relations(playlistVideos, ({ one }) => ({
-	videos: one(videos, {
+	video: one(videos, {
 		fields: [playlistVideos.videoId],
 		references: [videos.id],
 	}),
-	playlists: one(playlists, {
+	playlist: one(playlists, {
 		fields: [playlistVideos.playlistId],
 		references: [playlists.id],
 	}),

@@ -78,11 +78,6 @@ export const commentsRouter = createTRPCRouter({
 				userId = user.id
 			}
 
-			const [existingUser] = await db
-				.select()
-				.from(users)
-				.where(inArray(users.id, userId ? [userId] : []))
-
 			const viewerReactions = db.$with('viewer_reactions').as(
 				db
 					.select({
@@ -90,7 +85,7 @@ export const commentsRouter = createTRPCRouter({
 						type: commentsReactions.type,
 					})
 					.from(commentsReactions)
-					.where(inArray(commentsReactions.userId, existingUser.id ? [existingUser.id] : [])),
+					.where(inArray(commentsReactions.userId, userId ? [userId] : [])),
 			)
 
 			const replies = db.$with('replies').as(
