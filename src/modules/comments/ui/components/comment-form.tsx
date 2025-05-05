@@ -43,7 +43,10 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 		},
 	})
 
-	const form = useForm<{ videoId: string; parentId?: string; value: string }>({
+	const formSchema = commentInsertSchema.omit({ userId: true })
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
 		defaultValues: {
 			videoId,
 			parentId,
@@ -51,7 +54,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 		},
 	})
 
-	const onSubmit = (values: { videoId: string; parentId?: string; value: string }) => {
+	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		create.mutate(values)
 	}
 
@@ -78,7 +81,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 								<FormControl>
 									<Textarea
 										{...field}
-										placeholder={variant === 'reply' ? 'Reply to comment...' : 'Add a comment...'}
+										placeholder={variant === 'reply' ? 'Reply to this comment...' : 'Add a comment...'}
 										className="resize-none bg-transparent overflow-hidden"
 									/>
 								</FormControl>
@@ -89,7 +92,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 					/>
 
 					<div className="flex justify-end gap-2 mt-2">
-						{variant === 'reply' && (
+						{onCancel && (
 							<Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
 								Cancel
 							</Button>

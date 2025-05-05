@@ -6,17 +6,17 @@ import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { CommentItem } from '@/modules/comments/ui/components'
 
 interface Props {
-	parentId: string
 	videoId: string
+	parentId: string
 }
 
-export const CommentReplies = ({ parentId, videoId }: Props) => {
+export const CommentReplies = ({ videoId, parentId }: Props) => {
 	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		trpc.comments.getMany.useInfiniteQuery(
 			{
-				limit: DEFAULT_LIMIT,
-				parentId,
 				videoId,
+				parentId,
+				limit: DEFAULT_LIMIT,
 			},
 			{
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -32,25 +32,16 @@ export const CommentReplies = ({ parentId, videoId }: Props) => {
 					</div>
 				)}
 
-				{data?.pages.map((page, index) => (
-					<div key={index}>
-						{page.items.map((comment) => (
-							<CommentItem key={comment.id} comment={comment} variant="reply" />
-						))}
-					</div>
-				))}
+				{!isLoading &&
+					data?.pages
+						.flatMap((page) => page.items)
+						.map((comment) => <CommentItem key={comment.id} comment={comment} variant="reply" />)}
 			</div>
 
 			{hasNextPage && (
-				<Button
-					variant="link"
-					size="sm"
-					disabled={isFetchingNextPage}
-					onClick={() => fetchNextPage()}
-					className="text-blue-500"
-				>
+				<Button variant="tertiary" size="sm" disabled={isFetchingNextPage} onClick={() => fetchNextPage()}>
 					<CornerDownRightIcon className="size-4 mr-2" />
-					Show More
+					Show more replies
 				</Button>
 			)}
 		</div>

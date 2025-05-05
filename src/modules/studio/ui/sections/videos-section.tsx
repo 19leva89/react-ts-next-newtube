@@ -128,10 +128,10 @@ export const VideosSectionSuspense = () => {
 												/>
 											</div>
 
-											<div className="flex flex-col overflow-hidden gap-y-1">
-												<span className="text-sm line-clamp-1">{video.title}</span>
+											<div className="flex flex-col overflow-hidden gap-y-1 w-94">
+												<span className="text-sm truncate">{video.title}</span>
 
-												<span className="text-xs text-muted-foreground line-clamp-1">
+												<span className="text-xs text-muted-foreground truncate">
 													{video.description || 'No description'}
 												</span>
 											</div>

@@ -10,8 +10,8 @@ import {
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { useAuth, useClerk } from '@clerk/nextjs'
 import { formatDistanceToNow } from 'date-fns'
+import { useAuth, useClerk } from '@clerk/nextjs'
 
 import {
 	Button,
@@ -154,61 +154,56 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 						</div>
 
 						{variant === 'comment' && (
-							<Button variant="ghost" size="sm" className="rounded-full" onClick={() => setIsReplyOpen(true)}>
+							<Button variant="ghost" size="sm" onClick={() => setIsReplyOpen(true)} className="rounded-full">
 								Reply
 							</Button>
 						)}
 					</div>
 				</div>
 
-				<DropdownMenu modal={false}>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" size="icon" className="size-8">
-							<MoreVerticalIcon />
-						</Button>
-					</DropdownMenuTrigger>
+				{comment.user.clerkId === userId && (
+					<DropdownMenu modal={false}>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" size="icon" className="size-8">
+								<MoreVerticalIcon />
+							</Button>
+						</DropdownMenuTrigger>
 
-					<DropdownMenuContent align="end">
-						{variant === 'comment' && (
-							<DropdownMenuItem onClick={() => setIsReplyOpen(true)} className="cursor-pointer">
-								<MessageSquareIcon className="size-4 mr-2" />
-								Reply
-							</DropdownMenuItem>
-						)}
+						<DropdownMenuContent align="end">
+							{variant === 'comment' && (
+								<DropdownMenuItem onClick={() => setIsReplyOpen(true)} className="cursor-pointer">
+									<MessageSquareIcon className="size-4 mr-2" />
+									Reply
+								</DropdownMenuItem>
+							)}
 
-						{comment.user.clerkId === userId && (
 							<DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })} className="cursor-pointer">
 								<TrashIcon className="size-4 mr-2" />
 								Delete
 							</DropdownMenuItem>
-						)}
-					</DropdownMenuContent>
-				</DropdownMenu>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				)}
 			</div>
 
 			{isReplyOpen && variant === 'comment' && (
 				<div className="mt-4 pl-14">
 					<CommentForm
+						variant="reply"
 						videoId={comment.videoId}
 						parentId={comment.id}
-						onCancel={() => setIsReplyOpen(false)}
-						variant="reply"
 						onSuccess={() => {
 							setIsReplyOpen(false)
 							setIsRepliesOpen(true)
 						}}
+						onCancel={() => setIsReplyOpen(false)}
 					/>
 				</div>
 			)}
 
 			{comment.replyCount > 0 && variant === 'comment' && (
 				<div className="pl-14">
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() => setIsRepliesOpen((current) => !current)}
-						className="rounded-full text-blue-500"
-					>
+					<Button variant="tertiary" size="sm" onClick={() => setIsRepliesOpen((current) => !current)}>
 						{isRepliesOpen ? (
 							<ChevronUpIcon className="size-4 mr-2" />
 						) : (
@@ -220,7 +215,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 			)}
 
 			{comment.replyCount > 0 && variant === 'comment' && isRepliesOpen && (
-				<CommentReplies parentId={comment.id} videoId={comment.videoId} />
+				<CommentReplies videoId={comment.videoId} parentId={comment.id} />
 			)}
 		</div>
 	)

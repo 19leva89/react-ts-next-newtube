@@ -11,5 +11,6 @@ import { createCallerFactory, createTRPCContext } from '@/trpc/init'
 //            will return the same client during the same request.
 const caller = createCallerFactory(appRouter)(createTRPCContext)
 
-export const getQueryClient = cache(makeQueryClient)
+const getQueryClient = cache(makeQueryClient)
+
 export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(caller, getQueryClient)
