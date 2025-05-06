@@ -53,7 +53,7 @@ export const SearchInput = () => {
 						variant="ghost"
 						size="icon"
 						onClick={() => setValue('')}
-						className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
+						className="absolute right-2 top-1/2 -translate-y-1/2 size-7 rounded-full"
 					>
 						<XIcon className="text-gray-500" />
 					</Button>

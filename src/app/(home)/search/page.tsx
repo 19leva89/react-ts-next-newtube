@@ -1,6 +1,6 @@
 import { trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
-// import { SearchView } from '@/modules/search/ui/views/search-view'
+import { SearchView } from '@/modules/search/ui/views/search-view'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,13 +16,13 @@ const SearchPage = async ({ searchParams }: Props) => {
 
 	void trpc.categories.getMany.prefetch()
 
-	// void trpc.search.getMany.prefetchInfinite({
-	// 	query: query,
-	// 	categoryId: categoryId,
-	// 	limit: DEFAULT_LIMIT,
-	// })
+	void trpc.search.getMany.prefetchInfinite({
+		query: query,
+		categoryId: categoryId,
+		limit: DEFAULT_LIMIT,
+	})
 
-	// return <SearchView query={query} categoryId={categoryId} />
+	return <SearchView query={query} categoryId={categoryId} />
 }
 
 export default SearchPage
