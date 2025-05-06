@@ -25,7 +25,11 @@ export const StudioSidebarHeader = () => {
 			<SidebarMenuItem>
 				<SidebarMenuButton tooltip="Your profile" asChild>
 					<Link href="/users/current" prefetch>
-						<UserAvatar size="xs" name={user?.fullName ?? 'User'} imageUrl={user?.imageUrl} />
+						<UserAvatar
+							size="xs"
+							name={user?.fullName || 'User'}
+							imageUrl={user?.imageUrl || '/svg/user-placeholder.svg'}
+						/>
 
 						<span className="text-sm">Your profile</span>
 					</Link>
@@ -39,8 +43,8 @@ export const StudioSidebarHeader = () => {
 			<Link href="/users/current" prefetch>
 				<UserAvatar
 					size="xl"
-					name={user?.fullName ?? 'User'}
-					imageUrl={user?.imageUrl}
+					name={user?.fullName || 'User'}
+					imageUrl={user?.imageUrl || '/svg/user-placeholder.svg'}
 					className="size-28 hover:opacity-80 transition-opacity"
 				/>
 			</Link>

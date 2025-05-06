@@ -5,10 +5,10 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import { trpc } from '@/trpc/client'
 import { Skeleton } from '@/components/ui'
+import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
-// import { VideoRowCard } from '../components/video-row-card'
-// import { VideoGridCard } from '../components/video-grid-card'
-// import { InfiniteScroll } from '@/components/infinite-scroll'
+import { VideoRowCard } from '@/modules/videos/ui/components/video-row-card'
+import { VideoGridCard } from '@/modules/videos/ui/components/video-grid-card'
 
 interface Props {
 	videoId: string
@@ -26,40 +26,40 @@ export const SuggestionsSection = ({ videoId, isManual }: Props) => {
 }
 
 const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
-	// const [suggestions, query] = trpc.suggestions.getMany.useSuspenseInfiniteQuery(
-	// 	{
-	// 		videoId,
-	// 		limit: DEFAULT_LIMIT,
-	// 	},
-	// 	{
-	// 		getNextPageParam: (lastPage) => lastPage['nextCursor'],
-	// 	},
-	// )
+	const [suggestions, query] = trpc.suggestions.getMany.useSuspenseInfiniteQuery(
+		{
+			videoId,
+			limit: DEFAULT_LIMIT,
+		},
+		{
+			getNextPageParam: (lastPage) => lastPage['nextCursor'],
+		},
+	)
 
 	return (
 		<>
 			<div className="hidden md:block space-y-3">
-				{/* {suggestions.pages
+				{suggestions.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoRowCard key={video.id} data={video} size="compact" />
-					))} */}
+					))}
 			</div>
 
 			<div className="block md:hidden space-y-10">
-				{/* {suggestions.pages
+				{suggestions.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoGridCard key={video.id} data={video} />
-					))} */}
+					))}
 			</div>
 
-			{/* <InfiniteScroll
+			<InfiniteScroll
 				isManual={isManual}
 				hasNextPage={query.hasNextPage}
 				fetchNextPage={query.fetchNextPage}
 				isFetchingNextPage={query.isFetchingNextPage}
-			/> */}
+			/>
 		</>
 	)
 }

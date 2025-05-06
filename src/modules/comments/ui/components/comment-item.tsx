@@ -164,7 +164,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 				{comment.user.clerkId === userId && (
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="size-8">
+							<Button variant="ghost" size="icon" className="rounded-full">
 								<MoreVerticalIcon />
 							</Button>
 						</DropdownMenuTrigger>

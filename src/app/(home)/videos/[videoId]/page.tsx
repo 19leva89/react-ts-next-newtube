@@ -18,10 +18,10 @@ const VideosIdPage = async ({ params }: Props) => {
 		limit: DEFAULT_LIMIT,
 	})
 
-	// void trpc.suggestions.getMany.prefetchInfinite({
-	// 	videoId,
-	// 	limit: DEFAULT_LIMIT,
-	// })
+	void trpc.suggestions.getMany.prefetchInfinite({
+		videoId,
+		limit: DEFAULT_LIMIT,
+	})
 
 	return <VideoView videoId={videoId} />
 }

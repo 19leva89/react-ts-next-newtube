@@ -38,10 +38,14 @@ export const VideoOwner = ({ user, videoId }: Props) => {
 		<div className="flex items-center justify-between sm:justify-start gap-3 min-w-0">
 			<Link prefetch href={`/users/${user.id}`}>
 				<div className="flex items-center gap-3 min-w-0">
-					<UserAvatar size="lg" name={user.name ?? 'User'} imageUrl={user.imageUrl ?? ''} />
+					<UserAvatar
+						size="lg"
+						name={user.name || 'User'}
+						imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
+					/>
 
 					<div className="flex flex-col gap-1 min-w-0">
-						<UserInfo size="lg" name={user.name} />
+						<UserInfo size="lg" name={user.name || 'User'} />
 
 						<span className="text-sm text-muted-foreground line-clamp-1">
 							{user.subscriberCount} subscribers

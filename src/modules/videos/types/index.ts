@@ -3,4 +3,4 @@ import { inferRouterOutputs } from '@trpc/server'
 
 export type VideoGetOneOutput = inferRouterOutputs<AppRouter>['videos']['getOne']
 
-// export type VideoGetManyOutput = inferRouterOutputs<AppRouter>['suggestions']['getMany']
+export type VideoGetManyOutput = inferRouterOutputs<AppRouter>['suggestions']['getMany']
