@@ -7,8 +7,8 @@ import { UserAvatar } from '@/components/shared'
 import { VideoGetManyOutput } from '@/modules/videos/types'
 import { UserInfo } from '@/modules/users/ui/components/user-info'
 import { VideoMenu } from '@/modules/videos/ui/components/video-menu'
-import { VideoThumbnail } from '@/modules/videos/ui/components/video-thumbnail'
 import { Skeleton, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
+import { VideoThumbnail, VideoThumbnailSkeleton } from '@/modules/videos/ui/components/video-thumbnail'
 
 const videoRowCardVariants = cva('group flex min-w-0', {
 	variants: {
@@ -39,10 +39,35 @@ interface Props extends VariantProps<typeof videoRowCardVariants> {
 	onRemove?: () => void
 }
 
-export const VideoRowCardSkeleton = () => {
+export const VideoRowCardSkeleton = ({ size }: VariantProps<typeof videoRowCardVariants>) => {
 	return (
-		<div>
-			<Skeleton />
+		<div className={videoRowCardVariants({ size })}>
+			{/* Thumbnail skeleton */}
+			<div className={thumbnailVariants({ size })}>
+				<VideoThumbnailSkeleton />
+			</div>
+
+			{/* Info skeleton */}
+			<div className="flex-1 min-w-0">
+				<div className="flex justify-between gap-x-2">
+					<div className="flex-1 min-w-0">
+						<Skeleton className={cn('w-[40%] h-5', size === 'compact' && 'w-[40%] h-4')} />
+
+						{size === 'default' && (
+							<>
+								<Skeleton className="w-[20%] h-4 mt-1" />
+
+								<div className="flex items-center gap-2 my-3">
+									<Skeleton className="size-8 rounded-full" />
+									<Skeleton className="w-24 h-4" />
+								</div>
+							</>
+						)}
+
+						{size === 'compact' && <Skeleton className="w-[50%] h-4 mt-1" />}
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

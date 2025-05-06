@@ -44,8 +44,8 @@ import {
 	Skeleton,
 	Textarea,
 } from '@/components/ui'
-import { snakeCaseToTitle } from '@/lib/utils'
 import { videoUpdateSchema } from '@/db/schema'
+import { absoluteUrl, baseUrl, snakeCaseToTitle } from '@/lib/utils'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 import { ThumbnailUploadModal } from '@/modules/studio/ui/components/thumbnail-upload-modal'
@@ -137,7 +137,7 @@ const FormSectionSkeleton = () => {
 const FormSectionSuspense = ({ videoId }: Props) => {
 	const router = useRouter()
 	const utils = trpc.useUtils()
-	const fullUrl = `${process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || 'http://localhost:3000'}/videos/${videoId}`
+	const fullUrl = `${baseUrl}/videos/${videoId}`
 
 	const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId })
 	const [categories] = trpc.categories.getMany.useSuspenseQuery()

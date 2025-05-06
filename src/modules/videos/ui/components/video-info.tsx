@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 
+import { Skeleton } from '@/components/ui'
 import { UserAvatar } from '@/components/shared'
 import { VideoGetManyOutput } from '@/modules/videos/types'
 import { UserInfo } from '@/modules/users/ui/components/user-info'
@@ -10,6 +11,19 @@ import { VideoMenu } from '@/modules/videos/ui/components/video-menu'
 interface Props {
 	data: VideoGetManyOutput['items'][number]
 	onRemove?: () => void
+}
+
+export const VideoInfoSkeleton = () => {
+	return (
+		<div className="flex gap-3">
+			<Skeleton className="size-10 shrink-0 rounded-full" />
+
+			<div className="flex-1 min-w-0 space-y-2">
+				<Skeleton className="w-[90%] h-5" />
+				<Skeleton className="w-[70%] h-5" />
+			</div>
+		</div>
+	)
 }
 
 export const VideoInfo = ({ data, onRemove }: Props) => {

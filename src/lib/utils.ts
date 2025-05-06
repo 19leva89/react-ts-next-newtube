@@ -15,3 +15,17 @@ export function formatDuration(duration: number) {
 export function snakeCaseToTitle(str: string) {
 	return str.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
 }
+
+export const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+	? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+	: `http://localhost:${process.env.PORT || 3000}`
+
+export function absoluteUrl(path: string): string {
+	// If in a browser, return the relative path
+	if (typeof window !== 'undefined') {
+		return path
+	}
+
+	// Remove extra slashes to avoid format errors
+	return new URL(path, baseUrl).toString()
+}

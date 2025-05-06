@@ -321,13 +321,13 @@ export const videosRouter = createTRPCRouter({
 				throw new TRPCError({ code: 'BAD_REQUEST' })
 			}
 
-			const directUpload = await mux.video.uploads.retrieve(existingVideo.muxUploadId)
+			const upload = await mux.video.uploads.retrieve(existingVideo.muxUploadId)
 
-			if (!directUpload || !directUpload.asset_id) {
+			if (!upload || !upload.asset_id) {
 				throw new TRPCError({ code: 'BAD_REQUEST' })
 			}
 
-			const asset = await mux.video.assets.retrieve(directUpload.asset_id)
+			const asset = await mux.video.assets.retrieve(upload.asset_id)
 
 			if (!asset) {
 				throw new TRPCError({ code: 'BAD_REQUEST' })
@@ -336,9 +336,9 @@ export const videosRouter = createTRPCRouter({
 			const [updatedVideo] = await db
 				.update(videos)
 				.set({
+					muxAssetId: asset.id,
 					muxStatus: asset.status,
 					muxPlaybackId: asset.playback_ids?.[0].id,
-					muxAssetId: asset.id,
 					duration: asset.duration ? Math.round(asset.duration * 1000) : 0,
 				})
 				.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))

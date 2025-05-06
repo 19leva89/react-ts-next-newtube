@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 
 import type { AppRouter } from '@/trpc/routers/_app'
 import { makeQueryClient } from '@/trpc/query-client'
+import { absoluteUrl } from '@/lib/utils'
 
 export const trpc = createTRPCReact<AppRouter>()
 
@@ -29,17 +30,7 @@ function getQueryClient() {
 	return browserQueryClient
 }
 
-function getUrl() {
-	const base = (() => {
-		if (typeof window !== 'undefined') return ''
-		if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-		// if (process.env.NEXT_PUBLIC_APP_URL) return `https://${process.env.NEXT_PUBLIC_APP_URL}`
-
-		return 'http://localhost:3000'
-	})()
-
-	return `${base}/api/trpc`
-}
+const fullUrl = absoluteUrl('/api/trpc')
 
 export function TRPCProvider(props: PropsWithChildren) {
 	// NOTE: Avoid useState when initializing the query client if you don't
@@ -53,7 +44,7 @@ export function TRPCProvider(props: PropsWithChildren) {
 			links: [
 				httpBatchLink({
 					transformer: superjson,
-					url: getUrl(),
+					url: fullUrl,
 					async headers() {
 						const headers = new Headers()
 						headers.set('x-trpc-source', 'nextjs-react')

@@ -9,6 +9,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui'
+import { baseUrl } from '@/lib/utils'
 // import { PlaylistAddModal } from '@/modules/playlists/ui/components/playlist-add-modal'
 
 interface Props {
@@ -21,7 +22,7 @@ export const VideoMenu = ({ videoId, variant = 'ghost', onRemove }: Props) => {
 	const [openPlaylistAddModal, setOpenPlaylistAddModal] = useState<boolean>(false)
 
 	const onShare = () => {
-		const fullUrl = `${process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || 'http://localhost:3000'}/videos/${videoId}`
+		const fullUrl = `${baseUrl}/videos/${videoId}`
 		navigator.clipboard.writeText(fullUrl)
 
 		toast.success('Video URL copied to clipboard')
