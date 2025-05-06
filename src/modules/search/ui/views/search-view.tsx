@@ -8,7 +8,7 @@ interface Props {
 
 export const SearchView = ({ query, categoryId }: Props) => {
 	return (
-		<div className="flex flex-col gap-y-6 min-w-325 mb-10 px-4 pt-2.5 mx-auto">
+		<div className="flex flex-col gap-y-6 max-w-325 mb-10 px-4 pt-2.5 mx-auto">
 			<CategoriesSection categoryId={categoryId} />
 
 			<ResultsSection query={query} categoryId={categoryId} />

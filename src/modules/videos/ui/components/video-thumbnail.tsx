@@ -27,6 +27,7 @@ export const VideoThumbnail = ({ title, duration, imageUrl, previewUrl }: Props)
 				<Image
 					src={imageUrl || THUMBNAIL_FALLBACK}
 					alt={title}
+					sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
 					fill
 					className="size-full object-cover group-hover:opacity-0"
 				/>
@@ -34,6 +35,7 @@ export const VideoThumbnail = ({ title, duration, imageUrl, previewUrl }: Props)
 				<Image
 					src={previewUrl || THUMBNAIL_FALLBACK}
 					alt={title}
+					sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
 					unoptimized={!!previewUrl}
 					fill
 					className="size-full object-cover opacity-0 group-hover:opacity-100"

@@ -7,7 +7,7 @@ async function startNgrok() {
 	const listener = await ngrok.forward({
 		addr: 3000,
 		authtoken: process.env.NGROK_AUTHTOKEN,
-		domain: 'notably-just-cheetah.ngrok-free.app',
+		domain: process.env.NGROK_DOMAIN,
 	})
 
 	console.log(`✅ Ngrok tunnel established at: ${listener.url()}`)
