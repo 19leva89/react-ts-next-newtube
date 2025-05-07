@@ -21,7 +21,7 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 	const like = trpc.videoReactions.like.useMutation({
 		onSuccess: () => {
 			utils.videos.getOne.invalidate({ id: videoId })
-			// utils.playlists.getLiked.invalidate()
+			utils.playlists.getLiked.invalidate()
 		},
 		onError: (error) => {
 			toast.error('You need to be logged in to like this video')
@@ -35,7 +35,7 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 	const dislike = trpc.videoReactions.dislike.useMutation({
 		onSuccess: () => {
 			utils.videos.getOne.invalidate({ id: videoId })
-			// utils.playlists.getLiked.invalidate()
+			utils.playlists.getLiked.invalidate()
 		},
 		onError: (error) => {
 			toast.error('You need to be logged in to like this video')

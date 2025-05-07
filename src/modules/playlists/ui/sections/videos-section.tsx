@@ -5,11 +5,10 @@ import { toast } from 'sonner'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { trpc } from '@/trpc/client'
-import { Skeleton } from '@/components/ui'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
-import { VideoRowCard } from '@/modules/videos/ui/components/video-row-card'
-import { VideoGridCard } from '@/modules/videos/ui/components/video-grid-card'
+import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
+import { VideoGridCard, VideoGridCardSkeleton } from '@/modules/videos/ui/components/video-grid-card'
 
 interface Props {
 	playlistId: string
@@ -27,19 +26,19 @@ export const VideosSection = ({ playlistId }: Props) => {
 
 const VideosSectionSkeleton = () => {
 	return (
-		<div>
-			<div className="gap-4 gap-y-10 flex flex-col md:hidden">
+		<>
+			<div className="flex flex-col gap-4 gap-y-10 md:hidden">
 				{Array.from({ length: 6 }).map((_, index) => (
-					<Skeleton key={index} className="h-[200px] w-full" />
+					<VideoGridCardSkeleton key={index} />
 				))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4 gap-y-10">
+			<div className="hidden md:flex flex-col gap-4">
 				{Array.from({ length: 6 }).map((_, index) => (
-					<Skeleton key={index} className="h-[200px] w-full" />
+					<VideoRowCardSkeleton key={index} size="compact" />
 				))}
 			</div>
-		</div>
+		</>
 	)
 }
 
@@ -86,7 +85,7 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 					))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4 gap-y-10">
+			<div className="hidden md:flex flex-col gap-4">
 				{videos.pages
 					.flatMap((page) => page.items)
 					.map((video) => (

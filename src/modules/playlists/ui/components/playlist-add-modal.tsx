@@ -68,7 +68,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 	})
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a Playlist">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a playlist">
 			<div className="flex flex-col gap-2">
 				{isLoading && (
 					<div className="flex items-center justify-center p-4">

@@ -46,7 +46,7 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 	}
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a Playlist">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a playlist">
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<FormField
