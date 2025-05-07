@@ -17,7 +17,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 		onSuccess: () => {
 			toast.success('Subscribed')
 
-			// utils.videos.getManySubscribed.invalidate()
+			utils.videos.getManySubscribed.invalidate()
 			// utils.users.getOne.invalidate({ id: userId })
 			// utils.subscriptions.getMany.invalidate()
 
@@ -38,7 +38,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 		onSuccess: () => {
 			toast.success('Unsubscribed')
 
-			// utils.videos.getManySubscribed.invalidate()
+			utils.videos.getManySubscribed.invalidate()
 			// utils.users.getOne.invalidate({ id: userId })
 			// utils.subscriptions.getMany.invalidate()
 

@@ -15,10 +15,11 @@ const HomePage = async ({ searchParams }: Props) => {
 	const { categoryId } = await searchParams
 
 	void trpc.categories.getMany.prefetch()
-	// void trpc.videos.getMany.prefetchInfinite({
-	// 	categoryId: categoryId,
-	// 	limit: DEFAULT_LIMIT,
-	// })
+
+	void trpc.videos.getMany.prefetchInfinite({
+		categoryId: categoryId,
+		limit: DEFAULT_LIMIT,
+	})
 
 	return <HomeView categoryId={categoryId} />
 }

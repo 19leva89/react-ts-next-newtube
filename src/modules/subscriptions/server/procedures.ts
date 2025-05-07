@@ -67,8 +67,8 @@ export const subscriptionsRouter = createTRPCRouter({
 	// 		}),
 	// 	)
 	// 	.query(async ({ ctx, input }) => {
-	// 		const { cursor, limit } = input
 	// 		const { id: userId } = ctx.user
+	// 		const { cursor, limit } = input
 
 	// 		const data = await db
 	// 			.select({
@@ -99,10 +99,13 @@ export const subscriptionsRouter = createTRPCRouter({
 	// 			.limit(limit + 1)
 
 	// 		const hasMore = data.length > limit
+
 	// 		// Remove the last item if there is more data
 	// 		const items = hasMore ? data.slice(0, -1) : data
+
 	// 		// Set the next cursor to the last item if there is more data
 	// 		const lastItem = items[items.length - 1]
+
 	// 		const nextCursor = hasMore
 	// 			? {
 	// 					creatorId: lastItem.creatorId,
