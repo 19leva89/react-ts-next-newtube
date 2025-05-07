@@ -4,7 +4,6 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { trpc } from '@/trpc/client'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
@@ -31,25 +30,23 @@ export const ResultsSection = (props: Props) => {
 
 export const ResultsSectionSkeleton = () => {
 	return (
-		<div>
-			<div className="hidden md:flex flex-col gap-4">
-				{Array.from({ length: 3 }, (_, index) => (
-					<VideoRowCardSkeleton key={index} />
-				))}
-			</div>
-
+		<>
 			<div className="flex flex-col gap-4 gap-y-10 p-4 pt-6 md:hidden">
-				{Array.from({ length: 3 }, (_, index) => (
+				{Array.from({ length: 6 }, (_, index) => (
 					<VideoGridCardSkeleton key={index} />
 				))}
 			</div>
-		</div>
+
+			<div className="hidden md:flex flex-col gap-4">
+				{Array.from({ length: 6 }, (_, index) => (
+					<VideoRowCardSkeleton key={index} />
+				))}
+			</div>
+		</>
 	)
 }
 
 const ResultsSectionSuspense = ({ query, categoryId }: Props) => {
-	const isMobile = useIsMobile()
-
 	const [results, resultsQuery] = trpc.search.getMany.useSuspenseInfiniteQuery(
 		{
 			query: query,
@@ -63,23 +60,21 @@ const ResultsSectionSuspense = ({ query, categoryId }: Props) => {
 
 	return (
 		<>
-			{isMobile ? (
-				<div className="flex flex-col gap-4 gap-y-10">
-					{results.pages
-						.flatMap((page) => page.items)
-						.map((video) => (
-							<VideoGridCard key={video.id} data={video} />
-						))}
-				</div>
-			) : (
-				<div className="flex flex-col gap-4">
-					{results.pages
-						.flatMap((page) => page.items)
-						.map((video) => (
-							<VideoRowCard key={video.id} data={video} />
-						))}
-				</div>
-			)}
+			<div className="flex flex-col gap-4 gap-y-10 md:hidden">
+				{results.pages
+					.flatMap((page) => page.items)
+					.map((video) => (
+						<VideoGridCard key={video.id} data={video} />
+					))}
+			</div>
+
+			<div className="hidden md:flex flex-col gap-4">
+				{results.pages
+					.flatMap((page) => page.items)
+					.map((video) => (
+						<VideoRowCard key={video.id} data={video} />
+					))}
+			</div>
 
 			<InfiniteScroll
 				hasNextPage={resultsQuery.hasNextPage}

@@ -1,37 +1,38 @@
-'use client'
-
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { trpc } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
-import { VideoGridCard, VideoGridCardSkeleton } from '@/modules/videos/ui/components/video-grid-card'
+import {
+	PlaylistGridCard,
+	PlaylistGridCardSkeleton,
+} from '@/modules/playlists/ui/components/playlist-grid-card'
 
-export const TrendingVideosSection = () => {
+export const PlaylistSection = () => {
 	return (
-		<Suspense fallback={<TrendingVideosSectionSkeleton />}>
+		<Suspense fallback={<PlaylistSectionSkeleton />}>
 			<ErrorBoundary fallback={<p>Something went wrong</p>}>
-				<TrendingVideosSectionSuspense />
+				<PlaylistSectionSuspense />
 			</ErrorBoundary>
 		</Suspense>
 	)
 }
 
-const TrendingVideosSectionSkeleton = () => {
+export const PlaylistSectionSkeleton = () => {
 	return (
 		<div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 [@media(min-width:1920px)]:grid-cols-5 [@media(min-width:2200px)]:grid-cols-6 gap-4 gap-y-10">
-				{Array.from({ length: 20 }).map((_, index) => (
-					<VideoGridCardSkeleton key={index} />
+				{Array.from({ length: 12 }).map((_, index) => (
+					<PlaylistGridCardSkeleton key={index} />
 				))}
 			</div>
 		</div>
 	)
 }
 
-const TrendingVideosSectionSuspense = () => {
-	const [videos, query] = trpc.videos.getManyTrending.useSuspenseInfiniteQuery(
+const PlaylistSectionSuspense = () => {
+	const [data, query] = trpc.playlists.getMany.useSuspenseInfiniteQuery(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -43,17 +44,15 @@ const TrendingVideosSectionSuspense = () => {
 	return (
 		<div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 [@media(min-width:1920px)]:grid-cols-5 [@media(min-width:2200px)]:grid-cols-6 gap-4 gap-y-10">
-				{videos.pages
-					.flatMap((page) => page.items)
-					.map((video) => (
-						<VideoGridCard key={video.id} data={video} />
-					))}
+				{data.pages.flatMap((page) =>
+					page.items.map((item) => <PlaylistGridCard key={item.id} playlist={item} />),
+				)}
 			</div>
 
 			<InfiniteScroll
 				hasNextPage={query.hasNextPage}
-				fetchNextPage={query.fetchNextPage}
 				isFetchingNextPage={query.isFetchingNextPage}
+				fetchNextPage={query.fetchNextPage}
 			/>
 		</div>
 	)
