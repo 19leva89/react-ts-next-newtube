@@ -50,6 +50,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 
 	const removeVideo = trpc.playlists.removeVideo.useMutation({
 		onSuccess: (data) => {
+			utils.playlists.getMany.invalidate()
 			utils.playlists.getManyForVideo.invalidate({ videoId })
 			utils.playlists.getOne.invalidate({ id: data.playlistId })
 			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })

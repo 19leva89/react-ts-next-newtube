@@ -56,13 +56,10 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 
 	const removeVideo = trpc.playlists.removeVideo.useMutation({
 		onSuccess: (data) => {
-			utils.playlists.getManyForVideo.invalidate({
-				videoId: data.videoId,
-			})
+			utils.playlists.getMany.invalidate()
+			utils.playlists.getManyForVideo.invalidate({ videoId: data.videoId })
 			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({
-				playlistId: data.playlistId,
-			})
+			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
 
 			toast.success('Video removed from playlist')
 		},

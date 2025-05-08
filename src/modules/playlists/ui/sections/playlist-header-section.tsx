@@ -25,15 +25,9 @@ export const PlaylistHeaderSection = ({ playlistId }: Props) => {
 
 const PlaylistHeaderSectionSkeleton = () => {
 	return (
-		<div className="flex items-center justify-between">
-			<div className="flex flex-col gap-1">
-				<Skeleton className="w-24 h-8" />
-				<Skeleton className="w-48 h-5" />
-			</div>
-
-			<Button variant="outline" size="icon" className="rounded-full" disabled={true}>
-				<Trash2Icon className="size-5" />
-			</Button>
+		<div className="flex flex-col gap-y-2">
+			<Skeleton className="w-26 h-6" />
+			<Skeleton className="w-34 h-4" />
 		</div>
 	)
 }
@@ -63,7 +57,8 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
 		<div className="flex items-center justify-between">
 			<div>
 				<h1 className="text-2xl font-bold">{playlist.name}</h1>
-				<p className="text-xs text-muted-foreground">Custom playlist</p>
+
+				<p className="text-xs text-muted-foreground">Videos from the playlist</p>
 			</div>
 
 			<Button
@@ -73,7 +68,7 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
 				onClick={() => remove.mutate({ id: playlist.id })}
 				className="rounded-full"
 			>
-				<Trash2Icon className="size-5" />
+				<Trash2Icon className="size-4" />
 			</Button>
 		</div>
 	)

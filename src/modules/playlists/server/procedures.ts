@@ -166,7 +166,7 @@ export const playlistsRouter = createTRPCRouter({
 				limit: z.number().min(1).max(100),
 			}),
 		)
-		.query(async ({ input, ctx }) => {
+		.query(async ({ ctx, input }) => {
 			const { cursor, limit } = input
 			const {
 				user: { id: userId },
@@ -234,7 +234,7 @@ export const playlistsRouter = createTRPCRouter({
 				limit: z.number().min(1).max(100),
 			}),
 		)
-		.query(async ({ input, ctx }) => {
+		.query(async ({ ctx, input }) => {
 			const { cursor, limit, videoId } = input
 			const {
 				user: { id: userId },
@@ -301,7 +301,7 @@ export const playlistsRouter = createTRPCRouter({
 				limit: z.number().min(1).max(100),
 			}),
 		)
-		.query(async ({ input, ctx }) => {
+		.query(async ({ ctx, input }) => {
 			const { cursor, limit } = input
 			const {
 				user: { id: userId },
@@ -381,7 +381,7 @@ export const playlistsRouter = createTRPCRouter({
 				limit: z.number().min(1).max(100),
 			}),
 		)
-		.query(async ({ input, ctx }) => {
+		.query(async ({ ctx, input }) => {
 			const { cursor, limit } = input
 			const {
 				user: { id: userId },
@@ -462,8 +462,8 @@ export const playlistsRouter = createTRPCRouter({
 				limit: z.number().min(1).max(100),
 			}),
 		)
-		.query(async ({ input, ctx }) => {
-			const { cursor, limit, playlistId } = input
+		.query(async ({ ctx, input }) => {
+			const { playlistId, cursor, limit } = input
 			const {
 				user: { id: userId },
 			} = ctx
@@ -559,7 +559,7 @@ export const playlistsRouter = createTRPCRouter({
 		return existingPlaylist
 	}),
 
-	remove: protectedProcedure.input(z.object({ id: z.string().cuid2() })).mutation(async ({ input, ctx }) => {
+	remove: protectedProcedure.input(z.object({ id: z.string().cuid2() })).mutation(async ({ ctx, input }) => {
 		const { id } = input
 		const {
 			user: { id: userId },
