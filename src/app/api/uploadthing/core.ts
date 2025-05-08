@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { and, eq } from 'drizzle-orm'
-import { headers } from 'next/headers'
 import { auth } from '@clerk/nextjs/server'
 import { UploadThingError, UTApi } from 'uploadthing/server'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
@@ -11,46 +10,42 @@ import { users, videos } from '@/db/schema'
 const f = createUploadthing()
 
 export const ourFileRouter = {
-	// bannerUploader: f({
-	// 	image: {
-	// 		maxFileSize: '4MB',
-	// 		maxFileCount: 1,
-	// 	},
-	// })
-	// 	.middleware(async () => {
-	// 		const session = await auth.api.getSession({
-	// 			headers: await headers(),
-	// 		})
+	bannerUploader: f({
+		image: {
+			maxFileSize: '4MB',
+			maxFileCount: 1,
+		},
+	})
+		.middleware(async () => {
+			const { userId: clerkUserId } = await auth()
 
-	// 		const userId = session?.user?.id
+			if (!clerkUserId) throw new UploadThingError('Unauthorized')
 
-	// 		if (!userId) throw new UploadThingError('Unauthorized')
+			const [user] = await db.select().from(users).where(eq(users.clerkId, clerkUserId))
 
-	// 		const [existingUser] = await db.select().from(user).where(eq(user.id, userId))
+			if (!user) throw new UploadThingError('Unauthorized')
 
-	// 		if (!existingUser) throw new UploadThingError('Unauthorized')
+			if (user.bannerKey) {
+				const utApi = new UTApi()
 
-	// 		if (existingUser.bannerKey) {
-	// 			const utApi = new UTApi()
+				await utApi.deleteFiles(user.bannerKey)
 
-	// 			await utApi.deleteFiles(existingUser.bannerKey)
+				await db.update(users).set({ bannerKey: null, bannerUrl: null }).where(eq(users.id, user.id))
+			}
 
-	// 			await db.update(user).set({ bannerKey: null, bannerUrl: null }).where(eq(user.id, existingUser.id))
-	// 		}
+			return { user }
+		})
+		.onUploadComplete(async ({ metadata, file }) => {
+			await db
+				.update(users)
+				.set({
+					bannerUrl: file.ufsUrl,
+					bannerKey: file.key,
+				})
+				.where(eq(users.id, metadata.user.id))
 
-	// 		return { user: existingUser }
-	// 	})
-	// 	.onUploadComplete(async ({ metadata, file }) => {
-	// 		await db
-	// 			.update(user)
-	// 			.set({
-	// 				bannerUrl: file.ufsUrl,
-	// 				bannerKey: file.key,
-	// 			})
-	// 			.where(eq(user.id, metadata.user.id))
-
-	// 		return { uploadedBy: metadata.user.id }
-	// 	}),
+			return { uploadedBy: metadata.user.id }
+		}),
 
 	thumbnailUploader: f({
 		image: {
