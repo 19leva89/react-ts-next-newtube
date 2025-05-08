@@ -10,7 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui'
 import { baseUrl } from '@/lib/utils'
-// import { PlaylistAddModal } from '@/modules/playlists/ui/components/playlist-add-modal'
+import { PlaylistAddModal } from '@/modules/playlists/ui/components/playlist-add-modal'
 
 interface Props {
 	videoId: string
@@ -25,16 +25,16 @@ export const VideoMenu = ({ videoId, variant = 'ghost', onRemove }: Props) => {
 		const fullUrl = `${baseUrl}/videos/${videoId}`
 		navigator.clipboard.writeText(fullUrl)
 
-		toast.success('Video URL copied to clipboard')
+		toast.success('Link copied to clipboard')
 	}
 
 	return (
 		<>
-			{/* <PlaylistAddModal
-				open={openPlaylistAddModal}
-				onOpenChange={setOpenPlaylistAddModal}
+			<PlaylistAddModal
 				videoId={videoId}
-			/> */}
+				open={openPlaylistAddModal}
+				onOpenChangeAction={setOpenPlaylistAddModal}
+			/>
 
 			<DropdownMenu modal={false}>
 				<DropdownMenuTrigger asChild>

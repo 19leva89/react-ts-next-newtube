@@ -16,6 +16,7 @@ interface Props {
 
 export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) => {
 	const utils = trpc.useUtils()
+
 	const {
 		data: playlists,
 		isLoading,
@@ -35,16 +36,12 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 
 	const addVideo = trpc.playlists.addVideo.useMutation({
 		onSuccess: (data) => {
-			toast.success('Video added to playlist')
-
 			utils.playlists.getMany.invalidate()
-			utils.playlists.getManyForVideo.invalidate({
-				videoId,
-			})
+			utils.playlists.getManyForVideo.invalidate({ videoId })
 			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({
-				playlistId: data.playlistId,
-			})
+			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
+
+			toast.success('Video added to playlist')
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -53,14 +50,11 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 
 	const removeVideo = trpc.playlists.removeVideo.useMutation({
 		onSuccess: (data) => {
-			toast.success('Video removed from playlist')
-			utils.playlists.getManyForVideo.invalidate({
-				videoId,
-			})
+			utils.playlists.getManyForVideo.invalidate({ videoId })
 			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({
-				playlistId: data.playlistId,
-			})
+			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
+
+			toast.success('Video removed from playlist')
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -68,7 +62,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 	})
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a playlist">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Add to playlist">
 			<div className="flex flex-col gap-2">
 				{isLoading && (
 					<div className="flex items-center justify-center p-4">
@@ -82,7 +76,6 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 						.map((playlist) => (
 							<Button
 								key={playlist.id}
-								className="w-full justify-start px-2 [&_svg]:size-5"
 								variant="ghost"
 								size="lg"
 								disabled={addVideo.isPending || removeVideo.isPending}
@@ -99,6 +92,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 										})
 									}
 								}}
+								className="w-full justify-start px-2 [&_svg]:size-5"
 							>
 								{playlist.containsVideo ? (
 									<SquareCheckIcon className="mr-2" />
