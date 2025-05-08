@@ -8,10 +8,10 @@ interface Props {
 export const PlaylistInfoSkeleton = () => {
 	return (
 		<div className="flex gap-3">
-			<div className="min-w-0 flex-1 space-y-2">
-				<Skeleton className="h-5 w-[90%]" />
-				<Skeleton className="h-5 w-[70%]" />
-				<Skeleton className="h-5 w-[50%]" />
+			<div className="flex-1 min-w-0 space-y-2">
+				<Skeleton className="w-[90%] h-5" />
+				<Skeleton className="w-[70%] h-5" />
+				<Skeleton className="w-[50%] h-5" />
 			</div>
 		</div>
 	)

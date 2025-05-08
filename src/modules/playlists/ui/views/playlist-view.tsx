@@ -8,7 +8,7 @@ import { PlaylistSection } from '@/modules/playlists/ui/sections/playlist-sectio
 import { PlaylistCreateModal } from '@/modules/playlists/ui/components/playlist-create-modal'
 
 export const PlaylistView = () => {
-	const [open, setOpen] = useState(false)
+	const [open, setOpen] = useState<boolean>(false)
 
 	return (
 		<div className="flex flex-col gap-y-6 max-w-600 mb-10 px-4 pt-2.5 mx-auto">

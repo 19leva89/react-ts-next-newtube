@@ -17,7 +17,7 @@ interface Props {
 
 export const PlaylistGridCardSkeleton = () => {
 	return (
-		<div className="flex flex-col gap-2 w-full group">
+		<div className="flex flex-col gap-2 w-full">
 			<PlaylistThumbnailSkeleton />
 
 			<PlaylistInfoSkeleton />

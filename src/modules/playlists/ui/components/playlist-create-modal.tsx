@@ -30,19 +30,19 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 
 	const create = trpc.playlists.create.useMutation({
 		onSuccess: () => {
-			onOpenChangeAction(false)
 			form.reset()
+			onOpenChangeAction(false)
 			utils.playlists.getMany.invalidate()
 
-			toast.success('Playlist created successfully')
+			toast.success('Playlist created')
 		},
 		onError: (error) => {
 			toast.error(error.message)
 		},
 	})
 
-	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		create.mutateAsync(data)
+	const onSubmit = (values: z.infer<typeof formSchema>) => {
+		create.mutate(values)
 	}
 
 	return (
@@ -63,7 +63,7 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 						)}
 					/>
 
-					<Button disabled={create.isPending} type="submit">
+					<Button type="submit" disabled={create.isPending}>
 						Create
 					</Button>
 				</form>
