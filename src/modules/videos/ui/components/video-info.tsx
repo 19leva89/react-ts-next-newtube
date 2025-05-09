@@ -57,7 +57,7 @@ export const VideoInfo = ({ data, onRemove }: Props) => {
 
 				<Link prefetch href={`/videos/${data.id}`}>
 					<p className="text-sm text-muted-foreground line-clamp-1">
-						{compactViews} views • {compactDate}
+						{compactViews} views &bull; {compactDate}
 					</p>
 				</Link>
 			</div>

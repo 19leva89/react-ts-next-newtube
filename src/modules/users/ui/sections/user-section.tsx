@@ -28,14 +28,14 @@ const UserSectionSkeleton = () => {
 			<UserPageBannerSkeleton />
 
 			<UserPageInfoSkeleton />
+
+			<Separator />
 		</div>
 	)
 }
 
 const UserSectionSuspense = ({ userId }: Props) => {
-	const [data] = trpc.users.getOne.useSuspenseQuery({
-		id: userId,
-	})
+	const [data] = trpc.users.getOne.useSuspenseQuery({ id: userId })
 
 	return (
 		<div className="flex flex-col">

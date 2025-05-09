@@ -106,7 +106,7 @@ export const VideoRowCard = ({ data, onRemove, size = 'default' }: Props) => {
 
 						{size === 'default' && (
 							<p className="mt-1 text-sm text-muted-foreground">
-								{compactViews} views • {compactLikes} likes
+								{compactViews} views &bull; {compactLikes} likes
 							</p>
 						)}
 
@@ -140,7 +140,7 @@ export const VideoRowCard = ({ data, onRemove, size = 'default' }: Props) => {
 
 						{size === 'compact' && (
 							<p className="mt-1 text-xs text-muted-foreground">
-								{compactViews} views • {compactLikes} likes
+								{compactViews} views &bull; {compactLikes} likes
 							</p>
 						)}
 					</Link>

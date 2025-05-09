@@ -110,8 +110,8 @@ export const videosRouter = createTRPCRouter({
 				.where(
 					and(
 						eq(videos.visibility, 'public'),
-						categoryId ? eq(videos.categoryId, categoryId) : undefined,
 						userId ? eq(videos.userId, userId) : undefined,
+						categoryId ? eq(videos.categoryId, categoryId) : undefined,
 						cursor
 							? or(
 									lt(videos.updatedAt, cursor.updatedAt),

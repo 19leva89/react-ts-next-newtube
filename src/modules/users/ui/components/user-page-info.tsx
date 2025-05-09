@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { useAuth } from '@clerk/nextjs'
 import { useEffect, useState } from 'react'
+import { useAuth, useClerk } from '@clerk/nextjs'
 
 import { cn } from '@/lib/utils'
 import { UserAvatar } from '@/components/shared'
@@ -16,25 +16,28 @@ interface Props {
 export const UserPageInfoSkeleton = () => {
 	return (
 		<div className="py-6">
+			{/* Mobile layout */}
 			<div className="flex flex-col space-y-4 md:hidden">
 				<div className="flex items-center gap-3">
-					<Skeleton className="h-[60px] w-[60px] rounded-full" />
+					<Skeleton className="size-15 rounded-full" />
 
 					<div className="flex-1 min-w-0">
-						<Skeleton className="h-[40px] w-[200px]" />
-						<Skeleton className="h-[20px] w-[100px] mt-1" />
-						<Skeleton className="h-[40px] w-full mt-1" />
+						<Skeleton className="w-32 h-6" />
+						<Skeleton className="w-48 h-4 mt-1" />
 					</div>
 				</div>
+
+				<Skeleton className="w-full h-10 mt-3 rounded-full" />
 			</div>
 
+			{/* Desktop layout */}
 			<div className="hidden md:flex items-start gap-4">
-				<Skeleton className="h-[160px] w-[160px] rounded-full" />
+				<Skeleton className="size-40 rounded-full" />
 
 				<div className="flex-1 min-w-0">
-					<Skeleton className="h-[40px] w-[200px]" />
-					<Skeleton className="h-[20px] w-[100px] mt-1" />
-					<Skeleton className="h-[20px] w-[100px] mt-1" />
+					<Skeleton className="w-64 h-8" />
+					<Skeleton className="w-48 h-5 mt-4" />
+					<Skeleton className="w-32 h-10 mt-3 rounded-full" />
 				</div>
 			</div>
 		</div>
@@ -44,18 +47,19 @@ export const UserPageInfoSkeleton = () => {
 export const UserPageInfo = ({ user }: Props) => {
 	const { userId: clerkUserId, isLoaded } = useAuth()
 
-	const isOwner = clerkUserId === user.clerkId
-
-	const [mounted, setMounted] = useState<boolean>(false)
-
-	useEffect(() => {
-		setMounted(true)
-	}, [])
-
 	const { isPending, onClick } = useSubscription({
 		userId: user.id,
 		isSubscribed: user.viewerSubscribed,
 	})
+
+	const [mounted, setMounted] = useState<boolean>(false)
+
+	const clerk = useClerk()
+	const isOwner = clerkUserId === user.clerkId
+
+	useEffect(() => {
+		setMounted(true)
+	}, [])
 
 	return (
 		<div className="py-6">
@@ -66,7 +70,11 @@ export const UserPageInfo = ({ user }: Props) => {
 						size="lg"
 						name={user.name}
 						imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
-						onClick={() => {}}
+						onClick={() => {
+							if (isOwner) {
+								clerk.openUserProfile()
+							}
+						}}
 						className="size-15"
 					/>
 
@@ -90,7 +98,12 @@ export const UserPageInfo = ({ user }: Props) => {
 						</Link>
 					</Button>
 				) : (
-					<SubscriptionButton onClick={onClick} disabled={isPending} isSubscribed={user.viewerSubscribed} />
+					<SubscriptionButton
+						onClick={onClick}
+						disabled={isPending || !isLoaded}
+						isSubscribed={user.viewerSubscribed}
+						className="w-full mt-3"
+					/>
 				)}
 			</div>
 
@@ -100,7 +113,11 @@ export const UserPageInfo = ({ user }: Props) => {
 					size="xl"
 					name={user.name}
 					imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
-					onClick={() => {}}
+					onClick={() => {
+						if (isOwner) {
+							clerk.openUserProfile()
+						}
+					}}
 					className={cn(
 						mounted && isOwner && 'cursor-pointer hover:opacity-80 transition-opacity duration-300',
 					)}
@@ -128,7 +145,7 @@ export const UserPageInfo = ({ user }: Props) => {
 							disabled={isPending}
 							onClick={onClick}
 							isSubscribed={user.viewerSubscribed}
-							className="mt-3 rounded-full"
+							className="mt-3"
 						/>
 					)}
 				</div>

@@ -13,9 +13,7 @@ export const dynamic = 'force-dynamic'
 const UsersIdPage = async ({ params }: Props) => {
 	const { userId } = await params
 
-	void trpc.users.getOne.prefetch({
-		id: userId,
-	})
+	void trpc.users.getOne.prefetch({ id: userId })
 
 	void trpc.videos.getMany.prefetchInfinite({
 		userId,
