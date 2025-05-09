@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { PropsWithChildren } from 'react'
 import { ClerkProvider } from '@clerk/nextjs'
-// import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Toaster } from '@/components/ui'
 import { TRPCProviderClient } from '@/providers/trpc-provider-client'

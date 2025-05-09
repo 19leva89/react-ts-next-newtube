@@ -17,7 +17,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 		onSuccess: () => {
 			utils.videos.getManySubscribed.invalidate()
 			utils.users.getOne.invalidate({ id: userId })
-			// utils.subscriptions.getMany.invalidate()
+			utils.subscriptions.getMany.invalidate()
 
 			if (fromVideoId) {
 				utils.videos.getOne.invalidate({ id: fromVideoId })
@@ -38,7 +38,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 		onSuccess: () => {
 			utils.videos.getManySubscribed.invalidate()
 			utils.users.getOne.invalidate({ id: userId })
-			// utils.subscriptions.getMany.invalidate()
+			utils.subscriptions.getMany.invalidate()
 
 			if (fromVideoId) {
 				utils.videos.getOne.invalidate({ id: fromVideoId })
