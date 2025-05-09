@@ -33,7 +33,7 @@ export const ourFileRouter = {
 				await db.update(users).set({ bannerKey: null, bannerUrl: null }).where(eq(users.id, user.id))
 			}
 
-			return { user }
+			return { userId: user.id }
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
 			await db
@@ -42,9 +42,9 @@ export const ourFileRouter = {
 					bannerUrl: file.ufsUrl,
 					bannerKey: file.key,
 				})
-				.where(eq(users.id, metadata.user.id))
+				.where(eq(users.id, metadata.userId))
 
-			return { uploadedBy: metadata.user.id }
+			return { uploadedBy: metadata.userId }
 		}),
 
 	thumbnailUploader: f({
