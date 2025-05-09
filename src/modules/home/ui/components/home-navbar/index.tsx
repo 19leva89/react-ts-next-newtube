@@ -13,7 +13,7 @@ export const HomeNavbar = () => {
 				<div className="flex shrink-0 items-center gap-4">
 					<SidebarTrigger className="cursor-pointer" />
 
-					<Link href="/">
+					<Link prefetch href="/" className="hidden md:block">
 						<div className="flex items-center gap-1">
 							<Image src="/svg/logo.svg" alt="Logo" width={32} height={32} />
 
@@ -28,9 +28,7 @@ export const HomeNavbar = () => {
 				</div>
 
 				<div className="flex flex-shrink-0 items-center justify-center gap-4">
-					{/* <div className="flex items-center justify-center w-26"> */}
 					<AuthButton />
-					{/* </div> */}
 				</div>
 			</div>
 		</nav>

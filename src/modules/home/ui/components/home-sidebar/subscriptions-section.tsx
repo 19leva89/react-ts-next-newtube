@@ -21,12 +21,12 @@ export const LoadingSkeleton = () => {
 	return (
 		<>
 			{Array.from({ length: 5 }).map((_, index) => (
-				<SidebarMenuItem key={index}>
-					<SidebarMenuButton disabled>
+				<SidebarMenuItem key={`${index}-${Date.now()}`}>
+					<div className="flex items-center gap-4 px-2 py-1.5">
 						<Skeleton className="size-6 rounded-full shrink-0" />
 
 						<Skeleton className="w-full h-4" />
-					</SidebarMenuButton>
+					</div>
 				</SidebarMenuItem>
 			))}
 		</>
@@ -58,7 +58,7 @@ export const SubscriptionsSection = () => {
 						data?.pages
 							.flatMap((page) => page.items)
 							.map((item) => (
-								<SidebarMenuItem key={`${item.creatorId} - ${item.viewerId}`}>
+								<SidebarMenuItem key={`${item.creatorId}-${item.viewerId}`}>
 									<SidebarMenuButton
 										tooltip={item.user.name}
 										isActive={pathname === `/users/${item.user.id}`}

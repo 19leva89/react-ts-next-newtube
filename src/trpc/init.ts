@@ -6,10 +6,9 @@ import { initTRPC, TRPCError } from '@trpc/server'
 
 import { db } from '@/db'
 import { users } from '@/db/schema'
-import { ratelimit } from '@/lib/ratelimit' // Upstash
+import { ratelimit } from '@/lib/ratelimit'
 
 export const createTRPCContext = cache(async () => {
-	// TODO: Generate a problem for building the app
 	const { userId } = await auth()
 
 	return { clerkUserId: userId }
