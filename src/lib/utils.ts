@@ -16,7 +16,7 @@ export function snakeCaseToTitle(str: string) {
 	return str.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
-export const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+export const baseUrl = process.env.NEXT_PUBLIC_APP_URL!
 
 export function absoluteUrl(path: string): string {
 	// If in a browser, return the relative path
