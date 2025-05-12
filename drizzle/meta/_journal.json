@@ -43,6 +43,13 @@
       "when": 1746373950478,
       "tag": "0005_slippery_overlord",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747037400750,
+      "tag": "0006_parallel_human_torch",
+      "breakpoints": true
     }
   ]
 }
