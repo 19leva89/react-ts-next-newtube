@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import ngrok from '@ngrok/ngrok'
 
-config({ path: '.env' })
+config({ path: '.env.local' })
 
 async function startNgrok() {
 	const listener = await ngrok.forward({
