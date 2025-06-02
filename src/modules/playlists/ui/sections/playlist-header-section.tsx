@@ -25,9 +25,9 @@ export const PlaylistHeaderSection = ({ playlistId }: Props) => {
 
 const PlaylistHeaderSectionSkeleton = () => {
 	return (
-		<div className="flex flex-col gap-y-2">
-			<Skeleton className="w-26 h-6" />
-			<Skeleton className="w-34 h-4" />
+		<div className='flex flex-col gap-y-2'>
+			<Skeleton className='h-6 w-26' />
+			<Skeleton className='h-4 w-34' />
 		</div>
 	)
 }
@@ -54,21 +54,21 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
 	})
 
 	return (
-		<div className="flex items-center justify-between">
+		<div className='flex items-center justify-between'>
 			<div>
-				<h1 className="text-2xl font-bold">{playlist.name}</h1>
+				<h1 className='text-2xl font-bold'>{playlist.name}</h1>
 
-				<p className="text-xs text-muted-foreground">Videos from the playlist</p>
+				<p className='text-xs text-muted-foreground'>Videos from the playlist</p>
 			</div>
 
 			<Button
-				variant="outline"
-				size="icon"
+				variant='outline'
+				size='icon'
 				disabled={remove.isPending}
 				onClick={() => remove.mutate({ id: playlist.id })}
-				className="rounded-full"
+				className='rounded-full'
 			>
-				<Trash2Icon className="size-4" />
+				<Trash2Icon className='size-4' />
 			</Button>
 		</div>
 	)

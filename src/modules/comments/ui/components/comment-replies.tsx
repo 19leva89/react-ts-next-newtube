@@ -24,23 +24,23 @@ export const CommentReplies = ({ videoId, parentId }: Props) => {
 		)
 
 	return (
-		<div className="pl-14">
-			<div className="flex flex-col gap-4 mt-2">
+		<div className='pl-14'>
+			<div className='mt-2 flex flex-col gap-4'>
 				{isLoading && (
-					<div className="flex items-center justify-center">
-						<Loader2Icon className="size-6 animate-spin text-muted-foreground" />
+					<div className='flex items-center justify-center'>
+						<Loader2Icon className='size-6 animate-spin text-muted-foreground' />
 					</div>
 				)}
 
 				{!isLoading &&
 					data?.pages
 						.flatMap((page) => page.items)
-						.map((comment) => <CommentItem key={comment.id} comment={comment} variant="reply" />)}
+						.map((comment) => <CommentItem key={comment.id} comment={comment} variant='reply' />)}
 			</div>
 
 			{hasNextPage && (
-				<Button variant="tertiary" size="sm" disabled={isFetchingNextPage} onClick={() => fetchNextPage()}>
-					<CornerDownRightIcon className="size-4 mr-2" />
+				<Button variant='tertiary' size='sm' disabled={isFetchingNextPage} onClick={() => fetchNextPage()}>
+					<CornerDownRightIcon className='mr-2 size-4' />
 					Show more replies
 				</Button>
 			)}

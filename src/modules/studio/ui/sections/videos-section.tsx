@@ -25,11 +25,11 @@ export const VideosSection = () => {
 
 const VideosSectionSkeleton = () => {
 	return (
-		<div className="border-y">
+		<div className='border-y'>
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead className="w-130 pl-6">Video</TableHead>
+						<TableHead className='w-130 pl-6'>Video</TableHead>
 						<TableHead>Visibility</TableHead>
 						<TableHead>Status</TableHead>
 						<TableHead>Date</TableHead>
@@ -42,39 +42,39 @@ const VideosSectionSkeleton = () => {
 				<TableBody>
 					{Array.from({ length: DEFAULT_LIMIT }).map((_, index) => (
 						<TableRow key={index}>
-							<TableCell className="pl-6">
-								<div className="flex items-center gap-4">
-									<Skeleton className="w-36 h-20" />
+							<TableCell className='pl-6'>
+								<div className='flex items-center gap-4'>
+									<Skeleton className='h-20 w-36' />
 
-									<div className="flex flex-col gap-2">
-										<Skeleton className="w-25 h-4" />
-										<Skeleton className="w-45 h-3" />
+									<div className='flex flex-col gap-2'>
+										<Skeleton className='h-4 w-25' />
+										<Skeleton className='h-3 w-45' />
 									</div>
 								</div>
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-20 h-4" />
+								<Skeleton className='h-4 w-20' />
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-20 h-4" />
+								<Skeleton className='h-4 w-20' />
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-24 h-4" />
+								<Skeleton className='h-4 w-24' />
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-16 h-4" />
+								<Skeleton className='h-4 w-16' />
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-20 h-4" />
+								<Skeleton className='h-4 w-20' />
 							</TableCell>
 
 							<TableCell>
-								<Skeleton className="w-16 h-4" />
+								<Skeleton className='h-4 w-16' />
 							</TableCell>
 						</TableRow>
 					))}
@@ -94,11 +94,11 @@ export const VideosSectionSuspense = () => {
 
 	return (
 		<div>
-			<div className="border-y">
+			<div className='border-y'>
 				<Table>
 					<TableHeader>
 						<TableRow>
-							<TableHead className="w-130 pl-6">Video</TableHead>
+							<TableHead className='w-130 pl-6'>Video</TableHead>
 							<TableHead>Visibility</TableHead>
 							<TableHead>Status</TableHead>
 							<TableHead>Date</TableHead>
@@ -115,11 +115,11 @@ export const VideosSectionSuspense = () => {
 								<TableRow
 									key={video.id}
 									onClick={() => router.push(`/studio/videos/${video.id}`)}
-									className="cursor-pointer hover:bg-muted transition"
+									className='cursor-pointer transition hover:bg-muted'
 								>
-									<TableCell className="pl-6">
-										<div className="flex items-center gap-4">
-											<div className="relative aspect-video w-36 shrink-0">
+									<TableCell className='pl-6'>
+										<div className='flex items-center gap-4'>
+											<div className='relative aspect-video w-36 shrink-0'>
 												<VideoThumbnail
 													title={video.title}
 													imageUrl={video.thumbnailUrl}
@@ -128,10 +128,10 @@ export const VideosSectionSuspense = () => {
 												/>
 											</div>
 
-											<div className="flex flex-col overflow-hidden gap-y-1 w-94">
-												<span className="text-sm truncate">{video.title}</span>
+											<div className='flex w-94 flex-col gap-y-1 overflow-hidden'>
+												<span className='truncate text-sm'>{video.title}</span>
 
-												<span className="text-xs text-muted-foreground truncate">
+												<span className='truncate text-xs text-muted-foreground'>
 													{video.description || 'No description'}
 												</span>
 											</div>
@@ -139,11 +139,11 @@ export const VideosSectionSuspense = () => {
 									</TableCell>
 
 									<TableCell>
-										<div className="flex items-center">
+										<div className='flex items-center'>
 											{video.visibility === 'private' ? (
-												<LockIcon className="size-4 mr-2" />
+												<LockIcon className='mr-2 size-4' />
 											) : (
-												<LockOpenIcon className="size-4 mr-2" />
+												<LockOpenIcon className='mr-2 size-4' />
 											)}
 
 											{snakeCaseToTitle(video.visibility)}
@@ -151,10 +151,10 @@ export const VideosSectionSuspense = () => {
 									</TableCell>
 
 									<TableCell>
-										<div className="flex items-center">{snakeCaseToTitle(video.muxStatus || 'error')}</div>
+										<div className='flex items-center'>{snakeCaseToTitle(video.muxStatus || 'error')}</div>
 									</TableCell>
 
-									<TableCell className="text-xs truncate">
+									<TableCell className='truncate text-xs'>
 										{format(new Date(video.createdAt), 'd MMM yyyy')}
 									</TableCell>
 

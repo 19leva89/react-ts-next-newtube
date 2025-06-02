@@ -7,7 +7,7 @@ interface Props {
 
 export const VideosView = ({ playlistId }: Props) => {
 	return (
-		<div className="flex flex-col gap-y-6 max-w-screen-md mb-10 px-4 pt-2.5 mx-auto">
+		<div className='mx-auto mb-10 flex max-w-screen-md flex-col gap-y-6 px-4 pt-2.5'>
 			<PlaylistHeaderSection playlistId={playlistId} />
 
 			<VideosSection playlistId={playlistId} />

@@ -17,15 +17,15 @@ interface Props {
 const SuggestionsSectionSkeleton = () => {
 	return (
 		<>
-			<div className="block md:hidden space-y-10">
+			<div className='block space-y-10 md:hidden'>
 				{Array.from({ length: 6 }).map((_, index) => (
 					<VideoGridCardSkeleton key={index} />
 				))}
 			</div>
 
-			<div className="hidden md:block space-y-3">
+			<div className='hidden space-y-3 md:block'>
 				{Array.from({ length: 6 }).map((_, index) => (
-					<VideoRowCardSkeleton key={index} size="compact" />
+					<VideoRowCardSkeleton key={index} size='compact' />
 				))}
 			</div>
 		</>
@@ -55,7 +55,7 @@ const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
 
 	return (
 		<>
-			<div className="block md:hidden space-y-10">
+			<div className='block space-y-10 md:hidden'>
 				{suggestions.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
@@ -63,11 +63,11 @@ const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
 					))}
 			</div>
 
-			<div className="hidden md:block space-y-3">
+			<div className='hidden space-y-3 md:block'>
 				{suggestions.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
-						<VideoRowCard key={video.id} data={video} size="compact" />
+						<VideoRowCard key={video.id} data={video} size='compact' />
 					))}
 			</div>
 

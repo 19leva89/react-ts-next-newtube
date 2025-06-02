@@ -7,27 +7,27 @@ import { SearchInput } from '@/modules/home/ui/components/home-navbar/search-inp
 
 export const HomeNavbar = () => {
 	return (
-		<nav className="z-50 fixed top-0 left-0 right-0 flex items-center h-16 px-2 pr-5 bg-white">
-			<div className="flex items-center gap-4 w-full">
+		<nav className='fixed top-0 right-0 left-0 z-50 flex h-16 items-center bg-white px-2 pr-5'>
+			<div className='flex w-full items-center gap-4'>
 				{/* Menu and Logo */}
-				<div className="flex shrink-0 items-center gap-4">
-					<SidebarTrigger className="cursor-pointer" />
+				<div className='flex shrink-0 items-center gap-4'>
+					<SidebarTrigger className='cursor-pointer' />
 
-					<Link prefetch href="/" className="hidden md:block">
-						<div className="flex items-center gap-1">
-							<Image src="/svg/logo.svg" alt="Logo" width={32} height={32} />
+					<Link prefetch href='/' className='hidden md:block'>
+						<div className='flex items-center gap-1'>
+							<Image src='/svg/logo.svg' alt='Logo' width={32} height={32} />
 
-							<p className="text-xl font-semibold tracking-tight">NewTube</p>
+							<p className='text-xl font-semibold tracking-tight'>NewTube</p>
 						</div>
 					</Link>
 				</div>
 
 				{/* Search bar */}
-				<div className="flex flex-1 justify-center max-w-180 mx-auto">
+				<div className='mx-auto flex max-w-180 flex-1 justify-center'>
 					<SearchInput />
 				</div>
 
-				<div className="flex flex-shrink-0 items-center justify-center gap-4">
+				<div className='flex flex-shrink-0 items-center justify-center gap-4'>
 					<AuthButton />
 				</div>
 			</div>

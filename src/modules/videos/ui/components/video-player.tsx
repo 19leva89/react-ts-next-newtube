@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const VideoPlayerSkeleton = () => {
-	return <div className="aspect-video rounded-xl bg-black" />
+	return <div className='aspect-video rounded-xl bg-black' />
 }
 
 export const VideoPlayer = ({ autoPlay, playbackId, thumbnailUrl, onPlay }: Props) => {
@@ -25,8 +25,8 @@ export const VideoPlayer = ({ autoPlay, playbackId, thumbnailUrl, onPlay }: Prop
 			playerInitTime={0}
 			thumbnailTime={0}
 			onPlay={onPlay}
-			accentColor="#FF2056"
-			className="mux-player"
+			accentColor='#FF2056'
+			className='mux-player'
 		/>
 	)
 }

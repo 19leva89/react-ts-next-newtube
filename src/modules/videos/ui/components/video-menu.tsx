@@ -38,25 +38,25 @@ export const VideoMenu = ({ videoId, variant = 'ghost', onRemove }: Props) => {
 
 			<DropdownMenu modal={false}>
 				<DropdownMenuTrigger asChild>
-					<Button variant={variant} size="icon" className="rounded-full">
+					<Button variant={variant} size='icon' className='rounded-full'>
 						<MoreVerticalIcon />
 					</Button>
 				</DropdownMenuTrigger>
 
-				<DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-					<DropdownMenuItem onClick={onShare} className="cursor-pointer">
-						<ShareIcon className="size-4 mr-2" />
+				<DropdownMenuContent align='end' onClick={(e) => e.stopPropagation()}>
+					<DropdownMenuItem onClick={onShare} className='cursor-pointer'>
+						<ShareIcon className='mr-2 size-4' />
 						Share
 					</DropdownMenuItem>
 
-					<DropdownMenuItem onClick={() => setOpenPlaylistAddModal(true)} className="cursor-pointer">
-						<ListPlusIcon className="size-4 mr-2" />
+					<DropdownMenuItem onClick={() => setOpenPlaylistAddModal(true)} className='cursor-pointer'>
+						<ListPlusIcon className='mr-2 size-4' />
 						Add to playlist
 					</DropdownMenuItem>
 
 					{onRemove && (
-						<DropdownMenuItem onClick={onRemove} className="cursor-pointer">
-							<Trash2Icon className="size-4 mr-2" />
+						<DropdownMenuItem onClick={onRemove} className='cursor-pointer'>
+							<Trash2Icon className='mr-2 size-4' />
 							Remove
 						</DropdownMenuItem>
 					)}

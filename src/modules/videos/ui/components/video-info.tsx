@@ -15,12 +15,12 @@ interface Props {
 
 export const VideoInfoSkeleton = () => {
 	return (
-		<div className="flex gap-3">
-			<Skeleton className="size-10 shrink-0 rounded-full" />
+		<div className='flex gap-3'>
+			<Skeleton className='size-10 shrink-0 rounded-full' />
 
-			<div className="flex-1 min-w-0 space-y-2">
-				<Skeleton className="w-[90%] h-5" />
-				<Skeleton className="w-[70%] h-5" />
+			<div className='min-w-0 flex-1 space-y-2'>
+				<Skeleton className='h-5 w-[90%]' />
+				<Skeleton className='h-5 w-[70%]' />
 			</div>
 		</div>
 	)
@@ -38,7 +38,7 @@ export const VideoInfo = ({ data, onRemove }: Props) => {
 	}, [data.createdAt])
 
 	return (
-		<div className="flex gap-3">
+		<div className='flex gap-3'>
 			<Link prefetch href={`/videos/${data.id}`}>
 				<UserAvatar
 					name={data.user.name || 'User'}
@@ -46,23 +46,23 @@ export const VideoInfo = ({ data, onRemove }: Props) => {
 				/>
 			</Link>
 
-			<div className="flex-1 min-w-0">
+			<div className='min-w-0 flex-1'>
 				<Link prefetch href={`/videos/${data.id}`}>
-					<h3 className="font-medium line-clamp-1 lg:line-clamp-2 text-base break-words">{data.title}</h3>
+					<h3 className='line-clamp-1 text-base font-medium break-words lg:line-clamp-2'>{data.title}</h3>
 				</Link>
 
 				<Link prefetch href={`/users/${data.user.id}`}>
-					<UserInfo size="sm" name={data.user.name || 'User'} />
+					<UserInfo size='sm' name={data.user.name || 'User'} />
 				</Link>
 
 				<Link prefetch href={`/videos/${data.id}`}>
-					<p className="text-sm text-muted-foreground line-clamp-1">
+					<p className='line-clamp-1 text-sm text-muted-foreground'>
 						{compactViews} views &bull; {compactDate}
 					</p>
 				</Link>
 			</div>
 
-			<div className="flex-shrink-0">
+			<div className='flex-shrink-0'>
 				<VideoMenu videoId={data.id} onRemove={onRemove} />
 			</div>
 		</div>

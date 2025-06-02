@@ -8,19 +8,19 @@ interface Props {
 
 export const VideoView = ({ videoId }: Props) => {
 	return (
-		<div className="flex flex-col max-w-425 pt-2.5 px-4 mb-10 mx-auto ">
-			<div className="flex flex-col xl:flex-row gap-6">
-				<div className="flex-1 min-w-0">
+		<div className='mx-auto mb-10 flex max-w-425 flex-col px-4 pt-2.5 '>
+			<div className='flex flex-col gap-6 xl:flex-row'>
+				<div className='min-w-0 flex-1'>
 					<VideoSection videoId={videoId} />
 
-					<div className="mt-4 xl:hidden block">
+					<div className='mt-4 block xl:hidden'>
 						<SuggestionsSection videoId={videoId} isManual={true} />
 					</div>
 
 					<CommentsSection videoId={videoId} />
 				</div>
 
-				<div className="w-full xl:w-75 2xl:w-115 shrink-1 hidden xl:block">
+				<div className='hidden w-full shrink-1 xl:block xl:w-75 2xl:w-115'>
 					<SuggestionsSection videoId={videoId} />
 				</div>
 			</div>

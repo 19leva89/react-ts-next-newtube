@@ -25,10 +25,10 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<ClerkProvider afterSignOutUrl="/">
-			<html lang="en" suppressHydrationWarning>
+		<ClerkProvider afterSignOutUrl='/'>
+			<html lang='en' suppressHydrationWarning>
 				<body className={`${inter.className} antialiased`}>
-					<Toaster position="bottom-right" expand={false} richColors />
+					<Toaster position='bottom-right' expand={false} richColors />
 
 					<TRPCProviderClient>{children}</TRPCProviderClient>
 				</body>

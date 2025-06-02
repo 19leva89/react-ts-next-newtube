@@ -19,10 +19,10 @@ export const ThumbnailUploadModal = ({ videoId, open, onOpenChange }: Props) => 
 	}
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title="Upload a Thumbnail">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title='Upload a Thumbnail'>
 			<UploadDropzone
 				input={{ videoId }}
-				endpoint="thumbnailUploader"
+				endpoint='thumbnailUploader'
 				onClientUploadComplete={onUploadComplete}
 			/>
 		</ResponsiveModal>

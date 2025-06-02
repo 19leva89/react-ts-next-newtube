@@ -7,8 +7,8 @@ import { SubscriptionsSection } from '@/modules/home/ui/components/home-sidebar/
 
 export const HomeSidebar = () => {
 	return (
-		<Sidebar collapsible="icon" className="z-40 pt-16 border-none">
-			<SidebarContent className="bg-background">
+		<Sidebar collapsible='icon' className='z-40 border-none pt-16'>
+			<SidebarContent className='bg-background'>
 				<MainSection />
 
 				<Separator />

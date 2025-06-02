@@ -52,11 +52,11 @@ export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) =
 	}
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title="Upload a thumbnail">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title='Upload a thumbnail'>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+				<form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 					<FormField
-						name="prompt"
+						name='prompt'
 						control={form.control}
 						render={({ field }) => (
 							<FormItem>
@@ -67,8 +67,8 @@ export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) =
 										{...field}
 										cols={30}
 										rows={5}
-										placeholder="Enter description of wanted thumbnail"
-										className="min-h-28 resize-none"
+										placeholder='Enter description of wanted thumbnail'
+										className='min-h-28 resize-none'
 									/>
 								</FormControl>
 
@@ -77,8 +77,8 @@ export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) =
 						)}
 					/>
 
-					<div className="flex justify-end">
-						<Button type="submit" disabled={generateThumbnail.isPending}>
+					<div className='flex justify-end'>
+						<Button type='submit' disabled={generateThumbnail.isPending}>
 							Generate
 						</Button>
 					</div>

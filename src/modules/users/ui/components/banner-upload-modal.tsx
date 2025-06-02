@@ -17,8 +17,8 @@ export const BannerUploadModal = ({ userId, open, onOpenChange }: Props) => {
 	}
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title="Upload a banner">
-			<UploadDropzone endpoint="bannerUploader" onClientUploadComplete={onUploadComplete} />
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChange} title='Upload a banner'>
+			<UploadDropzone endpoint='bannerUploader' onClientUploadComplete={onUploadComplete} />
 		</ResponsiveModal>
 	)
 }

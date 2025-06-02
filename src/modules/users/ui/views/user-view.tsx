@@ -7,7 +7,7 @@ interface Props {
 
 export const UserView = ({ userId }: Props) => {
 	return (
-		<div className="flex flex-col gap-y-6 max-w-325 px-4 pt-2.5 mb-10 mx-auto">
+		<div className='mx-auto mb-10 flex max-w-325 flex-col gap-y-6 px-4 pt-2.5'>
 			<UserSection userId={userId} />
 
 			<VideosSection userId={userId} />

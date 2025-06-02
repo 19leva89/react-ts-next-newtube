@@ -14,24 +14,24 @@ interface Props {
 
 export const VideoTopRowSkeleton = () => {
 	return (
-		<div className="flex flex-col gap-4 mt-4">
-			<div className="flex flex-col gap-2">
-				<Skeleton className="w-4/5 md:w-2/5 h-6" />
+		<div className='mt-4 flex flex-col gap-4'>
+			<div className='flex flex-col gap-2'>
+				<Skeleton className='h-6 w-4/5 md:w-2/5' />
 			</div>
-			<div className="flex items-center justify-between w-full">
-				<div className="flex items-center gap-3 w-[70%]">
-					<Skeleton className="size-10 rounded-full shrink-0" />
+			<div className='flex w-full items-center justify-between'>
+				<div className='flex w-[70%] items-center gap-3'>
+					<Skeleton className='size-10 shrink-0 rounded-full' />
 
-					<div className="flex flex-col gap-2 w-full">
-						<Skeleton className="w-4/5 md:w-2/6 h-5" />
-						<Skeleton className="w-3/5 md:w-1/5 h-5" />
+					<div className='flex w-full flex-col gap-2'>
+						<Skeleton className='h-5 w-4/5 md:w-2/6' />
+						<Skeleton className='h-5 w-3/5 md:w-1/5' />
 					</div>
 				</div>
 
-				<Skeleton className="w-2/6 md:w-1/6 h-9 rounded-full" />
+				<Skeleton className='h-9 w-2/6 rounded-full md:w-1/6' />
 			</div>
 
-			<div className="w-full h-30" />
+			<div className='h-30 w-full' />
 		</div>
 	)
 }
@@ -58,13 +58,13 @@ export const VideoTopRow = ({ video }: Props) => {
 	}, [video.createdAt])
 
 	return (
-		<div className="flex flex-col gap-4 mt-4">
-			<h1 className="text-xl font-semibold">{video.title}</h1>
+		<div className='mt-4 flex flex-col gap-4'>
+			<h1 className='text-xl font-semibold'>{video.title}</h1>
 
-			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+			<div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
 				<VideoOwner user={video.user} videoId={video.id} />
 
-				<div className="flex gap-2 pb-2 -mb-2 sm:pb-0 sm:mb-0 overflow-x-auto sm:min-w-[calc(50%-6px)] sm:justify-end sm:overflow-visible">
+				<div className='-mb-2 flex gap-2 overflow-x-auto pb-2 sm:mb-0 sm:min-w-[calc(50%-6px)] sm:justify-end sm:overflow-visible sm:pb-0'>
 					<VideoReactions
 						videoId={video.id}
 						likeCount={video.likeCount}
@@ -72,7 +72,7 @@ export const VideoTopRow = ({ video }: Props) => {
 						viewerReaction={video.viewerReaction}
 					/>
 
-					<VideoMenu variant="secondary" videoId={video.id} />
+					<VideoMenu variant='secondary' videoId={video.id} />
 				</div>
 			</div>
 

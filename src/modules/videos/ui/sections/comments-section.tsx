@@ -26,8 +26,8 @@ export const CommentsSection = ({ videoId }: Props) => {
 
 const CommentsSectionSkeleton = () => {
 	return (
-		<div className="flex justify-center items-center mt-6">
-			<Loader2 className="size-7 animate-spin text-muted-foreground" />
+		<div className='mt-6 flex items-center justify-center'>
+			<Loader2 className='size-7 animate-spin text-muted-foreground' />
 		</div>
 	)
 }
@@ -44,13 +44,13 @@ const CommentsSectionSuspense = ({ videoId }: Props) => {
 	)
 
 	return (
-		<div className="mt-6">
-			<div className="flex flex-col gap-6">
-				<h1 className="text-xl font-bold">{comments.pages[0].totalCount} Comments</h1>
+		<div className='mt-6'>
+			<div className='flex flex-col gap-6'>
+				<h1 className='text-xl font-bold'>{comments.pages[0].totalCount} Comments</h1>
 
 				<CommentForm videoId={videoId} />
 
-				<div className="flex flex-col gap-4 mt-2">
+				<div className='mt-2 flex flex-col gap-4'>
 					{comments.pages
 						.flatMap((page) => page.items)
 						.map((comment) => (

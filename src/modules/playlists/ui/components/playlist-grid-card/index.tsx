@@ -17,7 +17,7 @@ interface Props {
 
 export const PlaylistGridCardSkeleton = () => {
 	return (
-		<div className="flex flex-col gap-2 w-full">
+		<div className='flex w-full flex-col gap-2'>
 			<PlaylistThumbnailSkeleton />
 
 			<PlaylistInfoSkeleton />
@@ -28,7 +28,7 @@ export const PlaylistGridCardSkeleton = () => {
 export const PlaylistGridCard = ({ playlist }: Props) => {
 	return (
 		<Link prefetch href={`/playlists/${playlist.id}`}>
-			<div className="flex flex-col gap-2 w-full group">
+			<div className='group flex w-full flex-col gap-2'>
 				<PlaylistThumbnail
 					title={playlist.name}
 					videoCount={playlist.videoCount}
