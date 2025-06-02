@@ -63,11 +63,11 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 	})
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Add to playlist">
-			<div className="flex flex-col gap-2">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title='Add to playlist'>
+			<div className='flex flex-col gap-2'>
 				{isLoading && (
-					<div className="flex items-center justify-center p-4">
-						<Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+					<div className='flex items-center justify-center p-4'>
+						<Loader2Icon className='size-5 animate-spin text-muted-foreground' />
 					</div>
 				)}
 
@@ -77,8 +77,8 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 						.map((playlist) => (
 							<Button
 								key={playlist.id}
-								variant="ghost"
-								size="lg"
+								variant='ghost'
+								size='lg'
 								disabled={addVideo.isPending || removeVideo.isPending}
 								onClick={() => {
 									if (playlist.containsVideo) {
@@ -93,12 +93,12 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 										})
 									}
 								}}
-								className="w-full justify-start px-2 [&_svg]:size-5"
+								className='w-full justify-start px-2 [&_svg]:size-5'
 							>
 								{playlist.containsVideo ? (
-									<SquareCheckIcon className="mr-2" />
+									<SquareCheckIcon className='mr-2' />
 								) : (
-									<SquareIcon className="mr-2" />
+									<SquareIcon className='mr-2' />
 								)}
 								{playlist.name}
 							</Button>

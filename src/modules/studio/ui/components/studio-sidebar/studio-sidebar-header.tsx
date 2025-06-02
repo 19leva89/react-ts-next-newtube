@@ -10,12 +10,12 @@ export const StudioSidebarHeader = () => {
 
 	if (!user)
 		return (
-			<SidebarHeader className="flex items-center justify-center pb-4">
-				<Skeleton className="size-28 rounded-full" />
+			<SidebarHeader className='flex items-center justify-center pb-4'>
+				<Skeleton className='size-28 rounded-full' />
 
-				<div className="flex flex-col items-center gap-y-1 mt-3">
-					<Skeleton className="w-20 h-4" />
-					<Skeleton className="w-26 h-4" />
+				<div className='mt-3 flex flex-col items-center gap-y-1'>
+					<Skeleton className='h-4 w-20' />
+					<Skeleton className='h-4 w-26' />
 				</div>
 			</SidebarHeader>
 		)
@@ -23,15 +23,15 @@ export const StudioSidebarHeader = () => {
 	if (state === 'collapsed') {
 		return (
 			<SidebarMenuItem>
-				<SidebarMenuButton tooltip="Your profile" asChild>
-					<Link prefetch href="/users/current">
+				<SidebarMenuButton tooltip='Your profile' asChild>
+					<Link prefetch href='/users/current'>
 						<UserAvatar
-							size="xs"
+							size='xs'
 							name={user?.fullName || 'User'}
 							imageUrl={user?.imageUrl || '/svg/user-placeholder.svg'}
 						/>
 
-						<span className="text-sm">Your profile</span>
+						<span className='text-sm'>Your profile</span>
 					</Link>
 				</SidebarMenuButton>
 			</SidebarMenuItem>
@@ -39,20 +39,20 @@ export const StudioSidebarHeader = () => {
 	}
 
 	return (
-		<SidebarHeader className="flex items-center justify-center pb-4">
-			<Link prefetch href="/users/current">
+		<SidebarHeader className='flex items-center justify-center pb-4'>
+			<Link prefetch href='/users/current'>
 				<UserAvatar
-					size="xl"
+					size='xl'
 					name={user?.fullName || 'User'}
 					imageUrl={user?.imageUrl || '/svg/user-placeholder.svg'}
-					className="size-28 hover:opacity-80 transition-opacity"
+					className='size-28 transition-opacity hover:opacity-80'
 				/>
 			</Link>
 
-			<div className="flex flex-col items-center mt-2 gap-y-1">
-				<p className="text-sm  font-medium">Your profile</p>
+			<div className='mt-2 flex flex-col items-center gap-y-1'>
+				<p className='text-sm  font-medium'>Your profile</p>
 
-				<p className="text-xs text-muted-foreground">{user.fullName}</p>
+				<p className='text-xs text-muted-foreground'>{user.fullName}</p>
 			</div>
 		</SidebarHeader>
 	)

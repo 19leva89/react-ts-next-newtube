@@ -45,7 +45,7 @@ import {
 	Textarea,
 } from '@/components/ui'
 import { videoUpdateSchema } from '@/db/schema'
-import { absoluteUrl, baseUrl, snakeCaseToTitle } from '@/lib/utils'
+import { baseUrl, snakeCaseToTitle } from '@/lib/utils'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 import { ThumbnailUploadModal } from '@/modules/studio/ui/components/thumbnail-upload-modal'
@@ -68,65 +68,65 @@ export const FormSection = ({ videoId }: Props) => {
 const FormSectionSkeleton = () => {
 	return (
 		<div>
-			<div className="flex items-center justify-between mb-6">
-				<div className="space-y-2">
-					<Skeleton className="w-32 h-7" />
-					<Skeleton className="w-40 h-4" />
+			<div className='mb-6 flex items-center justify-between'>
+				<div className='space-y-2'>
+					<Skeleton className='h-7 w-32' />
+					<Skeleton className='h-4 w-40' />
 				</div>
 
-				<Skeleton className="w-24 h-9" />
+				<Skeleton className='h-9 w-24' />
 			</div>
 
-			<div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+			<div className='grid grid-cols-1 gap-6 lg:grid-cols-5'>
 				{/* Left side */}
-				<div className="space-y-8 lg:col-span-3">
-					<div className="space-y-2">
-						<Skeleton className="w-16 h-5" />
-						<Skeleton className="w-full h-10" />
+				<div className='space-y-8 lg:col-span-3'>
+					<div className='space-y-2'>
+						<Skeleton className='h-5 w-16' />
+						<Skeleton className='h-10 w-full' />
 					</div>
 
-					<div className="space-y-2">
-						<Skeleton className="w-24 h-5" />
-						<Skeleton className="w-full h-55" />
+					<div className='space-y-2'>
+						<Skeleton className='h-5 w-24' />
+						<Skeleton className='h-55 w-full' />
 					</div>
 
-					<div className="space-y-2">
-						<Skeleton className="w-20 h-5" />
-						<Skeleton className="w-38 h-21" />
+					<div className='space-y-2'>
+						<Skeleton className='h-5 w-20' />
+						<Skeleton className='h-21 w-38' />
 					</div>
 
-					<div className="space-y-2">
-						<Skeleton className="w-20 h-5" />
-						<Skeleton className="w-full h-10" />
+					<div className='space-y-2'>
+						<Skeleton className='h-5 w-20' />
+						<Skeleton className='h-10 w-full' />
 					</div>
 				</div>
 
 				{/* Right side */}
-				<div className="flex flex-col gap-y-8 lg:col-span-2">
-					<div className="flex flex-col gap-4 h-fit rounded-xl bg-[#F9F9F9] overflow-hidden">
-						<Skeleton className="aspect-video" />
+				<div className='flex flex-col gap-y-8 lg:col-span-2'>
+					<div className='flex h-fit flex-col gap-4 overflow-hidden rounded-xl bg-[#F9F9F9]'>
+						<Skeleton className='aspect-video' />
 
-						<div className="p-4 space-y-6">
-							<div className="space-y-2">
-								<Skeleton className="w-20 h-4" />
-								<Skeleton className="w-full h-5" />
+						<div className='space-y-6 p-4'>
+							<div className='space-y-2'>
+								<Skeleton className='h-4 w-20' />
+								<Skeleton className='h-5 w-full' />
 							</div>
 
-							<div className="space-y-2">
-								<Skeleton className="w-24 h-4" />
-								<Skeleton className="w-32 h-5" />
+							<div className='space-y-2'>
+								<Skeleton className='h-4 w-24' />
+								<Skeleton className='h-5 w-32' />
 							</div>
 
-							<div className="space-y-2">
-								<Skeleton className="w-24 h-4" />
-								<Skeleton className="w-32 h-5" />
+							<div className='space-y-2'>
+								<Skeleton className='h-4 w-24' />
+								<Skeleton className='h-5 w-32' />
 							</div>
 						</div>
 					</div>
 
-					<div className="space-y-2">
-						<Skeleton className="w-20 h-5" />
-						<Skeleton className="w-full h-10" />
+					<div className='space-y-2'>
+						<Skeleton className='h-5 w-20' />
+						<Skeleton className='h-10 w-full' />
 					</div>
 				</div>
 			</div>
@@ -260,33 +260,33 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
-					<div className="flex items-center justify-between mb-6">
+					<div className='mb-6 flex items-center justify-between'>
 						<div>
-							<h1 className="text-2xl font-bold">Video details</h1>
+							<h1 className='text-2xl font-bold'>Video details</h1>
 
-							<p className="text-xs text-muted-foreground">Manage your video details</p>
+							<p className='text-xs text-muted-foreground'>Manage your video details</p>
 						</div>
 
-						<div className="flex items-center gap-x-2">
-							<Button type="submit" disabled={update.isPending || !form.formState.isDirty}>
+						<div className='flex items-center gap-x-2'>
+							<Button type='submit' disabled={update.isPending || !form.formState.isDirty}>
 								Save
 							</Button>
 
 							<DropdownMenu modal={false}>
 								<DropdownMenuTrigger asChild>
-									<Button variant="ghost" size="icon">
-										<MoreVerticalIcon className="size-4" />
+									<Button variant='ghost' size='icon'>
+										<MoreVerticalIcon className='size-4' />
 									</Button>
 								</DropdownMenuTrigger>
 
-								<DropdownMenuContent align="end">
+								<DropdownMenuContent align='end'>
 									<DropdownMenuItem
 										onClick={() => {
 											revalidate.mutate({ id: videoId })
 										}}
-										className="cursor-pointer"
+										className='cursor-pointer'
 									>
-										<RotateCcwIcon className="size-4 mr-2" />
+										<RotateCcwIcon className='mr-2 size-4' />
 										Revalidate
 									</DropdownMenuItem>
 
@@ -294,9 +294,9 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										onClick={() => {
 											remove.mutate({ id: videoId })
 										}}
-										className="cursor-pointer"
+										className='cursor-pointer'
 									>
-										<TrashIcon className="size-4 mr-2" />
+										<TrashIcon className='mr-2 size-4' />
 										Delete
 									</DropdownMenuItem>
 								</DropdownMenuContent>
@@ -304,27 +304,27 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 						</div>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+					<div className='grid grid-cols-1 gap-6 lg:grid-cols-5'>
 						{/* Left side */}
-						<div className="space-y-6 lg:col-span-3">
+						<div className='space-y-6 lg:col-span-3'>
 							<FormField
 								control={form.control}
-								name="title"
+								name='title'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											<div className="flex items-center gap-x-2">
+											<div className='flex items-center gap-x-2'>
 												Title
 												<Button
-													variant="outline"
-													size="icon"
-													type="button"
+													variant='outline'
+													size='icon'
+													type='button'
 													disabled={generateTitle.isPending || !video.muxTrackId}
 													onClick={() => generateTitle.mutate({ id: videoId })}
-													className="rounded-full size-6 [&_svg]:size-3"
+													className='size-6 rounded-full [&_svg]:size-3'
 												>
 													{generateTitle.isPending ? (
-														<Loader2Icon className="animate-spin" />
+														<Loader2Icon className='animate-spin' />
 													) : (
 														<SparklesIcon />
 													)}
@@ -333,7 +333,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										</FormLabel>
 
 										<FormControl>
-											<Input {...field} placeholder="Video title" />
+											<Input {...field} placeholder='Video title' />
 										</FormControl>
 
 										<FormMessage />
@@ -343,22 +343,22 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 							<FormField
 								control={form.control}
-								name="description"
+								name='description'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>
-											<div className="flex items-center gap-x-2">
+											<div className='flex items-center gap-x-2'>
 												Description
 												<Button
-													variant="outline"
-													size="icon"
-													type="button"
+													variant='outline'
+													size='icon'
+													type='button'
 													disabled={generateDescription.isPending || !video.muxTrackId}
 													onClick={() => generateDescription.mutate({ id: videoId })}
-													className="rounded-full size-6 [&_svg]:size-3"
+													className='size-6 rounded-full [&_svg]:size-3'
 												>
 													{generateDescription.isPending ? (
-														<Loader2Icon className="animate-spin" />
+														<Loader2Icon className='animate-spin' />
 													) : (
 														<SparklesIcon />
 													)}
@@ -371,8 +371,8 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 												{...field}
 												rows={10}
 												value={field.value || ''}
-												placeholder="Add a description to your video"
-												className="min-h-55 resize-none"
+												placeholder='Add a description to your video'
+												className='min-h-55 resize-none'
 											/>
 										</FormControl>
 										<FormMessage />
@@ -382,53 +382,53 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 							<FormField
 								control={form.control}
-								name="thumbnailUrl"
+								name='thumbnailUrl'
 								render={() => (
 									<FormItem>
 										<FormLabel>Thumbnail</FormLabel>
 
 										<FormControl>
-											<div className="relative w-38 h-21 p-0.5 border border-dashed border-neutral-400 group">
+											<div className='group relative h-21 w-38 border border-dashed border-neutral-400 p-0.5'>
 												<Image
 													src={video.thumbnailUrl || THUMBNAIL_FALLBACK}
-													alt="Thumbnail"
+													alt='Thumbnail'
 													fill
-													className="object-cover"
+													className='object-cover'
 												/>
 
 												<DropdownMenu>
 													<DropdownMenuTrigger asChild>
 														<Button
-															size="icon"
-															type="button"
-															className="absolute top-1 right-1 size-7 rounded-full bg-black/50 hover:bg-black/50 opacity-100 md:opacity-0 group-hover:opacity-100 duration-300"
+															size='icon'
+															type='button'
+															className='absolute top-1 right-1 size-7 rounded-full bg-black/50 opacity-100 duration-300 group-hover:opacity-100 hover:bg-black/50 md:opacity-0'
 														>
-															<MoreVerticalIcon className="text-white" />
+															<MoreVerticalIcon className='text-white' />
 														</Button>
 													</DropdownMenuTrigger>
 
-													<DropdownMenuContent align="start" side="right">
+													<DropdownMenuContent align='start' side='right'>
 														<DropdownMenuItem
 															onClick={() => setThumbnailModalOpen(true)}
-															className="cursor-pointer"
+															className='cursor-pointer'
 														>
-															<ImagePlusIcon className="size-4 mr-1" />
+															<ImagePlusIcon className='mr-1 size-4' />
 															Change
 														</DropdownMenuItem>
 
 														<DropdownMenuItem
 															onClick={() => setThumbnailGenerateModalOpen(true)}
-															className="cursor-pointer"
+															className='cursor-pointer'
 														>
-															<SparklesIcon className="size-4 mr-1" />
+															<SparklesIcon className='mr-1 size-4' />
 															AI-Generated
 														</DropdownMenuItem>
 
 														<DropdownMenuItem
 															onClick={() => restoreThumbnail.mutate({ id: video.id })}
-															className="cursor-pointer"
+															className='cursor-pointer'
 														>
-															<RotateCcwIcon className="size-4 mr-1" />
+															<RotateCcwIcon className='mr-1 size-4' />
 															Restore
 														</DropdownMenuItem>
 													</DropdownMenuContent>
@@ -443,21 +443,21 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 							<FormField
 								control={form.control}
-								name="categoryId"
+								name='categoryId'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Category</FormLabel>
 
 										<Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
 											<FormControl>
-												<SelectTrigger className="w-full">
-													<SelectValue placeholder="Select a category" />
+												<SelectTrigger className='w-full'>
+													<SelectValue placeholder='Select a category' />
 												</SelectTrigger>
 											</FormControl>
 
 											<SelectContent>
 												{categories.map((category) => (
-													<SelectItem key={category.id} value={category.id} className="cursor-pointer">
+													<SelectItem key={category.id} value={category.id} className='cursor-pointer'>
 														{category.name}
 													</SelectItem>
 												))}
@@ -471,29 +471,29 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 						</div>
 
 						{/* Right side */}
-						<div className="flex flex-col gap-y-8 lg:col-span-2">
-							<div className="flex flex-col gap-4 h-fit rounded-xl bg-[#F9F9F9] overflow-hidden">
-								<div className="relative aspect-video overflow-hidden">
+						<div className='flex flex-col gap-y-8 lg:col-span-2'>
+							<div className='flex h-fit flex-col gap-4 overflow-hidden rounded-xl bg-[#F9F9F9]'>
+								<div className='relative aspect-video overflow-hidden'>
 									<VideoPlayer playbackId={video.muxPlaybackId} thumbnailUrl={video.thumbnailUrl} />
 								</div>
 
-								<div className="flex flex-col gap-y-6 p-4">
-									<div className="flex justify-between items-center gap-x-2">
-										<div className="flex flex-col gap-y-1">
-											<p className="text-sm text-muted-foreground">Video link</p>
+								<div className='flex flex-col gap-y-6 p-4'>
+									<div className='flex items-center justify-between gap-x-2'>
+										<div className='flex flex-col gap-y-1'>
+											<p className='text-sm text-muted-foreground'>Video link</p>
 
-											<div className="flex items-center gap-x-2">
+											<div className='flex items-center gap-x-2'>
 												<Link prefetch href={`/videos/${video.id}`}>
-													<p className="line-clamp-1 text-sm text-blue-500">{fullUrl}</p>
+													<p className='line-clamp-1 text-sm text-blue-500'>{fullUrl}</p>
 												</Link>
 
 												<Button
-													variant="ghost"
-													type="button"
-													size="icon"
+													variant='ghost'
+													type='button'
+													size='icon'
 													onClick={onCopy}
 													disabled={isCopied}
-													className="shrink-0"
+													className='shrink-0'
 												>
 													{isCopied ? <CopyCheckIcon /> : <CopyIcon />}
 												</Button>
@@ -501,19 +501,19 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 										</div>
 									</div>
 
-									<div className="flex justify-between items-center">
-										<div className="flex flex-col gap-y-1">
-											<p className="text-muted-foreground text-xs">Video status</p>
+									<div className='flex items-center justify-between'>
+										<div className='flex flex-col gap-y-1'>
+											<p className='text-xs text-muted-foreground'>Video status</p>
 
-											<p className="text-sm">{snakeCaseToTitle(video.muxStatus || 'preparing')}</p>
+											<p className='text-sm'>{snakeCaseToTitle(video.muxStatus || 'preparing')}</p>
 										</div>
 									</div>
 
-									<div className="flex justify-between items-center">
-										<div className="flex flex-col gap-y-1">
-											<p className="text-muted-foreground text-xs">Subtitles status</p>
+									<div className='flex items-center justify-between'>
+										<div className='flex flex-col gap-y-1'>
+											<p className='text-xs text-muted-foreground'>Subtitles status</p>
 
-											<p className="text-sm">{snakeCaseToTitle(video.muxTrackStatus || 'no_subtitles')}</p>
+											<p className='text-sm'>{snakeCaseToTitle(video.muxTrackStatus || 'no_subtitles')}</p>
 										</div>
 									</div>
 								</div>
@@ -521,26 +521,26 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 
 							<FormField
 								control={form.control}
-								name="visibility"
+								name='visibility'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Visibility</FormLabel>
 
 										<Select onValueChange={field.onChange} defaultValue={field.value ?? undefined}>
-											<FormControl className="w-full">
+											<FormControl className='w-full'>
 												<SelectTrigger>
-													<SelectValue placeholder="Select visibility" />
+													<SelectValue placeholder='Select visibility' />
 												</SelectTrigger>
 											</FormControl>
 
 											<SelectContent>
-												<SelectItem value="public" className="cursor-pointer">
-													<LockOpenIcon className="size-4 mr-2" />
+												<SelectItem value='public' className='cursor-pointer'>
+													<LockOpenIcon className='mr-2 size-4' />
 													Public
 												</SelectItem>
 
-												<SelectItem value="private" className="cursor-pointer">
-													<LockIcon className="size-4 mr-2" />
+												<SelectItem value='private' className='cursor-pointer'>
+													<LockIcon className='mr-2 size-4' />
 													Private
 												</SelectItem>
 											</SelectContent>

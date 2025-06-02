@@ -27,15 +27,15 @@ export const VideosSection = ({ playlistId }: Props) => {
 const VideosSectionSkeleton = () => {
 	return (
 		<>
-			<div className="flex flex-col gap-4 gap-y-10 md:hidden">
+			<div className='flex flex-col gap-4 gap-y-10 md:hidden'>
 				{Array.from({ length: 6 }).map((_, index) => (
 					<VideoGridCardSkeleton key={index} />
 				))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4">
+			<div className='hidden flex-col gap-4 md:flex'>
 				{Array.from({ length: 6 }).map((_, index) => (
-					<VideoRowCardSkeleton key={index} size="compact" />
+					<VideoRowCardSkeleton key={index} size='compact' />
 				))}
 			</div>
 		</>
@@ -70,7 +70,7 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 
 	return (
 		<div>
-			<div className="flex flex-col gap-4 gap-y-10 md:hidden">
+			<div className='flex flex-col gap-4 gap-y-10 md:hidden'>
 				{videos.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
@@ -82,14 +82,14 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 					))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4">
+			<div className='hidden flex-col gap-4 md:flex'>
 				{videos.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoRowCard
 							key={video.id}
 							data={video}
-							size="compact"
+							size='compact'
 							onRemove={() => removeVideo.mutate({ playlistId, videoId: video.id })}
 						/>
 					))}

@@ -23,27 +23,27 @@ export const VideoDescription = ({
 	return (
 		<div
 			onClick={() => setIsExpanded(!isExpanded)}
-			className="p-3 rounded-xl bg-secondary/50 cursor-pointer hover:bg-secondary/70 transition"
+			className='cursor-pointer rounded-xl bg-secondary/50 p-3 transition hover:bg-secondary/70'
 		>
-			<div className="flex gap-2 mb-2 text-sm">
-				<span className="font-medium">{isExpanded ? expandedViews : compactViews} views</span>
+			<div className='mb-2 flex gap-2 text-sm'>
+				<span className='font-medium'>{isExpanded ? expandedViews : compactViews} views</span>
 
-				<span className="font-medium">{isExpanded ? expandedDate : compactDate}</span>
+				<span className='font-medium'>{isExpanded ? expandedDate : compactDate}</span>
 			</div>
 
-			<div className="relative">
+			<div className='relative'>
 				<p className={cn('text-sm whitespace-pre-wrap', !isExpanded && 'line-clamp-2')}>
 					{description || 'No description'}
 				</p>
 
-				<div className="flex items-center gap-1 mt-4 text-sm font-medium">
+				<div className='mt-4 flex items-center gap-1 text-sm font-medium'>
 					{isExpanded ? (
 						<>
-							show less <ChevronUpIcon className="size-4" />
+							show less <ChevronUpIcon className='size-4' />
 						</>
 					) : (
 						<>
-							show more <ChevronDownIcon className="size-4" />
+							show more <ChevronDownIcon className='size-4' />
 						</>
 					)}
 				</div>

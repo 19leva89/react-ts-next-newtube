@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
-	return <div className="flex items-center justify-center h-screen w-screen">{children}</div>
+	return <div className='flex h-screen w-screen items-center justify-center'>{children}</div>
 }
 
 export default AuthLayout

@@ -15,8 +15,8 @@ interface Props {
 
 export const PlaylistThumbnailSkeleton = () => {
 	return (
-		<div className="relative w-full rounded-xl overflow-hidden aspect-video">
-			<Skeleton className="size-full" />
+		<div className='relative aspect-video w-full overflow-hidden rounded-xl'>
+			<Skeleton className='size-full' />
 		</div>
 	)
 }
@@ -31,30 +31,30 @@ export const PlaylistThumbnail = ({ title, videoCount, className, imageUrl }: Pr
 	return (
 		<div className={cn('relative pt-3', className)}>
 			{/* Stack effect layers */}
-			<div className="relative">
+			<div className='relative'>
 				{/* Background layers */}
-				<div className="absolute -top-3 left-1/2 -translate-x-1/2 w-[97%] aspect-video rounded-xl overflow-hidden bg-black/20" />
+				<div className='absolute -top-3 left-1/2 aspect-video w-[97%] -translate-x-1/2 overflow-hidden rounded-xl bg-black/20' />
 
-				<div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-[98.5%] aspect-video rounded-xl overflow-hidden bg-black/25" />
+				<div className='absolute -top-1.5 left-1/2 aspect-video w-[98.5%] -translate-x-1/2 overflow-hidden rounded-xl bg-black/25' />
 			</div>
 
 			{/* Main image */}
-			<div className="relative w-full aspect-video rounded-xl overflow-hidden">
-				<Image src={imageUrl || THUMBNAIL_FALLBACK} alt={title} fill className="size-full object-cover" />
+			<div className='relative aspect-video w-full overflow-hidden rounded-xl'>
+				<Image src={imageUrl || THUMBNAIL_FALLBACK} alt={title} fill className='size-full object-cover' />
 
 				{/* Hover overlay */}
-				<div className="absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity">
-					<div className="flex items-center gap-x-2">
-						<PlayIcon className="size-4 text-white fill-white" />
+				<div className='absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 transition-opacity group-hover:opacity-100'>
+					<div className='flex items-center gap-x-2'>
+						<PlayIcon className='size-4 fill-white text-white' />
 
-						<span className="text-white font-medium">Play all</span>
+						<span className='font-medium text-white'>Play all</span>
 					</div>
 				</div>
 			</div>
 
 			{/* Video count indicator */}
-			<div className="absolute bottom-2 right-2 flex items-center gap-x-1 px-1 py-0.5 rounded bg-black/80 text-white text-xs font-medium">
-				<ListVideoIcon className="size-4" />
+			<div className='absolute right-2 bottom-2 flex items-center gap-x-1 rounded bg-black/80 px-1 py-0.5 text-xs font-medium text-white'>
+				<ListVideoIcon className='size-4' />
 				{compactView} videos
 			</div>
 		</div>

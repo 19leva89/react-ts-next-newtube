@@ -65,16 +65,16 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 
 	return (
 		<Form {...form}>
-			<form className="flex gap-4 group" onSubmit={form.handleSubmit(onSubmit)}>
+			<form className='group flex gap-4' onSubmit={form.handleSubmit(onSubmit)}>
 				<UserAvatar
-					size="lg"
+					size='lg'
 					name={user?.username || 'User'}
 					imageUrl={user?.imageUrl || '/svg/user-placeholder.svg'}
 				/>
 
-				<div className="flex-1">
+				<div className='flex-1'>
 					<FormField
-						name="value"
+						name='value'
 						control={form.control}
 						render={({ field }) => (
 							<FormItem>
@@ -82,7 +82,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 									<Textarea
 										{...field}
 										placeholder={variant === 'reply' ? 'Reply to this comment...' : 'Add a comment...'}
-										className="resize-none bg-transparent overflow-hidden"
+										className='resize-none overflow-hidden bg-transparent'
 									/>
 								</FormControl>
 
@@ -91,14 +91,14 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 						)}
 					/>
 
-					<div className="flex justify-end gap-2 mt-2">
+					<div className='mt-2 flex justify-end gap-2'>
 						{onCancel && (
-							<Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
+							<Button type='button' variant='ghost' size='sm' onClick={handleCancel}>
 								Cancel
 							</Button>
 						)}
 
-						<Button type="submit" size="sm" disabled={create.isPending}>
+						<Button type='submit' size='sm' disabled={create.isPending}>
 							{variant === 'reply' ? 'Reply' : 'Comment'}
 						</Button>
 					</div>

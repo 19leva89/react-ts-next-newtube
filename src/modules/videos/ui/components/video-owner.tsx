@@ -35,19 +35,19 @@ export const VideoOwner = ({ user, videoId }: Props) => {
 	}, [])
 
 	return (
-		<div className="flex items-center justify-between sm:justify-start gap-3 min-w-0">
+		<div className='flex min-w-0 items-center justify-between gap-3 sm:justify-start'>
 			<Link prefetch href={`/users/${user.id}`}>
-				<div className="flex items-center gap-3 min-w-0">
+				<div className='flex min-w-0 items-center gap-3'>
 					<UserAvatar
-						size="lg"
+						size='lg'
 						name={user.name || 'User'}
 						imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
 					/>
 
-					<div className="flex flex-col gap-1 min-w-0">
-						<UserInfo size="lg" name={user.name || 'User'} />
+					<div className='flex min-w-0 flex-col gap-1'>
+						<UserInfo size='lg' name={user.name || 'User'} />
 
-						<span className="text-sm text-muted-foreground line-clamp-1">
+						<span className='line-clamp-1 text-sm text-muted-foreground'>
 							{user.subscriberCount} subscribers
 						</span>
 					</div>
@@ -56,7 +56,7 @@ export const VideoOwner = ({ user, videoId }: Props) => {
 
 			{mounted ? (
 				isOwner ? (
-					<Button variant="secondary" className="rounded-full" asChild>
+					<Button variant='secondary' className='rounded-full' asChild>
 						<Link prefetch href={`/studio/videos/${videoId}`}>
 							Edit video
 						</Link>
@@ -66,12 +66,12 @@ export const VideoOwner = ({ user, videoId }: Props) => {
 						onClick={onClick}
 						disabled={isPending || !isLoaded}
 						isSubscribed={user.viewerSubscribed}
-						className="flex-none"
+						className='flex-none'
 					/>
 				)
 			) : (
 				// Placeholder with roughly the same dimensions
-				<div className="w-24 h-9" />
+				<div className='h-9 w-24' />
 			)}
 		</div>
 	)

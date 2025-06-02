@@ -32,7 +32,7 @@ export const ResponsiveModal = ({ title, open, children, onOpenChangeAction }: P
 					<DrawerHeader>
 						<DrawerTitle>{title}</DrawerTitle>
 
-						<DrawerDescription className="hidden" />
+						<DrawerDescription className='hidden' />
 					</DrawerHeader>
 					{children}
 				</DrawerContent>
@@ -46,7 +46,7 @@ export const ResponsiveModal = ({ title, open, children, onOpenChangeAction }: P
 				<DialogHeader>
 					<DialogTitle>{title}</DialogTitle>
 
-					<DialogDescription className="hidden" />
+					<DialogDescription className='hidden' />
 				</DialogHeader>
 
 				{children}

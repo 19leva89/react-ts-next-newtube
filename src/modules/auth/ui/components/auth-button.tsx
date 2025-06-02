@@ -9,8 +9,8 @@ export const AuthButton = () => {
 	return (
 		<>
 			<ClerkLoading>
-				<div className="flex items-center justify-center w-full">
-					<LoaderIcon className="size-6 text-gray-500/80 animate-spin" />
+				<div className='flex w-full items-center justify-center'>
+					<LoaderIcon className='size-6 animate-spin text-gray-500/80' />
 				</div>
 			</ClerkLoading>
 
@@ -24,29 +24,29 @@ export const AuthButton = () => {
 				>
 					<UserButton.MenuItems>
 						<UserButton.Link
-							href="/users/current"
-							label="My profile"
-							labelIcon={<UserIcon className="size-4" />}
+							href='/users/current'
+							label='My profile'
+							labelIcon={<UserIcon className='size-4' />}
 						/>
 
 						<UserButton.Link
-							href="/studio"
-							label="Studio"
-							labelIcon={<ClapperboardIcon className="size-4" />}
+							href='/studio'
+							label='Studio'
+							labelIcon={<ClapperboardIcon className='size-4' />}
 						/>
 
-						<UserButton.Action label="manageAccount" />
+						<UserButton.Action label='manageAccount' />
 					</UserButton.MenuItems>
 				</UserButton>
 			</SignedIn>
 
 			<SignedOut>
-				<SignInButton mode="modal">
+				<SignInButton mode='modal'>
 					<Button
-						variant="outline"
-						className="px-4 py-2 rounded-full text-sm font-medium text-blue-600 hover:text-blue-500 border-blue-500/20 shadow-none"
+						variant='outline'
+						className='rounded-full border-blue-500/20 px-4 py-2 text-sm font-medium text-blue-600 shadow-none hover:text-blue-500'
 					>
-						<UserCircleIcon className="size-5" />
+						<UserCircleIcon className='size-5' />
 						Sign in
 					</Button>
 				</SignInButton>

@@ -22,10 +22,10 @@ export const LoadingSkeleton = () => {
 		<>
 			{Array.from({ length: 5 }).map((_, index) => (
 				<SidebarMenuItem key={`${index}-${Date.now()}`}>
-					<div className="flex items-center gap-4 px-2 py-1.5">
-						<Skeleton className="size-6 rounded-full shrink-0" />
+					<div className='flex items-center gap-4 px-2 py-1.5'>
+						<Skeleton className='size-6 shrink-0 rounded-full' />
 
-						<Skeleton className="w-full h-4" />
+						<Skeleton className='h-4 w-full' />
 					</div>
 				</SidebarMenuItem>
 			))}
@@ -69,14 +69,14 @@ export const SubscriptionsSection = () => {
 										}}
 										asChild
 									>
-										<Link prefetch href={`/users/${item.user.id}`} className="flex items-center gap-4">
+										<Link prefetch href={`/users/${item.user.id}`} className='flex items-center gap-4'>
 											<UserAvatar
-												size="sm"
+												size='sm'
 												name={item.user.name}
 												imageUrl={item.user.imageUrl || '/svg/user-placeholder.svg'}
 											/>
 
-											<span className="text-sm">{item.user.name}</span>
+											<span className='text-sm'>{item.user.name}</span>
 										</Link>
 									</SidebarMenuButton>
 								</SidebarMenuItem>
@@ -86,10 +86,10 @@ export const SubscriptionsSection = () => {
 					{!isLoading && (
 						<SidebarMenuItem>
 							<SidebarMenuButton isActive={pathname === '/subscriptions'} asChild>
-								<Link prefetch href="/subscriptions" className="flex items-center gap-4">
-									<ListIcon className="size-4" />
+								<Link prefetch href='/subscriptions' className='flex items-center gap-4'>
+									<ListIcon className='size-4' />
 
-									<span className="text-sm">All subscriptions</span>
+									<span className='text-sm'>All subscriptions</span>
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>

@@ -2,11 +2,11 @@ import { TrendingVideosSection } from '@/modules/home/ui/sections/trending-video
 
 export const TrendingView = () => {
 	return (
-		<div className="flex flex-col gap-y-6 max-w-600 mb-10 px-4 pt-2.5 mx-auto">
+		<div className='mx-auto mb-10 flex max-w-600 flex-col gap-y-6 px-4 pt-2.5'>
 			<div>
-				<h1 className="text-2xl font-bold">Trending</h1>
+				<h1 className='text-2xl font-bold'>Trending</h1>
 
-				<p className="text-xs text-muted-foreground">Most popular videos at the moment</p>
+				<p className='text-xs text-muted-foreground'>Most popular videos at the moment</p>
 			</div>
 
 			<TrendingVideosSection />

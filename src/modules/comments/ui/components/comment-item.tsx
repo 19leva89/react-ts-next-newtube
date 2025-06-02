@@ -93,7 +93,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 
 	return (
 		<div>
-			<div className="flex gap-4">
+			<div className='flex gap-4'>
 				<Link prefetch href={`/users/${comment.userId}`}>
 					<UserAvatar
 						size={variant === 'comment' ? 'lg' : 'sm'}
@@ -102,59 +102,59 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 					/>
 				</Link>
 
-				<div className="flex-1 min-w-0">
+				<div className='min-w-0 flex-1'>
 					<Link prefetch href={`/users/${comment.userId}`}>
-						<div className="flex items-center gap-2 mb-0.5">
-							<span className="pb-0.5 font-medium text-sm">{comment.user.name}</span>
+						<div className='mb-0.5 flex items-center gap-2'>
+							<span className='pb-0.5 text-sm font-medium'>{comment.user.name}</span>
 
-							<span className="text-xs text-muted-foreground">
+							<span className='text-xs text-muted-foreground'>
 								{formatDistanceToNow(comment.createdAt, { addSuffix: true })}
 							</span>
 						</div>
 					</Link>
 
-					<p className="text-sm">{comment.value}</p>
+					<p className='text-sm'>{comment.value}</p>
 
 					{/* Reactions */}
-					<div className="flex items-center gap-2 mt-1">
-						<div className="flex items-center">
+					<div className='mt-1 flex items-center gap-2'>
+						<div className='flex items-center'>
 							<Button
-								variant="link"
-								size="icon"
+								variant='link'
+								size='icon'
 								disabled={like.isPending || dislike.isPending}
 								onClick={() => like.mutate({ commentId: comment.id })}
-								className="size-8 rounded-full group/like"
+								className='group/like size-8 rounded-full'
 							>
 								<ThumbsUpIcon
 									className={cn(
-										'transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+										'fill-transparent transition-colors duration-300 ease-in-out group-hover/like:fill-black',
 										comment.viewerReactions === 'like' && 'fill-black group-hover/like:fill-transparent',
 									)}
 								/>
 							</Button>
 
-							<span className="text-xs text-muted-foreground">{comment.likeCount}</span>
+							<span className='text-xs text-muted-foreground'>{comment.likeCount}</span>
 
 							<Button
-								variant="link"
-								size="icon"
+								variant='link'
+								size='icon'
 								disabled={dislike.isPending || like.isPending}
 								onClick={() => dislike.mutate({ commentId: comment.id })}
-								className="size-8 rounded-full group/like"
+								className='group/like size-8 rounded-full'
 							>
 								<ThumbsDownIcon
 									className={cn(
-										'transition-colors ease-in-out duration-300 fill-transparent group-hover/like:fill-black',
+										'fill-transparent transition-colors duration-300 ease-in-out group-hover/like:fill-black',
 										comment.viewerReactions === 'dislike' && 'fill-black group-hover/like:fill-transparent',
 									)}
 								/>
 							</Button>
 
-							<span className="text-xs text-muted-foreground">{comment.dislikeCount}</span>
+							<span className='text-xs text-muted-foreground'>{comment.dislikeCount}</span>
 						</div>
 
 						{variant === 'comment' && (
-							<Button variant="ghost" size="sm" onClick={() => setIsReplyOpen(true)} className="rounded-full">
+							<Button variant='ghost' size='sm' onClick={() => setIsReplyOpen(true)} className='rounded-full'>
 								Reply
 							</Button>
 						)}
@@ -164,21 +164,21 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 				{comment.user.clerkId === userId && (
 					<DropdownMenu modal={false}>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="rounded-full">
+							<Button variant='ghost' size='icon' className='rounded-full'>
 								<MoreVerticalIcon />
 							</Button>
 						</DropdownMenuTrigger>
 
-						<DropdownMenuContent align="end">
+						<DropdownMenuContent align='end'>
 							{variant === 'comment' && (
-								<DropdownMenuItem onClick={() => setIsReplyOpen(true)} className="cursor-pointer">
-									<MessageSquareIcon className="size-4 mr-2" />
+								<DropdownMenuItem onClick={() => setIsReplyOpen(true)} className='cursor-pointer'>
+									<MessageSquareIcon className='mr-2 size-4' />
 									Reply
 								</DropdownMenuItem>
 							)}
 
-							<DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })} className="cursor-pointer">
-								<TrashIcon className="size-4 mr-2" />
+							<DropdownMenuItem onClick={() => remove.mutate({ id: comment.id })} className='cursor-pointer'>
+								<TrashIcon className='mr-2 size-4' />
 								Delete
 							</DropdownMenuItem>
 						</DropdownMenuContent>
@@ -187,9 +187,9 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 			</div>
 
 			{isReplyOpen && variant === 'comment' && (
-				<div className="mt-4 pl-14">
+				<div className='mt-4 pl-14'>
 					<CommentForm
-						variant="reply"
+						variant='reply'
 						videoId={comment.videoId}
 						parentId={comment.id}
 						onSuccess={() => {
@@ -202,12 +202,12 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 			)}
 
 			{comment.replyCount > 0 && variant === 'comment' && (
-				<div className="pl-14">
-					<Button variant="tertiary" size="sm" onClick={() => setIsRepliesOpen((current) => !current)}>
+				<div className='pl-14'>
+					<Button variant='tertiary' size='sm' onClick={() => setIsRepliesOpen((current) => !current)}>
 						{isRepliesOpen ? (
-							<ChevronUpIcon className="size-4 mr-2" />
+							<ChevronUpIcon className='mr-2 size-4' />
 						) : (
-							<ChevronDownIcon className="size-4 mr-2" />
+							<ChevronDownIcon className='mr-2 size-4' />
 						)}
 						{comment.replyCount} replies
 					</Button>

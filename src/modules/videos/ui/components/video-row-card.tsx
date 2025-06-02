@@ -48,23 +48,23 @@ export const VideoRowCardSkeleton = ({ size = 'default' }: VariantProps<typeof v
 			</div>
 
 			{/* Info skeleton */}
-			<div className="flex-1 min-w-0">
-				<div className="flex justify-between gap-x-2">
-					<div className="flex-1 min-w-0">
-						<Skeleton className={cn('w-[40%] h-5', size === 'compact' && 'w-[40%] h-4')} />
+			<div className='min-w-0 flex-1'>
+				<div className='flex justify-between gap-x-2'>
+					<div className='min-w-0 flex-1'>
+						<Skeleton className={cn('h-5 w-[40%]', size === 'compact' && 'h-4 w-[40%]')} />
 
 						{size === 'default' && (
 							<>
-								<Skeleton className="w-[20%] h-4 mt-1" />
+								<Skeleton className='mt-1 h-4 w-[20%]' />
 
-								<div className="flex items-center gap-2 my-3">
-									<Skeleton className="size-8 rounded-full" />
-									<Skeleton className="w-24 h-4" />
+								<div className='my-3 flex items-center gap-2'>
+									<Skeleton className='size-8 rounded-full' />
+									<Skeleton className='h-4 w-24' />
 								</div>
 							</>
 						)}
 
-						{size === 'compact' && <Skeleton className="w-[50%] h-4 mt-1" />}
+						{size === 'compact' && <Skeleton className='mt-1 h-4 w-[50%]' />}
 					</div>
 				</div>
 			</div>
@@ -97,55 +97,55 @@ export const VideoRowCard = ({ data, onRemove, size = 'default' }: Props) => {
 			</Link>
 
 			{/* Info */}
-			<div className="flex-1 min-w-0">
-				<div className="flex justify-between gap-x-2">
-					<Link prefetch href={`/videos/${data.id}`} className="flex-1 min-w-0">
-						<h3 className={cn('font-medium line-clamp-2', size === 'compact' ? 'text-sm' : 'text-base')}>
+			<div className='min-w-0 flex-1'>
+				<div className='flex justify-between gap-x-2'>
+					<Link prefetch href={`/videos/${data.id}`} className='min-w-0 flex-1'>
+						<h3 className={cn('line-clamp-2 font-medium', size === 'compact' ? 'text-sm' : 'text-base')}>
 							{data.title}
 						</h3>
 
 						{size === 'default' && (
-							<p className="mt-1 text-sm text-muted-foreground">
+							<p className='mt-1 text-sm text-muted-foreground'>
 								{compactViews} views &bull; {compactLikes} likes
 							</p>
 						)}
 
 						{size === 'default' && (
 							<>
-								<div className="flex items-center gap-2 my-3">
+								<div className='my-3 flex items-center gap-2'>
 									<UserAvatar
-										size="sm"
+										size='sm'
 										name={data.user.name || 'User'}
 										imageUrl={data.user.imageUrl || '/svg/user-placeholder.svg'}
 									/>
 
-									<UserInfo size="sm" name={data.user.name || 'User'} />
+									<UserInfo size='sm' name={data.user.name || 'User'} />
 								</div>
 
 								<Tooltip>
 									<TooltipTrigger asChild>
-										<p className="w-fit line-clamp-2 text-xs text-muted-foreground">
+										<p className='line-clamp-2 w-fit text-xs text-muted-foreground'>
 											{data.description || 'No description'}
 										</p>
 									</TooltipTrigger>
 
-									<TooltipContent side="bottom" align="center" className="bg-black/70">
+									<TooltipContent side='bottom' align='center' className='bg-black/70'>
 										<p>From the video description</p>
 									</TooltipContent>
 								</Tooltip>
 							</>
 						)}
 
-						{size === 'compact' && <UserInfo size="sm" name={data.user.name || 'User'} />}
+						{size === 'compact' && <UserInfo size='sm' name={data.user.name || 'User'} />}
 
 						{size === 'compact' && (
-							<p className="mt-1 text-xs text-muted-foreground">
+							<p className='mt-1 text-xs text-muted-foreground'>
 								{compactViews} views &bull; {compactLikes} likes
 							</p>
 						)}
 					</Link>
 
-					<div className="flex-none">
+					<div className='flex-none'>
 						<VideoMenu videoId={data.id} onRemove={onRemove} />
 					</div>
 				</div>

@@ -15,29 +15,29 @@ interface Props {
 
 export const UserPageInfoSkeleton = () => {
 	return (
-		<div className="py-6">
+		<div className='py-6'>
 			{/* Mobile layout */}
-			<div className="flex flex-col space-y-4 md:hidden">
-				<div className="flex items-center gap-3">
-					<Skeleton className="size-15 rounded-full" />
+			<div className='flex flex-col space-y-4 md:hidden'>
+				<div className='flex items-center gap-3'>
+					<Skeleton className='size-15 rounded-full' />
 
-					<div className="flex-1 min-w-0">
-						<Skeleton className="w-32 h-6" />
-						<Skeleton className="w-48 h-4 mt-1" />
+					<div className='min-w-0 flex-1'>
+						<Skeleton className='h-6 w-32' />
+						<Skeleton className='mt-1 h-4 w-48' />
 					</div>
 				</div>
 
-				<Skeleton className="w-full h-10 mt-3 rounded-full" />
+				<Skeleton className='mt-3 h-10 w-full rounded-full' />
 			</div>
 
 			{/* Desktop layout */}
-			<div className="hidden md:flex items-start gap-4">
-				<Skeleton className="size-40 rounded-full" />
+			<div className='hidden items-start gap-4 md:flex'>
+				<Skeleton className='size-40 rounded-full' />
 
-				<div className="flex-1 min-w-0">
-					<Skeleton className="w-64 h-8" />
-					<Skeleton className="w-48 h-5 mt-4" />
-					<Skeleton className="w-32 h-10 mt-3 rounded-full" />
+				<div className='min-w-0 flex-1'>
+					<Skeleton className='h-8 w-64' />
+					<Skeleton className='mt-4 h-5 w-48' />
+					<Skeleton className='mt-3 h-10 w-32 rounded-full' />
 				</div>
 			</div>
 		</div>
@@ -62,12 +62,12 @@ export const UserPageInfo = ({ user }: Props) => {
 	}, [])
 
 	return (
-		<div className="py-6">
+		<div className='py-6'>
 			{/* Mobile layout */}
-			<div className="flex flex-col space-y-4 md:hidden">
-				<div className="flex items-center gap-3">
+			<div className='flex flex-col space-y-4 md:hidden'>
+				<div className='flex items-center gap-3'>
 					<UserAvatar
-						size="lg"
+						size='lg'
 						name={user.name}
 						imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
 						onClick={() => {
@@ -75,13 +75,13 @@ export const UserPageInfo = ({ user }: Props) => {
 								clerk.openUserProfile()
 							}
 						}}
-						className="size-15"
+						className='size-15'
 					/>
 
-					<div className="flex-1 min-w-0">
-						<h1 className="text-xl font-bold">{user.name}</h1>
+					<div className='min-w-0 flex-1'>
+						<h1 className='text-xl font-bold'>{user.name}</h1>
 
-						<div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
+						<div className='mt-1 flex items-center gap-1 text-xs text-muted-foreground'>
 							<span>{user.subscriberCount} subscribers</span>
 
 							<span>&bull;</span>
@@ -92,8 +92,8 @@ export const UserPageInfo = ({ user }: Props) => {
 				</div>
 
 				{mounted && isOwner ? (
-					<Button variant="secondary" className="w-full mt-3 rounded-full" asChild>
-						<Link prefetch href="/studio">
+					<Button variant='secondary' className='mt-3 w-full rounded-full' asChild>
+						<Link prefetch href='/studio'>
 							Go to studio
 						</Link>
 					</Button>
@@ -102,15 +102,15 @@ export const UserPageInfo = ({ user }: Props) => {
 						onClick={onClick}
 						disabled={isPending || !isLoaded}
 						isSubscribed={user.viewerSubscribed}
-						className="w-full mt-3"
+						className='mt-3 w-full'
 					/>
 				)}
 			</div>
 
 			{/* Desktop layout */}
-			<div className="hidden md:flex items-start gap-4">
+			<div className='hidden items-start gap-4 md:flex'>
 				<UserAvatar
-					size="xl"
+					size='xl'
 					name={user.name}
 					imageUrl={user.imageUrl || '/svg/user-placeholder.svg'}
 					onClick={() => {
@@ -119,14 +119,14 @@ export const UserPageInfo = ({ user }: Props) => {
 						}
 					}}
 					className={cn(
-						mounted && isOwner && 'cursor-pointer hover:opacity-80 transition-opacity duration-300',
+						mounted && isOwner && 'cursor-pointer transition-opacity duration-300 hover:opacity-80',
 					)}
 				/>
 
-				<div className="flex-1 min-w-0">
-					<h1 className="text-4xl font-bold">{user.name}</h1>
+				<div className='min-w-0 flex-1'>
+					<h1 className='text-4xl font-bold'>{user.name}</h1>
 
-					<div className="flex items-center gap-1 mt-3 text-sm text-muted-foreground">
+					<div className='mt-3 flex items-center gap-1 text-sm text-muted-foreground'>
 						<span>{user.subscriberCount} subscribers</span>
 
 						<span>&bull;</span>
@@ -135,8 +135,8 @@ export const UserPageInfo = ({ user }: Props) => {
 					</div>
 
 					{mounted && isOwner ? (
-						<Button variant="secondary" className="mt-3 rounded-full" asChild>
-							<Link prefetch href="/studio">
+						<Button variant='secondary' className='mt-3 rounded-full' asChild>
+							<Link prefetch href='/studio'>
 								Go to studio
 							</Link>
 						</Button>
@@ -145,7 +145,7 @@ export const UserPageInfo = ({ user }: Props) => {
 							disabled={isPending}
 							onClick={onClick}
 							isSubscribed={user.viewerSubscribed}
-							className="mt-3"
+							className='mt-3'
 						/>
 					)}
 				</div>

@@ -46,24 +46,24 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 	}
 
 	return (
-		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title="Create a playlist">
+		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title='Create a playlist'>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
 					<FormField
 						control={form.control}
-						name="name"
+						name='name'
 						render={({ field }) => (
-							<FormItem className="mb-4">
+							<FormItem className='mb-4'>
 								<FormLabel>Name</FormLabel>
 
 								<FormControl>
-									<Input {...field} placeholder="Enter playlist name" className="w-full" />
+									<Input {...field} placeholder='Enter playlist name' className='w-full' />
 								</FormControl>
 							</FormItem>
 						)}
 					/>
 
-					<Button type="submit" disabled={create.isPending}>
+					<Button type='submit' disabled={create.isPending}>
 						Create
 					</Button>
 				</form>

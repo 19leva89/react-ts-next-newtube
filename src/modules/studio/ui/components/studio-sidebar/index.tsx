@@ -19,18 +19,18 @@ export const StudioSidebar = () => {
 	const pathname = usePathname()
 
 	return (
-		<Sidebar className="z-40 pt-16" collapsible="icon">
-			<SidebarContent className="bg-background">
+		<Sidebar className='z-40 pt-16' collapsible='icon'>
+			<SidebarContent className='bg-background'>
 				<SidebarGroup>
 					<SidebarMenu>
 						<StudioSidebarHeader />
 
 						<SidebarMenuItem>
-							<SidebarMenuButton isActive={pathname === '/studio'} tooltip="Content" asChild>
-								<Link prefetch href="/studio">
-									<VideoIcon className="size-5" />
+							<SidebarMenuButton isActive={pathname === '/studio'} tooltip='Content' asChild>
+								<Link prefetch href='/studio'>
+									<VideoIcon className='size-5' />
 
-									<span className="text-sm">Content</span>
+									<span className='text-sm'>Content</span>
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>
@@ -38,11 +38,11 @@ export const StudioSidebar = () => {
 						<Separator />
 
 						<SidebarMenuItem>
-							<SidebarMenuButton tooltip="Exit studio" asChild>
-								<Link prefetch href="/">
-									<LogOutIcon className="size-5" />
+							<SidebarMenuButton tooltip='Exit studio' asChild>
+								<Link prefetch href='/'>
+									<LogOutIcon className='size-5' />
 
-									<span className="text-sm">Exit studio</span>
+									<span className='text-sm'>Exit studio</span>
 								</Link>
 							</SidebarMenuButton>
 						</SidebarMenuItem>

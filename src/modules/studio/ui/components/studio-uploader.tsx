@@ -22,37 +22,37 @@ export const StudioUploader = ({ endpoint, onSuccess }: Props) => {
 				id={UPLOADER_ID}
 				endpoint={endpoint}
 				onSuccess={onSuccess}
-				className="hidden group/uploader"
+				className='group/uploader hidden'
 			/>
 
-			<MuxUploaderDrop muxUploader={UPLOADER_ID} className="m-4 group/drop">
-				<div slot="heading" className="flex flex-col items-center gap-6">
-					<div className="flex items-center justify-center gap-2 size-32 rounded-full bg-muted">
-						<UploadIcon className="size-10 text-muted-foreground group-hover/drop:animate-bounce transition-all duration-300" />
+			<MuxUploaderDrop muxUploader={UPLOADER_ID} className='group/drop m-4'>
+				<div slot='heading' className='flex flex-col items-center gap-6'>
+					<div className='flex size-32 items-center justify-center gap-2 rounded-full bg-muted'>
+						<UploadIcon className='size-10 text-muted-foreground transition-all duration-300 group-hover/drop:animate-bounce' />
 					</div>
 
-					<div className="flex flex-col gap-2 text-center">
-						<p className="text-sm ">Drop and drop video files to upload</p>
+					<div className='flex flex-col gap-2 text-center'>
+						<p className='text-sm '>Drop and drop video files to upload</p>
 
-						<p className="text-xs text-muted-foreground">
+						<p className='text-xs text-muted-foreground'>
 							Your videos will be private until you publish them
 						</p>
 					</div>
 
 					<MuxUploaderFileSelect muxUploader={UPLOADER_ID}>
-						<Button type="button" className="rounded-full">
+						<Button type='button' className='rounded-full'>
 							Select files
 						</Button>
 					</MuxUploaderFileSelect>
 				</div>
 
-				<span slot="separator" className="hidden" />
+				<span slot='separator' className='hidden' />
 
-				<MuxUploaderStatus muxUploader={UPLOADER_ID} className="text-sm" />
+				<MuxUploaderStatus muxUploader={UPLOADER_ID} className='text-sm' />
 
-				<MuxUploaderProgress muxUploader={UPLOADER_ID} className="text-sm" type="percentage" />
+				<MuxUploaderProgress muxUploader={UPLOADER_ID} className='text-sm' type='percentage' />
 
-				<MuxUploaderProgress muxUploader={UPLOADER_ID} type="bar" />
+				<MuxUploaderProgress muxUploader={UPLOADER_ID} type='bar' />
 			</MuxUploaderDrop>
 		</div>
 	)

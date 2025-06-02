@@ -6,7 +6,7 @@ interface Props {
 
 export const VideoView = ({ videoId }: Props) => {
 	return (
-		<div className="p-4 pt-2.5">
+		<div className='p-4 pt-2.5'>
 			<FormSection videoId={videoId} />
 		</div>
 	)

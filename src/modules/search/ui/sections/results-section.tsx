@@ -31,13 +31,13 @@ export const ResultsSection = (props: Props) => {
 export const ResultsSectionSkeleton = () => {
 	return (
 		<>
-			<div className="flex flex-col gap-4 gap-y-10 p-4 pt-6 md:hidden">
+			<div className='flex flex-col gap-4 gap-y-10 p-4 pt-6 md:hidden'>
 				{Array.from({ length: 6 }, (_, index) => (
 					<VideoGridCardSkeleton key={index} />
 				))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4">
+			<div className='hidden flex-col gap-4 md:flex'>
 				{Array.from({ length: 6 }, (_, index) => (
 					<VideoRowCardSkeleton key={index} />
 				))}
@@ -60,7 +60,7 @@ const ResultsSectionSuspense = ({ query, categoryId }: Props) => {
 
 	return (
 		<>
-			<div className="flex flex-col gap-4 gap-y-10 md:hidden">
+			<div className='flex flex-col gap-4 gap-y-10 md:hidden'>
 				{results.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
@@ -68,7 +68,7 @@ const ResultsSectionSuspense = ({ query, categoryId }: Props) => {
 					))}
 			</div>
 
-			<div className="hidden md:flex flex-col gap-4">
+			<div className='hidden flex-col gap-4 md:flex'>
 				{results.pages
 					.flatMap((page) => page.items)
 					.map((video) => (

@@ -35,24 +35,24 @@ export const StudioUploadModal = () => {
 	return (
 		<>
 			<ResponsiveModal
-				title="Upload a video"
+				title='Upload a video'
 				open={!!create.data?.ufsUrl}
 				onOpenChangeAction={() => create.reset()}
 			>
 				{create.data?.ufsUrl ? (
 					<StudioUploader endpoint={create.data.ufsUrl} onSuccess={onSuccess} />
 				) : (
-					<Loader2Icon className="size-4 animate-spin" />
+					<Loader2Icon className='size-4 animate-spin' />
 				)}
 			</ResponsiveModal>
 
 			<Button
-				variant="secondary"
+				variant='secondary'
 				disabled={create.isPending}
 				onClick={() => create.mutate()}
-				className="cursor-pointer"
+				className='cursor-pointer'
 			>
-				{create.isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
+				{create.isPending ? <Loader2Icon className='animate-spin' /> : <PlusIcon />}
 				Create
 			</Button>
 		</>

@@ -22,7 +22,7 @@ export const SubscriptionsSection = () => {
 
 const SubscriptionsSectionSkeleton = () => {
 	return (
-		<div className="flex flex-col gap-4">
+		<div className='flex flex-col gap-4'>
 			{Array.from({ length: 8 }).map((_, index) => (
 				<SubscriptionItemSkeleton key={index} />
 			))}
@@ -57,7 +57,7 @@ const SubscriptionsSectionSuspense = () => {
 
 	return (
 		<>
-			<div className="flex flex-col gap-4">
+			<div className='flex flex-col gap-4'>
 				{data.pages
 					.flatMap((page) => page.items)
 					.map((subscription) => (
