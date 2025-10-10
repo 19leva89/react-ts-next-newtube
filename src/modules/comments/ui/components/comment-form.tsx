@@ -43,7 +43,11 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 		},
 	})
 
-	const formSchema = commentInsertSchema.omit({ userId: true })
+	const formSchema = commentInsertSchema.pick({
+		videoId: true,
+		parentId: true,
+		value: true,
+	}) as typeof commentInsertSchema & z.ZodType<any, any, any>
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),

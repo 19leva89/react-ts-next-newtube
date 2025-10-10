@@ -223,12 +223,18 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 		},
 	})
 
-	const form = useForm<z.infer<typeof videoUpdateSchema>>({
+	const formSchema = videoUpdateSchema.pick({
+		title: true,
+		description: true,
+		categoryId: true,
+	}) as typeof videoUpdateSchema & z.ZodType<any, any, any>
+
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
 		defaultValues: video,
-		resolver: zodResolver(videoUpdateSchema),
 	})
 
-	const onSubmit = (data: z.infer<typeof videoUpdateSchema>) => {
+	const onSubmit = (data: z.infer<typeof formSchema>) => {
 		update.mutateAsync(data)
 	}
 

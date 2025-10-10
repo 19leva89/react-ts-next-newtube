@@ -54,9 +54,11 @@ Webhooks:
 
 # To run the client and server via concurrently:
 terminal powershell -> `npm i` (install dependencies)
+terminal powershell -> `npx npm-check-updates --interactive` (update dependencies)
 terminal powershell -> `npm run all`
 terminal powershell -> `npm run lint` (loading ESLint checker)
-terminal powershell -> `npm run knip`
+terminal powershell -> `npm run types` (loading TypeScript checker)
+terminal powershell -> `npm run knip` (loading Knip checker)
 
 # Drizzle commands:
 terminal powershell -> `npx drizzle-kit generate`

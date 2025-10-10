@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { PropsWithChildren } from 'react'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Analytics } from '@vercel/analytics/next'
 
 import { Toaster } from '@/components/ui'
 import { TRPCProviderClient } from '@/providers/trpc-provider-client'
@@ -28,9 +29,13 @@ const RootLayout = ({ children }: PropsWithChildren) => {
 		<ClerkProvider afterSignOutUrl='/'>
 			<html lang='en' suppressHydrationWarning>
 				<body className={`${inter.className} antialiased`}>
-					<Toaster position='bottom-right' expand={false} richColors />
 
 					<TRPCProviderClient>{children}</TRPCProviderClient>
+
+					<Toaster position='bottom-right' expand={false} richColors />
+
+					{/* Allow track page views for Vercel */}
+				<Analytics />
 				</body>
 			</html>
 		</ClerkProvider>
