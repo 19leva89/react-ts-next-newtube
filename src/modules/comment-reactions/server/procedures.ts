@@ -9,7 +9,7 @@ export const commentReactionsRouter = createTRPCRouter({
 	like: protectedProcedure
 		.input(
 			z.object({
-				commentId: z.string().cuid2(),
+				commentId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -63,7 +63,7 @@ export const commentReactionsRouter = createTRPCRouter({
 	dislike: protectedProcedure
 		.input(
 			z.object({
-				commentId: z.string().cuid2(),
+				commentId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

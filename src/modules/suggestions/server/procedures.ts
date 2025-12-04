@@ -10,10 +10,10 @@ export const suggestionsRouter = createTRPCRouter({
 	getMany: baseProcedure
 		.input(
 			z.object({
-				videoId: z.string().cuid2(),
+				videoId: z.cuid2(),
 				cursor: z
 					.object({
-						id: z.string().cuid2(),
+						id: z.cuid2(),
 						updatedAt: z.date(),
 					})
 					.nullish(),

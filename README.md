@@ -6,7 +6,7 @@ Authentication and User Management:
 Core Technologies:
 - React 19
 - TypeScript
-- Next 15 (framework)
+- Next 16 (framework)
 
 Data Fetching and State Management:
 - React Query (TanStack Query) (data fetching and state management)
@@ -80,7 +80,3 @@ terminal powershell -> `git push origin <branch-name>` (push changes to branch)
 # To run the ngrok tunnel:
 terminal CommandPrompt -> `ngrok config add-authtoken <NGROK_AUTHTOKEN>`
 terminal CommandPrompt -> `ngrok http --url=<NGROK_DOMAIN> 3000`
-
-# To run the stripe webhook:
-terminal CommandPrompt -> `stripe login`
-terminal CommandPrompt -> `stripe listen --forward-to localhost:3000/api/webhook`

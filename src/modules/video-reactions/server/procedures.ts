@@ -9,7 +9,7 @@ export const videoReactionsRouter = createTRPCRouter({
 	like: protectedProcedure
 		.input(
 			z.object({
-				videoId: z.string().cuid2(),
+				videoId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -63,7 +63,7 @@ export const videoReactionsRouter = createTRPCRouter({
 	dislike: protectedProcedure
 		.input(
 			z.object({
-				videoId: z.string().cuid2(),
+				videoId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

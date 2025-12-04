@@ -10,10 +10,10 @@ export const searchRouter = createTRPCRouter({
 		.input(
 			z.object({
 				query: z.string().nullish(),
-				categoryId: z.string().cuid2().nullish(),
+				categoryId: z.cuid2().nullish(),
 				cursor: z
 					.object({
-						id: z.string().cuid2(),
+						id: z.cuid2(),
 						updatedAt: z.date(),
 					})
 					.nullish(),

@@ -10,7 +10,7 @@ export const subscriptionsRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(
 			z.object({
-				userId: z.string().cuid2(),
+				userId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -35,7 +35,7 @@ export const subscriptionsRouter = createTRPCRouter({
 	remove: protectedProcedure
 		.input(
 			z.object({
-				userId: z.string().cuid2(),
+				userId: z.cuid2(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -59,7 +59,7 @@ export const subscriptionsRouter = createTRPCRouter({
 			z.object({
 				cursor: z
 					.object({
-						creatorId: z.string().cuid2(),
+						creatorId: z.cuid2(),
 						updatedAt: z.date(),
 					})
 					.nullish(),
