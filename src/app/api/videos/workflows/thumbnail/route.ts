@@ -34,7 +34,7 @@ export const { POST } = serve(async (context) => {
 	const response = await context.call<{ data: { url: string }[] }>('generate-thumbnail', {
 		url: 'https://api.openai.com/v1/images/generations',
 		method: 'POST',
-		body: {
+		body: JSON.stringify({
 			prompt,
 			model: 'dall-e-3',
 			n: 1,
@@ -42,7 +42,7 @@ export const { POST } = serve(async (context) => {
 			quality: 'standard',
 			response_format: 'url',
 			style: 'natural',
-		},
+		}),
 		headers: {
 			Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
 			'Content-Type': 'application/json',
