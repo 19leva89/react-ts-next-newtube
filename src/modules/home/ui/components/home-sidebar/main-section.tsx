@@ -52,7 +52,7 @@ export const MainSection = () => {
 									if (!isSignedIn && item.auth) {
 										e.preventDefault()
 
-										return clerk.openSignIn({ redirectUrl: item.url })
+										return clerk.openSignIn({ fallbackRedirectUrl: item.url })
 									}
 								}}
 							>

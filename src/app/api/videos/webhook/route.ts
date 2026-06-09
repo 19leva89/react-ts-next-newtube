@@ -1,12 +1,12 @@
 import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
-import {
+import type {
 	VideoAssetCreatedWebhookEvent,
 	VideoAssetDeletedWebhookEvent,
 	VideoAssetErroredWebhookEvent,
 	VideoAssetReadyWebhookEvent,
 	VideoAssetTrackReadyWebhookEvent,
-} from '@mux/mux-node/resources/webhooks'
+} from '@mux/mux-node/resources/webhooks/webhooks.mjs'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { db } from '@/db'

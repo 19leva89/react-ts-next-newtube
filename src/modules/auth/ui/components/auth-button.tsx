@@ -1,11 +1,13 @@
 'use client'
 
+import { ClerkLoading, SignInButton, UserButton, useAuth } from '@clerk/nextjs'
 import { ClapperboardIcon, LoaderIcon, UserCircleIcon, UserIcon } from 'lucide-react'
-import { ClerkLoading, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui'
 
 export const AuthButton = () => {
+	const { isSignedIn } = useAuth()
+
 	return (
 		<>
 			<ClerkLoading>
@@ -14,7 +16,7 @@ export const AuthButton = () => {
 				</div>
 			</ClerkLoading>
 
-			<SignedIn>
+			{isSignedIn && (
 				<UserButton
 					appearance={{
 						elements: {
@@ -38,9 +40,9 @@ export const AuthButton = () => {
 						<UserButton.Action label='manageAccount' />
 					</UserButton.MenuItems>
 				</UserButton>
-			</SignedIn>
+			)}
 
-			<SignedOut>
+			{!isSignedIn && (
 				<SignInButton mode='modal'>
 					<Button
 						variant='outline'
@@ -50,7 +52,7 @@ export const AuthButton = () => {
 						Sign in
 					</Button>
 				</SignInButton>
-			</SignedOut>
+			)}
 		</>
 	)
 }

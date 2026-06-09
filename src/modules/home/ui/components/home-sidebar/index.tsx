@@ -1,4 +1,6 @@
-import { SignedIn } from '@clerk/nextjs'
+'use client'
+
+import { useAuth } from '@clerk/nextjs'
 
 import { Separator, Sidebar, SidebarContent } from '@/components/ui'
 import { MainSection } from '@/modules/home/ui/components/home-sidebar/main-section'
@@ -6,6 +8,8 @@ import { PersonalSection } from '@/modules/home/ui/components/home-sidebar/perso
 import { SubscriptionsSection } from '@/modules/home/ui/components/home-sidebar/subscriptions-section'
 
 export const HomeSidebar = () => {
+	const { isSignedIn } = useAuth()
+
 	return (
 		<Sidebar collapsible='icon' className='z-40 border-none pt-16'>
 			<SidebarContent className='bg-background'>
@@ -15,11 +19,13 @@ export const HomeSidebar = () => {
 
 				<PersonalSection />
 
-				<SignedIn>
-					<Separator />
+				{isSignedIn && (
+					<>
+						<Separator />
 
-					<SubscriptionsSection />
-				</SignedIn>
+						<SubscriptionsSection />
+					</>
+				)}
 			</SidebarContent>
 		</Sidebar>
 	)
