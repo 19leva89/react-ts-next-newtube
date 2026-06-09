@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import ngrok from '@ngrok/ngrok'
 
-config({ path: '.env.local' })
+config({ path: '.env' })
 
 async function startNgrok() {
 	const authtoken = process.env.NGROK_AUTHTOKEN
