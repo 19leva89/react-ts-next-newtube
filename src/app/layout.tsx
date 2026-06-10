@@ -26,16 +26,15 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<ClerkProvider afterSignOutUrl='/'>
-			<html lang='en' suppressHydrationWarning>
+		<ClerkProvider afterSignOutUrl='/' telemetry={false}>
+			<html lang='en' data-scroll-behavior='smooth' suppressHydrationWarning>
 				<body className={`${inter.className} antialiased`}>
-
 					<TRPCProviderClient>{children}</TRPCProviderClient>
 
 					<Toaster position='bottom-right' expand={false} richColors />
 
 					{/* Allow track page views for Vercel */}
-				<Analytics />
+					<Analytics />
 				</body>
 			</html>
 		</ClerkProvider>

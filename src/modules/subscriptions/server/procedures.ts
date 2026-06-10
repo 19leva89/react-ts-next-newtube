@@ -104,14 +104,15 @@ export const subscriptionsRouter = createTRPCRouter({
 			const items = hasMore ? data.slice(0, -1) : data
 
 			// Set the next cursor to the last item if there is more data
-			const lastItem = items[items.length - 1]
+			const lastItem = items.length > 0 ? items[items.length - 1] : null
 
-			const nextCursor = hasMore
-				? {
-						creatorId: lastItem.creatorId,
-						updatedAt: lastItem.updatedAt,
-					}
-				: null
+			const nextCursor =
+				hasMore && lastItem
+					? {
+							creatorId: lastItem.creatorId,
+							updatedAt: lastItem.updatedAt,
+						}
+					: null
 
 			return { items, nextCursor }
 		}),

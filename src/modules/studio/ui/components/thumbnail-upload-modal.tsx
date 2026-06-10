@@ -1,4 +1,6 @@
-import { trpc } from '@/trpc/client'
+import { useQueryClient } from '@tanstack/react-query'
+
+import { useTRPC } from '@/trpc/client'
 import { UploadDropzone } from '@/lib/uploadthing'
 import { ResponsiveModal } from '@/components/shared'
 
@@ -9,11 +11,12 @@ interface Props {
 }
 
 export const ThumbnailUploadModal = ({ videoId, open, onOpenChange }: Props) => {
-	const utils = trpc.useUtils()
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
 
 	const onUploadComplete = () => {
-		utils.studio.getMany.invalidate()
-		utils.studio.getOne.invalidate({ id: videoId })
+		queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+		queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
 		onOpenChange(false)
 	}

@@ -5,8 +5,9 @@ import { format } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
 import { LockOpenIcon, LockIcon } from 'lucide-react'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { snakeCaseToTitle } from '@/lib/utils'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
@@ -85,12 +86,15 @@ const VideosSectionSkeleton = () => {
 }
 
 export const VideosSectionSuspense = () => {
+	const trpc = useTRPC()
 	const router = useRouter()
 
-	const [videos, query] = trpc.studio.getMany.useSuspenseInfiniteQuery(
+	const queryOptions = trpc.studio.getMany.infiniteQueryOptions(
 		{ limit: DEFAULT_LIMIT },
 		{ getNextPageParam: (lastPage) => lastPage.nextCursor },
 	)
+
+	const { data: videos, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
 
 	return (
 		<div>
@@ -109,7 +113,7 @@ export const VideosSectionSuspense = () => {
 					</TableHeader>
 
 					<TableBody>
-						{videos.pages
+						{videos?.pages
 							.flatMap((page) => page.items)
 							.map((video) => (
 								<TableRow
@@ -170,9 +174,9 @@ export const VideosSectionSuspense = () => {
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				fetchNextPage={query.fetchNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
+				hasNextPage={hasNextPage}
+				fetchNextPage={fetchNextPage}
+				isFetchingNextPage={isFetchingNextPage}
 			/>
 		</div>
 	)

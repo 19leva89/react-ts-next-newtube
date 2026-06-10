@@ -1,7 +1,5 @@
 import { CategoriesSection, HomeVideosSection } from '@/modules/home/ui/sections'
 
-export const dynamic = 'force-dynamic'
-
 interface Props {
 	categoryId?: string
 }

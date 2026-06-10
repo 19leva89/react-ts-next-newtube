@@ -1,14 +1,21 @@
-import { trpc } from '@/trpc/server'
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { TrendingView } from '@/modules/home/ui/views/trending-view'
 
-export const dynamic = 'force-dynamic'
-
 const TrendingPage = async () => {
-	void trpc.videos.getManyTrending.prefetchInfinite({
-		cursor: null,
-		limit: DEFAULT_LIMIT,
-	})
+	const queryClient = getQueryClient()
+
+	void queryClient.prefetchInfiniteQuery(
+		trpc.videos.getManyTrending.infiniteQueryOptions(
+			{
+				cursor: null,
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
 	return <TrendingView />
 }

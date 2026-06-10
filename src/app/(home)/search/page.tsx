@@ -1,8 +1,6 @@
-import { trpc } from '@/trpc/server'
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { SearchView } from '@/modules/search/ui/views/search-view'
-
-export const dynamic = 'force-dynamic'
 
 interface Props {
 	searchParams: Promise<{
@@ -12,15 +10,24 @@ interface Props {
 }
 
 const SearchPage = async ({ searchParams }: Props) => {
+	const queryClient = getQueryClient()
+
 	const { query, categoryId } = await searchParams
 
-	void trpc.categories.getMany.prefetch()
+	void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions())
 
-	void trpc.search.getMany.prefetchInfinite({
-		query: query,
-		categoryId: categoryId,
-		limit: DEFAULT_LIMIT,
-	})
+	void queryClient.prefetchInfiniteQuery(
+		trpc.search.getMany.infiniteQueryOptions(
+			{
+				query: query,
+				categoryId: categoryId,
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
 	return <SearchView query={query} categoryId={categoryId} />
 }

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import {
@@ -13,7 +14,7 @@ import {
 	FormMessage,
 	Textarea,
 } from '@/components/ui'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { ResponsiveModal } from '@/components/shared'
 
 interface Props {
@@ -27,18 +28,22 @@ const formSchema = z.object({
 })
 
 export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) => {
-	const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
-		onSuccess: () => {
-			toast.success('Background job started', {
-				description: 'This may take a few minutes',
-			})
-			form.reset()
-			onOpenChange(false)
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+	const trpc = useTRPC()
+
+	const generateThumbnail = useMutation(
+		trpc.videos.generateThumbnail.mutationOptions({
+			onSuccess: async () => {
+				toast.success('Background job started', {
+					description: 'This may take a few minutes',
+				})
+				form.reset()
+				onOpenChange(false)
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),

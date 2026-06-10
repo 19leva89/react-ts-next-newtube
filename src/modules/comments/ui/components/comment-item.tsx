@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { useAuth, useClerk } from '@clerk/nextjs'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import {
 	Button,
@@ -21,7 +22,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui'
 import { cn } from '@/lib/utils'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { UserAvatar } from '@/components/shared'
 import { CommentsGetManyOutput } from '@/modules/comments/types'
 import { CommentForm, CommentReplies } from '@/modules/comments/ui/components'
@@ -32,64 +33,77 @@ interface Props {
 }
 
 export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
+	const trpc = useTRPC()
 	const clerk = useClerk()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 
 	const { userId } = useAuth()
 
 	const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false)
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false)
 
-	const remove = trpc.comments.remove.useMutation({
-		onSuccess: () => {
-			utils.comments.getMany.invalidate({
-				videoId: comment.videoId,
-			})
+	const remove = useMutation(
+		trpc.comments.remove.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(
+					trpc.comments.getMany.queryFilter({
+						videoId: comment.videoId,
+					}),
+				)
 
-			toast.success('Comment deleted')
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to delete comment')
+				toast.success('Comment deleted')
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to delete comment')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
-	const like = trpc.commentReactions.like.useMutation({
-		onSuccess: () => {
-			utils.comments.getMany.invalidate({
-				videoId: comment.videoId,
-			})
+	const like = useMutation(
+		trpc.commentReactions.like.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(
+					trpc.comments.getMany.queryFilter({
+						videoId: comment.videoId,
+					}),
+				)
 
-			toast.success('Comment liked')
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to like comment')
+				toast.success('Comment liked')
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to like comment')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
-	const dislike = trpc.commentReactions.dislike.useMutation({
-		onSuccess: () => {
-			utils.comments.getMany.invalidate({
-				videoId: comment.videoId,
-			})
+	const dislike = useMutation(
+		trpc.commentReactions.dislike.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(
+					trpc.comments.getMany.queryFilter({
+						videoId: comment.videoId,
+					}),
+				)
 
-			toast.success('Comment disliked')
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to dislike comment')
+				toast.success('Comment disliked')
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to dislike comment')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
 	return (
 		<div>

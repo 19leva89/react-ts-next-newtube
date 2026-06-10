@@ -2,8 +2,9 @@
 
 import { toast } from 'sonner'
 import { Loader2Icon, SquareCheckIcon, SquareIcon } from 'lucide-react'
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { Button } from '@/components/ui'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { InfiniteScroll, ResponsiveModal } from '@/components/shared'
@@ -15,15 +16,10 @@ interface Props {
 }
 
 export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) => {
-	const utils = trpc.useUtils()
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
 
-	const {
-		data: playlists,
-		isLoading,
-		hasNextPage,
-		fetchNextPage,
-		isFetchingNextPage,
-	} = trpc.playlists.getManyForVideo.useInfiniteQuery(
+	const queryOptions = trpc.playlists.getManyForVideo.infiniteQueryOptions(
 		{
 			videoId,
 			limit: DEFAULT_LIMIT,
@@ -34,33 +30,49 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 		},
 	)
 
-	const addVideo = trpc.playlists.addVideo.useMutation({
-		onSuccess: (data) => {
-			utils.playlists.getMany.invalidate()
-			utils.playlists.getManyForVideo.invalidate({ videoId })
-			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
+	const {
+		data: playlists,
+		isLoading,
+		hasNextPage,
+		fetchNextPage,
+		isFetchingNextPage,
+	} = useInfiniteQuery(queryOptions)
 
-			toast.success('Video added to playlist')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+	const addVideo = useMutation(
+		trpc.playlists.addVideo.mutationOptions({
+			onSuccess: async (data) => {
+				await queryClient.invalidateQueries(trpc.playlists.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.playlists.getManyForVideo.queryFilter({ videoId }))
+				await queryClient.invalidateQueries(trpc.playlists.getOne.queryFilter({ id: data.playlistId }))
+				await queryClient.invalidateQueries(
+					trpc.playlists.getVideos.queryFilter({ playlistId: data.playlistId }),
+				)
 
-	const removeVideo = trpc.playlists.removeVideo.useMutation({
-		onSuccess: (data) => {
-			utils.playlists.getMany.invalidate()
-			utils.playlists.getManyForVideo.invalidate({ videoId })
-			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
+				toast.success('Video added to playlist')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-			toast.success('Video removed from playlist')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+	const removeVideo = useMutation(
+		trpc.playlists.removeVideo.mutationOptions({
+			onSuccess: async (data) => {
+				await queryClient.invalidateQueries(trpc.playlists.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.playlists.getManyForVideo.queryFilter({ videoId }))
+				await queryClient.invalidateQueries(trpc.playlists.getOne.queryFilter({ id: data.playlistId }))
+				await queryClient.invalidateQueries(
+					trpc.playlists.getVideos.queryFilter({ playlistId: data.playlistId }),
+				)
+
+				toast.success('Video removed from playlist')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	return (
 		<ResponsiveModal open={open} onOpenChangeAction={onOpenChangeAction} title='Add to playlist'>

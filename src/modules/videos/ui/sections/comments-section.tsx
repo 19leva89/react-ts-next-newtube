@@ -3,8 +3,9 @@
 import { Suspense } from 'react'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { CommentForm } from '@/modules/comments/ui/components/comment-form'
@@ -33,7 +34,9 @@ const CommentsSectionSkeleton = () => {
 }
 
 const CommentsSectionSuspense = ({ videoId }: Props) => {
-	const [comments, query] = trpc.comments.getMany.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.comments.getMany.infiniteQueryOptions(
 		{
 			videoId,
 			limit: DEFAULT_LIMIT,
@@ -43,15 +46,17 @@ const CommentsSectionSuspense = ({ videoId }: Props) => {
 		},
 	)
 
+	const { data: comments, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
+
 	return (
 		<div className='mt-6'>
 			<div className='flex flex-col gap-6'>
-				<h1 className='text-xl font-bold'>{comments.pages[0].totalCount} Comments</h1>
+				<h1 className='text-xl font-bold'>{comments?.pages[0].totalCount} Comments</h1>
 
 				<CommentForm videoId={videoId} />
 
 				<div className='mt-2 flex flex-col gap-4'>
-					{comments.pages
+					{comments?.pages
 						.flatMap((page) => page.items)
 						.map((comment) => (
 							<CommentItem key={comment.id} comment={comment} />
@@ -59,9 +64,9 @@ const CommentsSectionSuspense = ({ videoId }: Props) => {
 				</div>
 
 				<InfiniteScroll
-					hasNextPage={query.hasNextPage}
-					fetchNextPage={query.fetchNextPage}
-					isFetchingNextPage={query.isFetchingNextPage}
+					hasNextPage={hasNextPage}
+					fetchNextPage={fetchNextPage}
+					isFetchingNextPage={isFetchingNextPage}
 				/>
 			</div>
 		</div>

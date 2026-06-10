@@ -3,26 +3,30 @@
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Loader2Icon, PlusIcon } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { Button } from '@/components/ui'
 import { ResponsiveModal } from '@/components/shared'
 import { StudioUploader } from '@/modules/studio/ui/components/studio-uploader'
 
 export const StudioUploadModal = () => {
+	const trpc = useTRPC()
 	const router = useRouter()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 
-	const create = trpc.videos.create.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
+	const create = useMutation(
+		trpc.videos.create.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
 
-			toast.success('Video created successfully')
-		},
-		onError: (error) => {
-			toast.error(error ? error.message : 'Error creating video')
-		},
-	})
+				toast.success('Video created successfully')
+			},
+			onError: (error) => {
+				toast.error(error ? error.message : 'Error creating video')
+			},
+		}),
+	)
 
 	const onSuccess = () => {
 		if (!create.data?.video.id) return

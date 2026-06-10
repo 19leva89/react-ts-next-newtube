@@ -27,7 +27,7 @@ export const HomeNavbar = () => {
 					<SearchInput />
 				</div>
 
-				<div className='flex flex-shrink-0 items-center justify-center gap-4'>
+				<div className='flex shrink-0 items-center justify-center gap-4'>
 					<AuthButton />
 				</div>
 			</div>

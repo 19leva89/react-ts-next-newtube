@@ -1,8 +1,9 @@
 'use client'
 
 import { Suspense } from 'react'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Separator } from '@/components/ui'
 import { UserPageInfo, UserPageInfoSkeleton } from '@/modules/users/ui/components/user-page-info'
@@ -35,13 +36,15 @@ const UserSectionSkeleton = () => {
 }
 
 const UserSectionSuspense = ({ userId }: Props) => {
-	const [data] = trpc.users.getOne.useSuspenseQuery({ id: userId })
+	const trpc = useTRPC()
+
+	const { data: user } = useSuspenseQuery(trpc.users.getOne.queryOptions({ id: userId }))
 
 	return (
 		<div className='flex flex-col'>
-			<UserPageBanner user={data} />
+			<UserPageBanner user={user} />
 
-			<UserPageInfo user={data} />
+			<UserPageInfo user={user} />
 
 			<Separator />
 		</div>

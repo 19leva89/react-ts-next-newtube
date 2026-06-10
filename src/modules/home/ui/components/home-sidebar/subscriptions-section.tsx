@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ListIcon } from 'lucide-react'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { usePathname, useRouter } from 'next/navigation'
 
 import {
@@ -13,7 +14,7 @@ import {
 	SidebarGroupLabel,
 	Skeleton,
 } from '@/components/ui'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { UserAvatar } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 
@@ -34,10 +35,11 @@ export const LoadingSkeleton = () => {
 }
 
 export const SubscriptionsSection = () => {
+	const trpc = useTRPC()
 	const router = useRouter()
 	const pathname = usePathname()
 
-	const { data, isLoading } = trpc.subscriptions.getMany.useInfiniteQuery(
+	const queryOptions = trpc.subscriptions.getMany.infiniteQueryOptions(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -45,6 +47,8 @@ export const SubscriptionsSection = () => {
 			getNextPageParam: (lastPage) => lastPage.nextCursor,
 		},
 	)
+
+	const { data, isLoading } = useInfiniteQuery(queryOptions)
 
 	return (
 		<SidebarGroup>

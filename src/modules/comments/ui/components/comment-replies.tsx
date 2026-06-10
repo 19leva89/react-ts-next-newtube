@@ -1,6 +1,7 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { CornerDownRightIcon, Loader2Icon } from 'lucide-react'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { Button } from '@/components/ui'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { CommentItem } from '@/modules/comments/ui/components'
@@ -11,17 +12,20 @@ interface Props {
 }
 
 export const CommentReplies = ({ videoId, parentId }: Props) => {
-	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-		trpc.comments.getMany.useInfiniteQuery(
-			{
-				videoId,
-				parentId,
-				limit: DEFAULT_LIMIT,
-			},
-			{
-				getNextPageParam: (lastPage) => lastPage.nextCursor,
-			},
-		)
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.comments.getMany.infiniteQueryOptions(
+		{
+			videoId,
+			parentId,
+			limit: DEFAULT_LIMIT,
+		},
+		{
+			getNextPageParam: (lastPage) => lastPage.nextCursor,
+		},
+	)
+
+	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(queryOptions)
 
 	return (
 		<div className='pl-14'>

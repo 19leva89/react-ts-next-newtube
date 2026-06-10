@@ -1,17 +1,17 @@
-import { trpc } from '@/trpc/server'
+import { getQueryClient, trpc } from '@/trpc/server'
 import { VideoView } from '@/modules/studio/ui/views/video-view'
-
-export const dynamic = 'force-dynamic'
 
 interface Props {
 	params: Promise<{ videoId: string }>
 }
 
 const VideoIdPage = async ({ params }: Props) => {
+	const queryClient = getQueryClient()
+
 	const { videoId } = await params
 
-	void trpc.studio.getOne.prefetch({ id: videoId })
-	void trpc.categories.getMany.prefetch()
+	void queryClient.prefetchQuery(trpc.studio.getOne.queryOptions({ id: videoId }))
+	void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions())
 
 	return <VideoView videoId={videoId} />
 }

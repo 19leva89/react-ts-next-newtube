@@ -5,8 +5,9 @@ import { Suspense } from 'react'
 import { Trash2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { Button, Skeleton } from '@/components/ui'
 
 interface Props {
@@ -33,25 +34,26 @@ const PlaylistHeaderSectionSkeleton = () => {
 }
 
 const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
+	const trpc = useTRPC()
 	const router = useRouter()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 
-	const [playlist] = trpc.playlists.getOne.useSuspenseQuery({
-		id: playlistId,
-	})
+	const { data: playlist } = useSuspenseQuery(trpc.playlists.getOne.queryOptions({ id: playlistId }))
 
-	const remove = trpc.playlists.remove.useMutation({
-		onSuccess: () => {
-			utils.playlists.getMany.invalidate()
+	const remove = useMutation(
+		trpc.playlists.remove.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.playlists.getMany.queryFilter())
 
-			toast.success('Playlist removed')
+				toast.success('Playlist removed')
 
-			router.push('/playlists')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				router.push('/playlists')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	return (
 		<div className='flex items-center justify-between'>

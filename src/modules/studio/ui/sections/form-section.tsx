@@ -16,12 +16,13 @@ import { z } from 'zod'
 import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { useForm } from 'react-hook-form'
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
 import {
 	Button,
@@ -135,93 +136,106 @@ const FormSectionSkeleton = () => {
 }
 
 const FormSectionSuspense = ({ videoId }: Props) => {
+	const trpc = useTRPC()
 	const router = useRouter()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 	const fullUrl = `${baseUrl}/videos/${videoId}`
 
-	const [video] = trpc.studio.getOne.useSuspenseQuery({ id: videoId })
-	const [categories] = trpc.categories.getMany.useSuspenseQuery()
+	const { data: video } = useSuspenseQuery(trpc.studio.getOne.queryOptions({ id: videoId }))
+	const { data: categories } = useSuspenseQuery(trpc.categories.getMany.queryOptions())
 
 	const [isCopied, setIsCopied] = useState<boolean>(false)
 	const [thumbnailModalOpen, setThumbnailModalOpen] = useState<boolean>(false)
 	const [thumbnailGenerateModalOpen, setThumbnailGenerateModalOpen] = useState<boolean>(false)
 
-	const update = trpc.videos.update.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
+	const update = useMutation(
+		trpc.videos.update.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
-			toast.success('Video updated')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Video updated')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-	const remove = trpc.videos.remove.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
+	const remove = useMutation(
+		trpc.videos.remove.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
 
-			toast.success('Video removed')
+				toast.success('Video removed')
 
-			router.push('/studio')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				router.push('/studio')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-	const revalidate = trpc.videos.revalidate.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
+	const revalidate = useMutation(
+		trpc.videos.revalidate.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
-			toast.success('Video revalidated')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Video revalidated')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-	const restoreThumbnail = trpc.videos.restoreThumbnail.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
+	const restoreThumbnail = useMutation(
+		trpc.videos.restoreThumbnail.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
-			toast.success('Thumbnail restored')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Thumbnail restored')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-	const generateTitle = trpc.videos.generateTitle.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
+	const generateTitle = useMutation(
+		trpc.videos.generateTitle.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
-			toast.success('Background job started', {
-				description: 'This may take a few minutes',
-			})
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Background job started', {
+					description: 'This may take a few minutes',
+				})
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
-	const generateDescription = trpc.videos.generateDescription.useMutation({
-		onSuccess: () => {
-			utils.studio.getMany.invalidate()
-			utils.studio.getOne.invalidate({ id: videoId })
+	const generateDescription = useMutation(
+		trpc.videos.generateDescription.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.studio.getMany.queryFilter())
+				await queryClient.invalidateQueries(trpc.studio.getOne.queryFilter({ id: videoId }))
 
-			toast.success('Background job started', {
-				description: 'This may take a few minutes',
-			})
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Background job started', {
+					description: 'This may take a few minutes',
+				})
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	const formSchema = videoUpdateSchema.pick({
 		title: true,

@@ -1,9 +1,6 @@
-import { trpc } from '@/trpc/server'
-
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { HomeView } from '@/modules/home/ui/views/home-view'
-
-export const dynamic = 'force-dynamic'
 
 interface Props {
 	searchParams: Promise<{
@@ -12,14 +9,23 @@ interface Props {
 }
 
 const HomePage = async ({ searchParams }: Props) => {
+	const queryClient = getQueryClient()
+
 	const { categoryId } = await searchParams
 
-	void trpc.categories.getMany.prefetch()
+	void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions())
 
-	void trpc.videos.getMany.prefetchInfinite({
-		categoryId: categoryId,
-		limit: DEFAULT_LIMIT,
-	})
+	void queryClient.prefetchInfiniteQuery(
+		trpc.videos.getMany.infiniteQueryOptions(
+			{
+				categoryId: categoryId,
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
 	return <HomeView categoryId={categoryId} />
 }

@@ -1,9 +1,10 @@
 import { toast } from 'sonner'
 import { useClerk } from '@clerk/nextjs'
 import { ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/lib/utils'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { Button, Separator } from '@/components/ui'
 import { VideoGetOneOutput } from '@/modules/videos/types'
 
@@ -15,36 +16,41 @@ interface Props {
 }
 
 export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReaction }: Props) => {
+	const trpc = useTRPC()
 	const clerk = useClerk()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 
-	const like = trpc.videoReactions.like.useMutation({
-		onSuccess: () => {
-			utils.videos.getOne.invalidate({ id: videoId })
-			utils.playlists.getLiked.invalidate()
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to like this video')
+	const like = useMutation(
+		trpc.videoReactions.like.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.videos.getOne.queryFilter({ id: videoId }))
+				await queryClient.invalidateQueries(trpc.playlists.getLiked.queryFilter())
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to like this video')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
-	const dislike = trpc.videoReactions.dislike.useMutation({
-		onSuccess: () => {
-			utils.videos.getOne.invalidate({ id: videoId })
-			utils.playlists.getLiked.invalidate()
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to like this video')
+	const dislike = useMutation(
+		trpc.videoReactions.dislike.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.videos.getOne.queryFilter({ id: videoId }))
+				await queryClient.invalidateQueries(trpc.playlists.getLiked.queryFilter())
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to like this video')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
 	return (
 		<div className='flex flex-none items-center'>

@@ -1,13 +1,24 @@
-import { trpc } from '@/trpc/server'
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { SubscriptionsView } from '@/modules/subscriptions/ui/views/subscriptions-view'
 
-export const dynamic = 'force-dynamic'
-
 const SubscriptionsPage = async () => {
-	void trpc.subscriptions.getMany.prefetchInfinite({
-		limit: DEFAULT_LIMIT,
-	})
+	const queryClient = getQueryClient()
+
+	try {
+		void queryClient.prefetchInfiniteQuery(
+			trpc.subscriptions.getMany.infiniteQueryOptions(
+				{
+					limit: DEFAULT_LIMIT,
+				},
+				{
+					getNextPageParam: (lastPage) => lastPage.nextCursor,
+				},
+			),
+		)
+	} catch (error) {
+		console.error('Failed to prefetch subscriptions:', error)
+	}
 
 	return <SubscriptionsView />
 }

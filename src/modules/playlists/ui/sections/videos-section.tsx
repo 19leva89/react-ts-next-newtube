@@ -3,8 +3,9 @@
 import { Suspense } from 'react'
 import { toast } from 'sonner'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
@@ -43,8 +44,10 @@ const VideosSectionSkeleton = () => {
 }
 
 const VideosSectionSuspense = ({ playlistId }: Props) => {
-	const utils = trpc.useUtils()
-	const [videos, query] = trpc.playlists.getVideos.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
+
+	const queryOptions = trpc.playlists.getVideos.infiniteQueryOptions(
 		{
 			playlistId,
 			limit: DEFAULT_LIMIT,
@@ -54,24 +57,32 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 		},
 	)
 
-	const removeVideo = trpc.playlists.removeVideo.useMutation({
-		onSuccess: (data) => {
-			utils.playlists.getMany.invalidate()
-			utils.playlists.getManyForVideo.invalidate({ videoId: data.videoId })
-			utils.playlists.getOne.invalidate({ id: data.playlistId })
-			utils.playlists.getVideos.invalidate({ playlistId: data.playlistId })
+	const { data: videos, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
 
-			toast.success('Video removed from playlist')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+	const removeVideo = useMutation(
+		trpc.playlists.removeVideo.mutationOptions({
+			onSuccess: async (data) => {
+				await queryClient.invalidateQueries(trpc.playlists.getMany.queryFilter())
+				await queryClient.invalidateQueries(
+					trpc.playlists.getManyForVideo.queryFilter({ videoId: data.videoId }),
+				)
+				await queryClient.invalidateQueries(trpc.playlists.getOne.queryFilter({ id: data.playlistId }))
+				await queryClient.invalidateQueries(
+					trpc.playlists.getVideos.queryFilter({ playlistId: data.playlistId }),
+				)
+
+				toast.success('Video removed from playlist')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	return (
 		<div>
 			<div className='flex flex-col gap-4 gap-y-10 md:hidden'>
-				{videos.pages
+				{videos?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoGridCard
@@ -83,7 +94,7 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 			</div>
 
 			<div className='hidden flex-col gap-4 md:flex'>
-				{videos.pages
+				{videos?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoRowCard
@@ -96,9 +107,9 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
-				fetchNextPage={query.fetchNextPage}
+				hasNextPage={hasNextPage}
+				isFetchingNextPage={isFetchingNextPage}
+				fetchNextPage={fetchNextPage}
 			/>
 		</div>
 	)

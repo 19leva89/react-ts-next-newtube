@@ -25,7 +25,7 @@ export const StudioNavbar = () => {
 				{/* Spacer */}
 				<div className='flex-1' />
 
-				<div className='flex flex-shrink-0 items-center gap-4'>
+				<div className='flex shrink-0 items-center gap-4'>
 					<StudioUploadModal />
 
 					<div className='flex items-center justify-center'>

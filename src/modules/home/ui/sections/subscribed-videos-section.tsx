@@ -2,8 +2,9 @@
 
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoGridCard, VideoGridCardSkeleton } from '@/modules/videos/ui/components/video-grid-card'
@@ -31,7 +32,9 @@ const SubscribedVideosSectionSkeleton = () => {
 }
 
 const SubscribedVideosSectionSuspense = () => {
-	const [videos, query] = trpc.videos.getManySubscribed.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.videos.getManySubscribed.infiniteQueryOptions(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -40,10 +43,12 @@ const SubscribedVideosSectionSuspense = () => {
 		},
 	)
 
+	const { data: videos, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
+
 	return (
 		<div>
 			<div className='grid grid-cols-1 gap-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 [@media(min-width:1920px)]:grid-cols-5 [@media(min-width:2200px)]:grid-cols-6'>
-				{videos.pages
+				{videos?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoGridCard key={video.id} data={video} />
@@ -51,9 +56,9 @@ const SubscribedVideosSectionSuspense = () => {
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				fetchNextPage={query.fetchNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
+				hasNextPage={hasNextPage}
+				fetchNextPage={fetchNextPage}
+				isFetchingNextPage={isFetchingNextPage}
 			/>
 		</div>
 	)

@@ -1,14 +1,20 @@
-import { trpc } from '@/trpc/server'
-
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { StudioView } from '@/modules/studio/ui/views/studio-view'
 
-export const dynamic = 'force-dynamic'
-
 const StudioPage = () => {
-	void trpc.studio.getMany.prefetchInfinite({
-		limit: DEFAULT_LIMIT,
-	})
+	const queryClient = getQueryClient()
+
+	void queryClient.prefetchInfiniteQuery(
+		trpc.studio.getMany.infiniteQueryOptions(
+			{
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
 	return <StudioView />
 }

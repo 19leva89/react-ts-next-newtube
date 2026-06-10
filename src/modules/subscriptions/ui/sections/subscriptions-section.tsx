@@ -4,8 +4,9 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { SubscriptionItem, SubscriptionItemSkeleton } from '@/modules/subscriptions/ui/components'
@@ -31,9 +32,10 @@ const SubscriptionsSectionSkeleton = () => {
 }
 
 const SubscriptionsSectionSuspense = () => {
-	const utils = trpc.useUtils()
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
 
-	const [data, query] = trpc.subscriptions.getMany.useSuspenseInfiniteQuery(
+	const queryOptions = trpc.subscriptions.getMany.infiniteQueryOptions(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -42,23 +44,32 @@ const SubscriptionsSectionSuspense = () => {
 		},
 	)
 
-	const unsubscribe = trpc.subscriptions.remove.useMutation({
-		onSuccess: (data) => {
-			utils.videos.getManySubscribed.invalidate()
-			utils.users.getOne.invalidate({ id: data.creatorId })
-			utils.subscriptions.getMany.invalidate()
+	const {
+		data: subscriptions,
+		hasNextPage,
+		isFetchingNextPage,
+		fetchNextPage,
+	} = useInfiniteQuery(queryOptions)
 
-			toast.success('Unsubscribed')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+	const unsubscribe = useMutation(
+		trpc.subscriptions.remove.mutationOptions({
+			onSuccess: async (data) => {
+				await queryClient.invalidateQueries(trpc.videos.getManySubscribed.queryFilter())
+				await queryClient.invalidateQueries(trpc.users.getOne.queryFilter({ id: data.creatorId }))
+				await queryClient.invalidateQueries(trpc.subscriptions.getMany.queryFilter())
+
+				toast.success('Unsubscribed')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	return (
 		<>
 			<div className='flex flex-col gap-4'>
-				{data.pages
+				{subscriptions?.pages
 					.flatMap((page) => page.items)
 					.map((subscription) => (
 						<Link prefetch key={subscription.creatorId} href={`/users/${subscription.user.id}`}>
@@ -74,9 +85,9 @@ const SubscriptionsSectionSuspense = () => {
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
-				fetchNextPage={query.fetchNextPage}
+				hasNextPage={hasNextPage}
+				isFetchingNextPage={isFetchingNextPage}
+				fetchNextPage={fetchNextPage}
 			/>
 		</>
 	)

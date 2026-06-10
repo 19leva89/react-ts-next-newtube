@@ -1,4 +1,6 @@
-import { trpc } from '@/trpc/client'
+import { useQueryClient } from '@tanstack/react-query'
+
+import { useTRPC } from '@/trpc/client'
 import { UploadDropzone } from '@/lib/uploadthing'
 import { ResponsiveModal } from '@/components/shared'
 
@@ -9,10 +11,11 @@ interface Props {
 }
 
 export const BannerUploadModal = ({ userId, open, onOpenChange }: Props) => {
-	const utils = trpc.useUtils()
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
 
 	const onUploadComplete = () => {
-		utils.users.getOne.invalidate({ id: userId })
+		queryClient.invalidateQueries(trpc.users.getOne.queryFilter({ id: userId }))
 		onOpenChange(false)
 	}
 

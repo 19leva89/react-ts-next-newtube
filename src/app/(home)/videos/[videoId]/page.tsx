@@ -1,27 +1,41 @@
-import { trpc } from '@/trpc/server'
+import { getQueryClient, trpc } from '@/trpc/server'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoView } from '@/modules/videos/ui/views/video-view'
-
-export const dynamic = 'force-dynamic'
 
 interface Props {
 	params: Promise<{ videoId: string }>
 }
 
 const VideosIdPage = async ({ params }: Props) => {
+	const queryClient = getQueryClient()
+
 	const { videoId } = await params
 
-	void trpc.videos.getOne.prefetch({ id: videoId })
+	void queryClient.prefetchQuery(trpc.videos.getOne.queryOptions({ id: videoId }))
 
-	void trpc.comments.getMany.prefetchInfinite({
-		videoId,
-		limit: DEFAULT_LIMIT,
-	})
+	void queryClient.prefetchInfiniteQuery(
+		trpc.comments.getMany.infiniteQueryOptions(
+			{
+				videoId,
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
-	void trpc.suggestions.getMany.prefetchInfinite({
-		videoId,
-		limit: DEFAULT_LIMIT,
-	})
+	void queryClient.prefetchInfiniteQuery(
+		trpc.suggestions.getMany.infiniteQueryOptions(
+			{
+				videoId,
+				limit: DEFAULT_LIMIT,
+			},
+			{
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+			},
+		),
+	)
 
 	return <VideoView videoId={videoId} />
 }

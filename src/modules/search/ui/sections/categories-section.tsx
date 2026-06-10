@@ -3,8 +3,9 @@
 import { Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { FilterCarousel } from '@/components/shared'
 
 interface Props {
@@ -22,9 +23,10 @@ export const CategoriesSection = ({ categoryId }: Props) => {
 }
 
 const CategoriesSectionSuspense = ({ categoryId }: Props) => {
+	const trpc = useTRPC()
 	const router = useRouter()
 
-	const [categories] = trpc.categories.getMany.useSuspenseQuery()
+	const { data: categories } = useSuspenseQuery(trpc.categories.getMany.queryOptions())
 
 	const data = categories.map((category) => ({
 		value: category.id,

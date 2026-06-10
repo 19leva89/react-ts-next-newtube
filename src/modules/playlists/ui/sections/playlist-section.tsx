@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import {
@@ -32,7 +33,9 @@ export const PlaylistSectionSkeleton = () => {
 }
 
 const PlaylistSectionSuspense = () => {
-	const [data, query] = trpc.playlists.getMany.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.playlists.getMany.infiniteQueryOptions(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -41,18 +44,20 @@ const PlaylistSectionSuspense = () => {
 		},
 	)
 
+	const { data: playlists, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
+
 	return (
 		<div>
 			<div className='grid grid-cols-1 gap-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 [@media(min-width:1920px)]:grid-cols-5 [@media(min-width:2200px)]:grid-cols-6'>
-				{data.pages.flatMap((page) =>
+				{playlists?.pages.flatMap((page) =>
 					page.items.map((item) => <PlaylistGridCard key={item.id} playlist={item} />),
 				)}
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
-				fetchNextPage={query.fetchNextPage}
+				hasNextPage={hasNextPage}
+				isFetchingNextPage={isFetchingNextPage}
+				fetchNextPage={fetchNextPage}
 			/>
 		</div>
 	)

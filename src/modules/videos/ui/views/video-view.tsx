@@ -20,7 +20,7 @@ export const VideoView = ({ videoId }: Props) => {
 					<CommentsSection videoId={videoId} />
 				</div>
 
-				<div className='hidden w-full shrink-1 xl:block xl:w-75 2xl:w-115'>
+				<div className='hidden w-full shrink xl:block xl:w-75 2xl:w-115'>
 					<SuggestionsSection videoId={videoId} />
 				</div>
 			</div>

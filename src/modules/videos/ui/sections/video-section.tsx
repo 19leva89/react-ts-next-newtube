@@ -3,9 +3,10 @@
 import { Suspense } from 'react'
 import { useAuth } from '@clerk/nextjs'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
 import { cn } from '@/lib/utils'
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { VideoBanner } from '@/modules/videos/ui/components/video-banner'
 import { VideoPlayer, VideoPlayerSkeleton } from '@/modules/videos/ui/components/video-player'
 import { VideoTopRow, VideoTopRowSkeleton } from '@/modules/videos/ui/components/video-top-row'
@@ -35,16 +36,19 @@ const VideoSectionSkeleton = () => {
 }
 
 const VideoSectionSuspense = ({ videoId }: Props) => {
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
+
 	const { isSignedIn } = useAuth()
+	const { data: video } = useSuspenseQuery(trpc.videos.getOne.queryOptions({ id: videoId }))
 
-	const utils = trpc.useUtils()
-	const [video] = trpc.videos.getOne.useSuspenseQuery({ id: videoId })
-
-	const createView = trpc.videoViews.create.useMutation({
-		onSuccess: () => {
-			utils.videos.getOne.invalidate({ id: videoId })
-		},
-	})
+	const createView = useMutation(
+		trpc.videoViews.create.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.videos.getOne.queryFilter({ id: videoId }))
+			},
+		}),
+	)
 
 	const handlePlay = () => {
 		if (!isSignedIn) return

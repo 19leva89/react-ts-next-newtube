@@ -4,8 +4,9 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { ResponsiveModal } from '@/components/shared'
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, Input } from '@/components/ui'
 
@@ -19,6 +20,9 @@ const formSchema = z.object({
 })
 
 export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
+	const trpc = useTRPC()
+	const queryClient = useQueryClient()
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -26,20 +30,21 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 		},
 	})
 
-	const utils = trpc.useUtils()
+	const create = useMutation(
+		trpc.playlists.create.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(trpc.playlists.getMany.queryFilter())
 
-	const create = trpc.playlists.create.useMutation({
-		onSuccess: () => {
-			form.reset()
-			onOpenChangeAction(false)
-			utils.playlists.getMany.invalidate()
+				form.reset()
+				onOpenChangeAction(false)
 
-			toast.success('Playlist created')
-		},
-		onError: (error) => {
-			toast.error(error.message)
-		},
-	})
+				toast.success('Playlist created')
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		}),
+	)
 
 	const onSubmit = (values: z.infer<typeof formSchema>) => {
 		create.mutate(values)

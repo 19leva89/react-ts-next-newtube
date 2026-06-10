@@ -2,8 +2,9 @@
 
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
@@ -38,7 +39,9 @@ const HistorySectionSkeleton = () => {
 }
 
 const HistorySectionSuspense = () => {
-	const [video, query] = trpc.playlists.getHistory.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.playlists.getHistory.infiniteQueryOptions(
 		{
 			limit: DEFAULT_LIMIT,
 		},
@@ -47,10 +50,12 @@ const HistorySectionSuspense = () => {
 		},
 	)
 
+	const { data: videos, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
+
 	return (
 		<div>
 			<div className='flex flex-col gap-4 gap-y-10 md:hidden'>
-				{video.pages
+				{videos?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoGridCard key={video.id} data={video} />
@@ -58,7 +63,7 @@ const HistorySectionSuspense = () => {
 			</div>
 
 			<div className='hidden flex-col gap-4 md:flex'>
-				{video.pages
+				{videos?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoRowCard key={video.id} data={video} size='compact' />
@@ -66,9 +71,9 @@ const HistorySectionSuspense = () => {
 			</div>
 
 			<InfiniteScroll
-				hasNextPage={query.hasNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
-				fetchNextPage={query.fetchNextPage}
+				hasNextPage={hasNextPage}
+				isFetchingNextPage={isFetchingNextPage}
+				fetchNextPage={fetchNextPage}
 			/>
 		</div>
 	)

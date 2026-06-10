@@ -2,8 +2,9 @@
 
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
 import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
@@ -43,7 +44,9 @@ export const SuggestionsSection = ({ videoId, isManual }: Props) => {
 }
 
 const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
-	const [suggestions, query] = trpc.suggestions.getMany.useSuspenseInfiniteQuery(
+	const trpc = useTRPC()
+
+	const queryOptions = trpc.suggestions.getMany.infiniteQueryOptions(
 		{
 			videoId,
 			limit: DEFAULT_LIMIT,
@@ -53,10 +56,12 @@ const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
 		},
 	)
 
+	const { data: suggestions, hasNextPage, isFetchingNextPage, fetchNextPage } = useInfiniteQuery(queryOptions)
+
 	return (
 		<>
 			<div className='block space-y-10 md:hidden'>
-				{suggestions.pages
+				{suggestions?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoGridCard key={video.id} data={video} />
@@ -64,7 +69,7 @@ const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
 			</div>
 
 			<div className='hidden space-y-3 md:block'>
-				{suggestions.pages
+				{suggestions?.pages
 					.flatMap((page) => page.items)
 					.map((video) => (
 						<VideoRowCard key={video.id} data={video} size='compact' />
@@ -73,9 +78,9 @@ const SuggestionsSectionSuspense = ({ videoId, isManual }: Props) => {
 
 			<InfiniteScroll
 				isManual={isManual}
-				hasNextPage={query.hasNextPage}
-				fetchNextPage={query.fetchNextPage}
-				isFetchingNextPage={query.isFetchingNextPage}
+				hasNextPage={hasNextPage}
+				fetchNextPage={fetchNextPage}
+				isFetchingNextPage={isFetchingNextPage}
 			/>
 		</>
 	)

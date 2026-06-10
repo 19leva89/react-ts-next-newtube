@@ -45,7 +45,7 @@ export const FilterCarousel = ({ value, isLoading, onSelectAction, data }: Props
 			{/* Left fade */}
 			<div
 				className={cn(
-					'pointer-events-none absolute top-0 bottom-0 left-12 z-10 w-12 bg-gradient-to-r from-white to-transparent',
+					'pointer-events-none absolute top-0 bottom-0 left-12 z-10 w-12 bg-linear-to-r from-white to-transparent',
 					current === 1 && 'hidden',
 				)}
 			/>
@@ -103,7 +103,7 @@ export const FilterCarousel = ({ value, isLoading, onSelectAction, data }: Props
 			{/* Right fade */}
 			<div
 				className={cn(
-					'pointer-events-none absolute top-0 right-12 bottom-0 w-12 bg-gradient-to-l from-white to-transparent',
+					'pointer-events-none absolute top-0 right-12 bottom-0 w-12 bg-linear-to-l from-white to-transparent',
 					current === count && 'hidden',
 				)}
 			/>

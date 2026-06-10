@@ -48,7 +48,7 @@ export const VideoInfo = ({ data, onRemove }: Props) => {
 
 			<div className='min-w-0 flex-1'>
 				<Link prefetch href={`/videos/${data.id}`}>
-					<h3 className='line-clamp-1 text-base font-medium break-words lg:line-clamp-2'>{data.title}</h3>
+					<h3 className='line-clamp-1 text-base font-medium wrap-break-word lg:line-clamp-2'>{data.title}</h3>
 				</Link>
 
 				<Link prefetch href={`/users/${data.user.id}`}>
@@ -62,7 +62,7 @@ export const VideoInfo = ({ data, onRemove }: Props) => {
 				</Link>
 			</div>
 
-			<div className='flex-shrink-0'>
+			<div className='shrink-0'>
 				<VideoMenu videoId={data.id} onRemove={onRemove} />
 			</div>
 		</div>

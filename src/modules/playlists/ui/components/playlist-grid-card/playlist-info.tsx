@@ -21,7 +21,7 @@ export const PlaylistInfo = ({ data }: Props) => {
 	return (
 		<div className='flex gap-3'>
 			<div className='min-w-0 flex-1'>
-				<h3 className='line-clamp-1 text-sm font-medium break-words lg:line-clamp-2'>{data.name}</h3>
+				<h3 className='line-clamp-1 text-sm font-medium wrap-break-word lg:line-clamp-2'>{data.name}</h3>
 
 				<p className='text-sm text-muted-foreground'>Playlist</p>
 

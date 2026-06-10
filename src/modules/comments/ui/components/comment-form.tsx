@@ -3,8 +3,9 @@ import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { useUser, useClerk } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { trpc } from '@/trpc/client'
+import { useTRPC } from '@/trpc/client'
 import { UserAvatar } from '@/components/shared'
 import { commentInsertSchema } from '@/db/schema'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Textarea } from '@/components/ui'
@@ -18,30 +19,37 @@ interface Props {
 }
 
 export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess, onCancel }: Props) => {
+	const trpc = useTRPC()
 	const clerk = useClerk()
-	const utils = trpc.useUtils()
+	const queryClient = useQueryClient()
 
 	const { user } = useUser()
 
-	const create = trpc.comments.create.useMutation({
-		onSuccess: () => {
-			utils.comments.getMany.invalidate({ videoId })
-			utils.comments.getMany.invalidate({ videoId, parentId })
+	const create = useMutation(
+		trpc.comments.create.mutationOptions({
+			onSuccess: async () => {
+				await queryClient.invalidateQueries(
+					trpc.comments.getMany.queryFilter({
+						videoId,
+						parentId,
+					}),
+				)
 
-			form.reset()
+				form.reset()
 
-			toast.success('Comment added')
+				toast.success('Comment added')
 
-			onSuccess?.()
-		},
-		onError: (error) => {
-			toast.error('You need to be logged in to add a comment')
+				onSuccess?.()
+			},
+			onError: (error) => {
+				toast.error('You need to be logged in to add a comment')
 
-			if (error.data?.code === 'UNAUTHORIZED') {
-				clerk.openSignIn()
-			}
-		},
-	})
+				if (error.data?.code === 'UNAUTHORIZED') {
+					clerk.openSignIn()
+				}
+			},
+		}),
+	)
 
 	const formSchema = commentInsertSchema.pick({
 		videoId: true,
