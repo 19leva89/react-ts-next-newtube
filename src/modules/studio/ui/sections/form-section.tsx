@@ -47,6 +47,7 @@ import {
 } from '@/components/ui'
 import { videoUpdateSchema } from '@/db/schema'
 import { baseUrl, snakeCaseToTitle } from '@/lib/utils'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { VideoPlayer } from '@/modules/videos/ui/components/video-player'
 import { THUMBNAIL_FALLBACK } from '@/modules/videos/constants/thumbnail-fallback'
 import { ThumbnailUploadModal } from '@/modules/studio/ui/components/thumbnail-upload-modal'
@@ -141,6 +142,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 	const queryClient = useQueryClient()
 	const fullUrl = `${baseUrl}/videos/${videoId}`
 
+	const { toastError } = useErrorToaster()
 	const { data: video } = useSuspenseQuery(trpc.studio.getOne.queryOptions({ id: videoId }))
 	const { data: categories } = useSuspenseQuery(trpc.categories.getMany.queryOptions())
 
@@ -157,7 +159,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				toast.success('Video updated')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Update video')
 			},
 		}),
 	)
@@ -172,7 +174,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				router.push('/studio')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Remove video')
 			},
 		}),
 	)
@@ -186,7 +188,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				toast.success('Video revalidated')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Revalidate video')
 			},
 		}),
 	)
@@ -200,7 +202,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				toast.success('Thumbnail restored')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Restore thumbnail')
 			},
 		}),
 	)
@@ -216,7 +218,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				})
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Generate title')
 			},
 		}),
 	)
@@ -232,7 +234,7 @@ const FormSectionSuspense = ({ videoId }: Props) => {
 				})
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Generate description')
 			},
 		}),
 	)

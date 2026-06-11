@@ -8,6 +8,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { VideoRowCard, VideoRowCardSkeleton } from '@/modules/videos/ui/components/video-row-card'
 import { VideoGridCard, VideoGridCardSkeleton } from '@/modules/videos/ui/components/video-grid-card'
 
@@ -47,6 +48,8 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 	const trpc = useTRPC()
 	const queryClient = useQueryClient()
 
+	const { toastError } = useErrorToaster()
+
 	const queryOptions = trpc.playlists.getVideos.infiniteQueryOptions(
 		{
 			playlistId,
@@ -74,7 +77,7 @@ const VideosSectionSuspense = ({ playlistId }: Props) => {
 				toast.success('Video removed from playlist')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Remove video from playlist')
 			},
 		}),
 	)

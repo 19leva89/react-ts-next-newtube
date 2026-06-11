@@ -9,6 +9,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { useTRPC } from '@/trpc/client'
 import { InfiniteScroll } from '@/components/shared'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { SubscriptionItem, SubscriptionItemSkeleton } from '@/modules/subscriptions/ui/components'
 
 export const SubscriptionsSection = () => {
@@ -34,6 +35,8 @@ const SubscriptionsSectionSkeleton = () => {
 const SubscriptionsSectionSuspense = () => {
 	const trpc = useTRPC()
 	const queryClient = useQueryClient()
+
+	const { toastError } = useErrorToaster()
 
 	const queryOptions = trpc.subscriptions.getMany.infiniteQueryOptions(
 		{
@@ -61,7 +64,7 @@ const SubscriptionsSectionSuspense = () => {
 				toast.success('Unsubscribed')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Unsubscribe')
 			},
 		}),
 	)

@@ -30,7 +30,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!newPlaylist) {
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
-					message: 'Failed to create playlist',
+					message: 'CREATE_PLAYLIST',
 				})
 			}
 
@@ -58,6 +58,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingPlaylist) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'PLAYLIST',
 				})
 			}
 
@@ -66,6 +67,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingVideo) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'VIDEO',
 				})
 			}
 
@@ -77,6 +79,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (existingPlaylistVideo) {
 				throw new TRPCError({
 					code: 'CONFLICT',
+					message: 'PLAYLIST_VIDEO',
 				})
 			}
 
@@ -91,6 +94,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!newPlaylistVideo) {
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
+					message: 'CREATE_PLAYLIST_VIDEO',
 				})
 			}
 
@@ -118,6 +122,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingPlaylist) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'PLAYLIST',
 				})
 			}
 
@@ -126,6 +131,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingVideo) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'VIDEO',
 				})
 			}
 
@@ -137,6 +143,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingPlaylistVideo) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'PLAYLIST_VIDEO',
 				})
 			}
 
@@ -148,6 +155,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!removedPlaylistVideo) {
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
+					message: 'REMOVE_PLAYLIST_VIDEO',
 				})
 			}
 
@@ -476,6 +484,7 @@ export const playlistsRouter = createTRPCRouter({
 			if (!existingPlaylist) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'PLAYLIST',
 				})
 			}
 
@@ -553,6 +562,7 @@ export const playlistsRouter = createTRPCRouter({
 		if (!existingPlaylist) {
 			throw new TRPCError({
 				code: 'NOT_FOUND',
+				message: 'PLAYLIST',
 			})
 		}
 
@@ -573,6 +583,7 @@ export const playlistsRouter = createTRPCRouter({
 		if (!deletedPlaylist) {
 			throw new TRPCError({
 				code: 'NOT_FOUND',
+				message: 'PLAYLIST',
 			})
 		}
 

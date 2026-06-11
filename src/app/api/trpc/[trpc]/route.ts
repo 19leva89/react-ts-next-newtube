@@ -10,6 +10,11 @@ const handler = (req: NextRequest) =>
 		req,
 		router: appRouter,
 		createContext: createTRPCContext,
+
+		onError({ error, path }) {
+			console.error(`❌ tRPC failed on ${path ?? '<no-path>'}`)
+			console.error(error)
+		},
 	})
 
 export { handler as GET, handler as POST }

@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useTRPC } from '@/trpc/client'
 import { ResponsiveModal } from '@/components/shared'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { Button, Form, FormControl, FormField, FormItem, FormLabel, Input } from '@/components/ui'
 
 interface Props {
@@ -22,6 +23,8 @@ const formSchema = z.object({
 export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 	const trpc = useTRPC()
 	const queryClient = useQueryClient()
+
+	const { toastError } = useErrorToaster()
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -41,7 +44,7 @@ export const PlaylistCreateModal = ({ open, onOpenChangeAction }: Props) => {
 				toast.success('Playlist created')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Create playlist')
 			},
 		}),
 	)

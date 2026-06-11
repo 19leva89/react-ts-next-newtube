@@ -8,12 +8,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTRPC } from '@/trpc/client'
 import { Button } from '@/components/ui'
 import { ResponsiveModal } from '@/components/shared'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { StudioUploader } from '@/modules/studio/ui/components/studio-uploader'
 
 export const StudioUploadModal = () => {
 	const trpc = useTRPC()
 	const router = useRouter()
 	const queryClient = useQueryClient()
+
+	const { toastError } = useErrorToaster()
 
 	const create = useMutation(
 		trpc.videos.create.mutationOptions({
@@ -23,7 +26,7 @@ export const StudioUploadModal = () => {
 				toast.success('Video created successfully')
 			},
 			onError: (error) => {
-				toast.error(error ? error.message : 'Error creating video')
+				toastError(error, 'Create video')
 			},
 		}),
 	)

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { useTRPC } from '@/trpc/client'
 import { Button, Separator } from '@/components/ui'
 import { VideoGetOneOutput } from '@/modules/videos/types'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 
 interface Props {
 	videoId: string
@@ -20,6 +21,8 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 	const clerk = useClerk()
 	const queryClient = useQueryClient()
 
+	const { toastError } = useErrorToaster()
+
 	const like = useMutation(
 		trpc.videoReactions.like.mutationOptions({
 			onSuccess: async () => {
@@ -27,7 +30,7 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 				await queryClient.invalidateQueries(trpc.playlists.getLiked.queryFilter())
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to like this video')
+				toastError(error, 'Like')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()
@@ -43,7 +46,7 @@ export const VideoReactions = ({ videoId, likeCount, dislikeCount, viewerReactio
 				await queryClient.invalidateQueries(trpc.playlists.getLiked.queryFilter())
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to like this video')
+				toastError(error, 'Dislike')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()

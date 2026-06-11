@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTRPC } from '@/trpc/client'
 import { UserAvatar } from '@/components/shared'
 import { commentInsertSchema } from '@/db/schema'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { Button, Form, FormControl, FormField, FormItem, FormMessage, Textarea } from '@/components/ui'
 
 interface Props {
@@ -24,6 +25,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 	const queryClient = useQueryClient()
 
 	const { user } = useUser()
+	const { toastError } = useErrorToaster()
 
 	const create = useMutation(
 		trpc.comments.create.mutationOptions({
@@ -42,7 +44,7 @@ export const CommentForm = ({ videoId, parentId, variant = 'comment', onSuccess,
 				onSuccess?.()
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to add a comment')
+				toastError(error, 'Add comment')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()

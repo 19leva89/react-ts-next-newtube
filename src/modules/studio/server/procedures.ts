@@ -23,7 +23,10 @@ export const studioRouter = createTRPCRouter({
 				.where(and(eq(videos.id, id), eq(videos.userId, userId)))
 
 			if (!video) {
-				throw new TRPCError({ code: 'NOT_FOUND' })
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'VIDEO',
+				})
 			}
 
 			return video

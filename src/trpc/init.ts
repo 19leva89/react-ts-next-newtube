@@ -53,19 +53,20 @@ export const baseProcedure = t.procedure
  */
 export const protectedProcedure = baseProcedure.use(async function isAuthed({ ctx, next }) {
 	if (!ctx.clerkUserId) {
-		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource' })
+		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'USER' })
 	}
 
 	// Get user data from the database
 	const [user] = await db.select().from(users).where(eq(users.clerkId, ctx.clerkUserId)).limit(1)
+
 	if (!user) {
-		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not user found in database' })
+		throw new TRPCError({ code: 'UNAUTHORIZED', message: 'USER' })
 	}
 
 	// Check if the user has exceeded the request limit
 	const { success } = await ratelimit.limit(user.id)
 	if (!success) {
-		throw new TRPCError({ code: 'TOO_MANY_REQUESTS' })
+		throw new TRPCError({ code: 'TOO_MANY_REQUESTS', message: 'FALLBACK' })
 	}
 
 	return next({

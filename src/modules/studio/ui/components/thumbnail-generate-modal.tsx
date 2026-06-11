@@ -16,6 +16,7 @@ import {
 } from '@/components/ui'
 import { useTRPC } from '@/trpc/client'
 import { ResponsiveModal } from '@/components/shared'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 
 interface Props {
 	videoId: string
@@ -30,6 +31,8 @@ const formSchema = z.object({
 export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) => {
 	const trpc = useTRPC()
 
+	const { toastError } = useErrorToaster()
+
 	const generateThumbnail = useMutation(
 		trpc.videos.generateThumbnail.mutationOptions({
 			onSuccess: async () => {
@@ -40,7 +43,7 @@ export const ThumbnailGenerateModal = ({ videoId, open, onOpenChange }: Props) =
 				onOpenChange(false)
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Generate thumbnail')
 			},
 		}),
 	)

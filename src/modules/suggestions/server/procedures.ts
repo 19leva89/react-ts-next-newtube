@@ -26,7 +26,10 @@ export const suggestionsRouter = createTRPCRouter({
 			const [existingVideo] = await db.select().from(videos).where(eq(videos.id, videoId))
 
 			if (!existingVideo) {
-				throw new TRPCError({ code: 'NOT_FOUND' })
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'VIDEO',
+				})
 			}
 
 			const data = await db

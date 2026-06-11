@@ -9,6 +9,7 @@ import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-q
 
 import { useTRPC } from '@/trpc/client'
 import { Button, Skeleton } from '@/components/ui'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 
 interface Props {
 	playlistId: string
@@ -38,6 +39,7 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
 	const router = useRouter()
 	const queryClient = useQueryClient()
 
+	const { toastError } = useErrorToaster()
 	const { data: playlist } = useSuspenseQuery(trpc.playlists.getOne.queryOptions({ id: playlistId }))
 
 	const remove = useMutation(
@@ -50,7 +52,7 @@ const PlaylistHeaderSectionSuspense = ({ playlistId }: Props) => {
 				router.push('/playlists')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Remove playlist')
 			},
 		}),
 	)

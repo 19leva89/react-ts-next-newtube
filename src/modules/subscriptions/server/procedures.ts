@@ -18,7 +18,10 @@ export const subscriptionsRouter = createTRPCRouter({
 			const { userId } = input
 
 			if (userId === user.id) {
-				throw new TRPCError({ code: 'BAD_REQUEST' })
+				throw new TRPCError({
+					code: 'BAD_REQUEST',
+					message: 'SUBSCRIBE_TO_YOURSELF',
+				})
 			}
 
 			const [createSubscription] = await db
@@ -43,7 +46,10 @@ export const subscriptionsRouter = createTRPCRouter({
 			const { userId } = input
 
 			if (userId === user.id) {
-				throw new TRPCError({ code: 'BAD_REQUEST' })
+				throw new TRPCError({
+					code: 'BAD_REQUEST',
+					message: 'SUBSCRIBE_TO_YOURSELF',
+				})
 			}
 
 			const [deleteSubscription] = await db

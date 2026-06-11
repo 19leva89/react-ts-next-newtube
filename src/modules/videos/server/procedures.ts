@@ -68,7 +68,10 @@ export const videosRouter = createTRPCRouter({
 			.where(eq(videos.id, input.id))
 
 		if (!video) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		return video
@@ -318,23 +321,35 @@ export const videosRouter = createTRPCRouter({
 			.where(and(eq(videos.id, input.id), eq(videos.userId, userId)))
 
 		if (!existingVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		if (!existingVideo.muxUploadId) {
-			throw new TRPCError({ code: 'BAD_REQUEST' })
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'UPLOAD_NOT_FOUND',
+			})
 		}
 
 		const upload = await mux.video.uploads.retrieve(existingVideo.muxUploadId)
 
 		if (!upload || !upload.asset_id) {
-			throw new TRPCError({ code: 'BAD_REQUEST' })
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'UPLOAD_NOT_FOUND',
+			})
 		}
 
 		const asset = await mux.video.assets.retrieve(upload.asset_id)
 
 		if (!asset) {
-			throw new TRPCError({ code: 'BAD_REQUEST' })
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'UPLOAD_NOT_FOUND',
+			})
 		}
 
 		const [updatedVideo] = await db
@@ -375,7 +390,10 @@ export const videosRouter = createTRPCRouter({
 			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
 
 		if (!existingVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		if (existingVideo.thumbnailKey) {
@@ -390,7 +408,10 @@ export const videosRouter = createTRPCRouter({
 		}
 
 		if (!existingVideo.muxPlaybackId) {
-			throw new TRPCError({ code: 'BAD_REQUEST' })
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'UPLOAD_NOT_FOUND',
+			})
 		}
 
 		const thumbnailUrl = `https://image.mux.com/${existingVideo.muxPlaybackId}/thumbnail.jpg`
@@ -442,7 +463,10 @@ export const videosRouter = createTRPCRouter({
 		const { id: userId } = ctx.user
 
 		if (!input.id) {
-			throw new TRPCError({ code: 'BAD_REQUEST' })
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: 'ID',
+			})
 		}
 
 		const [updatedVideo] = await db
@@ -457,7 +481,10 @@ export const videosRouter = createTRPCRouter({
 			.returning()
 
 		if (!updatedVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		return updatedVideo
@@ -473,7 +500,10 @@ export const videosRouter = createTRPCRouter({
 			.where(and(eq(videos.id, id), eq(videos.userId, userId)))
 
 		if (!existingVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		// Delete thumbnail from UploadThing
@@ -509,7 +539,10 @@ export const videosRouter = createTRPCRouter({
 			.returning()
 
 		if (!removedVideo) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'VIDEO',
+			})
 		}
 
 		return removedVideo

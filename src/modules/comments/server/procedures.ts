@@ -27,12 +27,14 @@ export const commentsRouter = createTRPCRouter({
 			if (!existingComment && parentId) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'COMMENT',
 				})
 			}
 
 			if (existingComment?.parentId && parentId) {
 				throw new TRPCError({
 					code: 'BAD_REQUEST',
+					message: 'REPLY_TO_REPLY',
 				})
 			}
 
@@ -173,6 +175,7 @@ export const commentsRouter = createTRPCRouter({
 			if (!deletedComment) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
+					message: 'COMMENT',
 				})
 			}
 

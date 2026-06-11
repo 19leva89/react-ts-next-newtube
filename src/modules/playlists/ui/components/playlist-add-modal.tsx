@@ -7,6 +7,7 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { useTRPC } from '@/trpc/client'
 import { Button } from '@/components/ui'
 import { DEFAULT_LIMIT } from '@/constants/default-limit'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { InfiniteScroll, ResponsiveModal } from '@/components/shared'
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
 export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) => {
 	const trpc = useTRPC()
 	const queryClient = useQueryClient()
+
+	const { toastError } = useErrorToaster()
 
 	const queryOptions = trpc.playlists.getManyForVideo.infiniteQueryOptions(
 		{
@@ -51,7 +54,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 				toast.success('Video added to playlist')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Add video to playlist')
 			},
 		}),
 	)
@@ -69,7 +72,7 @@ export const PlaylistAddModal = ({ open, onOpenChangeAction, videoId }: Props) =
 				toast.success('Video removed from playlist')
 			},
 			onError: (error) => {
-				toast.error(error.message)
+				toastError(error, 'Remove video from playlist')
 			},
 		}),
 	)

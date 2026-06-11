@@ -3,6 +3,7 @@ import { useClerk } from '@clerk/nextjs'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useTRPC } from '@/trpc/client'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 
 interface Props {
 	userId: string
@@ -14,6 +15,8 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 	const trpc = useTRPC()
 	const clerk = useClerk()
 	const queryClient = useQueryClient()
+
+	const { toastError } = useErrorToaster()
 
 	const subscribe = useMutation(
 		trpc.subscriptions.create.mutationOptions({
@@ -29,7 +32,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 				toast.success('Subscribed')
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to subscribe')
+				toastError(error, 'Subscribe')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()
@@ -52,7 +55,7 @@ export const useSubscription = ({ userId, isSubscribed, fromVideoId }: Props) =>
 				toast.success('Unsubscribed')
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to unsubscribe')
+				toastError(error, 'Unsubscribe')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()

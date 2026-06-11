@@ -24,6 +24,7 @@ import {
 import { cn } from '@/lib/utils'
 import { useTRPC } from '@/trpc/client'
 import { UserAvatar } from '@/components/shared'
+import { useErrorToaster } from '@/hooks/use-error-toaster'
 import { CommentsGetManyOutput } from '@/modules/comments/types'
 import { CommentForm, CommentReplies } from '@/modules/comments/ui/components'
 
@@ -38,6 +39,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 	const queryClient = useQueryClient()
 
 	const { userId } = useAuth()
+	const { toastError } = useErrorToaster()
 
 	const [isReplyOpen, setIsReplyOpen] = useState<boolean>(false)
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false)
@@ -54,7 +56,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 				toast.success('Comment deleted')
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to delete comment')
+				toastError(error, 'Delete comment')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()
@@ -75,7 +77,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 				toast.success('Comment liked')
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to like comment')
+				toastError(error, 'Like comment')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()
@@ -96,7 +98,7 @@ export const CommentItem = ({ comment, variant = 'comment' }: Props) => {
 				toast.success('Comment disliked')
 			},
 			onError: (error) => {
-				toast.error('You need to be logged in to dislike comment')
+				toastError(error, 'Dislike comment')
 
 				if (error.data?.code === 'UNAUTHORIZED') {
 					clerk.openSignIn()

@@ -33,7 +33,10 @@ export const usersRouter = createTRPCRouter({
 				.where(eq(users.id, input.id))
 
 			if (!existingUser) {
-				throw new TRPCError({ code: 'NOT_FOUND' })
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'USER',
+				})
 			}
 
 			return existingUser
